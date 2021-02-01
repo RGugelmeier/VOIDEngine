@@ -15,7 +15,7 @@ bool Window::OnCreate(std::string name_, int width_, int height_)
 	//Initialize SDL and error check.
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
-		std::cout << "Failed to initialize SDL" << std::endl;
+		Debug::FatalError("Failed to initialize SDL", "Window.cpp", __LINE__);
 		return false;
 	}
 
@@ -32,7 +32,7 @@ bool Window::OnCreate(std::string name_, int width_, int height_)
 	//If window failed to create, end program and print error.
 	if (!window)
 	{
-		std::cout << "Window failed to create" << std::endl;
+		Debug::FatalError("Failed to create window", "Window.cpp", __LINE__);
 		return false;
 	}
 
@@ -44,15 +44,16 @@ bool Window::OnCreate(std::string name_, int width_, int height_)
 	GLenum err = glewInit();
 	if (err != GLEW_OK)
 	{
-		std::cout << "Failed to initialize GLEW." << std::endl;
+		Debug::FatalError("Failed to initialize GLEW", "Window.cpp", __LINE__);
 		return false;
 	}
 
 	//Enable gl depth, then print OpenGl version to console.
 	glEnable(GL_DEPTH_TEST);
+	//Debug::Info("OpenGL version:" + glGetString(GL_VERSION), "Window.cpp", __LINE__); Ask about this
 	std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl << std::endl;
 
-	std::cout << "Window Created" << std::endl;
+	Debug::Info("Window created", "Window.cpp", __LINE__);
 	return true;
 }
 
