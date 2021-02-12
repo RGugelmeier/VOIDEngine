@@ -48,7 +48,7 @@ bool CoreEngine::OnCreate(std::string name_, int width_, int height_)
 	return isRunning = true;
 }
 
-/*Main loop. While game is running, update game and timer, then render screen. Delay the engine by the timer's sleeptime to ensure consistent engine speed.
+/*Main loop. While game is running, update game and timer, then render screen. Delay the engine by the timer's sleep time to ensure consistent engine speed.
   Whenever the game stops running, call OnDestroy(); */
 void CoreEngine::Run()
 {
@@ -89,7 +89,7 @@ void CoreEngine::Update(const float deltaTime_)
 //Clear screen, render game.
 void CoreEngine::Render()
 {
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClearColor(1.0f, 0.25f, 0.25f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	if (gameInterface)
 	{

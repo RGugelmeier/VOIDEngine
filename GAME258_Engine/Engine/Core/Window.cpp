@@ -26,7 +26,7 @@ bool Window::OnCreate(std::string name_, int width_, int height_)
 	//Set attributes that need to be set before window creation.
 	SetPreAttributes();
 
-	//Create window. Set cast name from string to c_str, then set window position (centered), dimensions (defined when called), and flag (connect window to opengl).
+	//Create window. Set cast name from string to c_str, then set window position (centered), dimensions (defined when called), and flag (connect window to OpenGL).
 	window = SDL_CreateWindow(name_.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL);
 
 	//If window failed to create, end program and print error.
@@ -40,7 +40,7 @@ bool Window::OnCreate(std::string name_, int width_, int height_)
 	context = SDL_GL_CreateContext(window);
 	SetPostAttributes();
 
-	//Initialize glew then error check initialization.
+	//Initialize GLEW then error check initialization.
 	GLenum err = glewInit();
 	if (err != GLEW_OK)
 	{
@@ -48,10 +48,11 @@ bool Window::OnCreate(std::string name_, int width_, int height_)
 		return false;
 	}
 
-	//Enable gl depth, then print OpenGl version to console.
+	//Enable GL depth, then print OpenGl version to console.
 	glEnable(GL_DEPTH_TEST);
-	//Debug::Info("OpenGL version:" + glGetString(GL_VERSION), "Window.cpp", __LINE__); Ask about this
-	std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl << std::endl;
+	
+	Debug::Info("OpenGL Version: " + std::string((char*)glGetString(GL_VERSION)), "Window.cpp", __LINE__);
+	//std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl << std::endl;
 
 	Debug::Info("Window created", "Window.cpp", __LINE__);
 	return true;
@@ -66,20 +67,25 @@ void Window::OnDestroy()
 }
 
 //Set attributes that must be set before window creation.
-//Sets OpenGl version to 4.5
+
 void Window::SetPreAttributes()
 {
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE); //Ask about this
+	//Set the SDL/GL profile to CORE so deprecated functions are disallowed.
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+	//Sets OpenGl version to 4.5
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 5);
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1); //Ask about this
-	SDL_GL_SetSwapInterval(1); //Ask about this
+	//Turn double buffering on to allow two buffers which will improve performance.
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+	//Set the swap interval to update synchronized with the vertical retrace. This makes frames being drawn look smooth on the display rather than choppy.
+	SDL_GL_SetSwapInterval(1); 
+	//Set GLEW experimental to true before initialization. This fixes many bugs found when using GL functions.
 	glewExperimental = GL_TRUE;
 }
 
 //Set attributes that must be set after window creation.
-//Set depth buffer to 32 bits.
+//Set depth buffer to 32 bits minimum.
 void Window::SetPostAttributes()
 {
-	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 32); //Ask about this.
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 32);
 }

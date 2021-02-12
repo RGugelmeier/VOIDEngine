@@ -13,6 +13,10 @@ public:
 	bool OnCreate() override;
 	void Update(const float deltaTime_) override;
 	void Render() override;
+
+private:
+	GameObject* star;
+	GameObject* square;
 };
 
 #endif // !GAMESCENE_H
