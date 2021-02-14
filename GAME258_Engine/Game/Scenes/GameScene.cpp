@@ -23,46 +23,59 @@ bool GameScene::OnCreate()
 {
 	Debug::Info("Game Scene started.", "GameScene.cpp", __LINE__);
 
-	Model* model = new Model();
+	//Create a model variable and input what shader it will use.
+	Model* model = new Model(ShaderHandler::GetInstance()->GetShader("colourShader"));
 
 	Vertex v;
 	vector<Vertex> vertexList;
 
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	//START STAR VECTOR LIST
 
 	//Triangle one.
 	vertexList.reserve(12);
 	v.position = vec3(-.75, 0.25f, 0.0f);
+	v.colour = vec3(1.0f, 0.0f, 0.0f);
 	vertexList.push_back(v);
 	v.position = vec3(0.0f, 0.25f, 0.0f);
+	v.colour = vec3(1.0f, 0.0f, 0.0f);
 	vertexList.push_back(v);
 	v.position = vec3(0.0f, -0.25f, 0.0f);
+	v.colour = vec3(1.0f, 1.0f, 1.0f);
 	vertexList.push_back(v);
 
 	//Triangle two
 	v.position = vec3(0.75f, 0.25f, 0.0f);
+	v.colour = vec3(1.0f, 0.0f, 0.0f);
 	vertexList.push_back(v);
 	v.position = vec3(0.0f, 0.25f, 0.0f);
+	v.colour = vec3(1.0f, 0.0f, 0.0f);
 	vertexList.push_back(v);
 	v.position = vec3(0.0f, -0.25f, 0.0f);
+	v.colour = vec3(1.0f, 1.0f, 1.0f);
 	vertexList.push_back(v);
 
 	//Triangle three
 	v.position = vec3(0.0f, 0.75f, 0.0f);
+	v.colour = vec3(1.0f, 0.0f, 0.0f);
 	vertexList.push_back(v);
 	v.position = vec3(-0.5f, -0.75f, 0.0f);
+	v.colour = vec3(1.0f, 0.0f, 0.0f);
 	vertexList.push_back(v);
 	v.position = vec3(0.0f, -0.25f, 0.0f);
+	v.colour = vec3(1.0f, 1.0f, 1.0f);
 	vertexList.push_back(v);
 
 	//Triangle four
 	v.position = vec3(0.0f, 0.75f, 0.0f);
+	v.colour = vec3(1.0f, 0.0f, 0.0f);
 	vertexList.push_back(v);
 	v.position = vec3(0.5f, -0.75f, 0.0f);
+	v.colour = vec3(1.0f, 0.0f, 0.0f);
 	vertexList.push_back(v);
 	v.position = vec3(0.0f, -0.25f, 0.0f);
+	v.colour = vec3(1.0f, 1.0f, 1.0f);
 	vertexList.push_back(v);
 
 	model->AddMesh(new Mesh(vertexList));
