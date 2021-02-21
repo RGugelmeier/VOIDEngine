@@ -15,8 +15,9 @@ public:
 	void Render() override;
 
 private:
-	GameObject* star;
-	GameObject* square;
+	GameObject* cube;
+
+	Model* cubeModel;
 };
 
 #endif // !GAMESCENE_H

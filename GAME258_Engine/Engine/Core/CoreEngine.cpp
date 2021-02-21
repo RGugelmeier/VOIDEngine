@@ -3,8 +3,9 @@
 std::unique_ptr<CoreEngine> CoreEngine::engineInstance = nullptr;
 
 //Set window, isRunning, and gameInterface to null as default to make sure that when they are created, there is no junk data. Set fps to 60 and current scene to the start scene as default.
-CoreEngine::CoreEngine() : window(nullptr), isRunning(false), fps(60), gameInterface(nullptr), currentScene(SceneList::START_SCENE)
+CoreEngine::CoreEngine() : window(nullptr), isRunning(false), fps(60), gameInterface(nullptr), camera(nullptr), timer(nullptr), currentScene(SceneList::START_SCENE)
 {
+	timer = new Timer();
 }
 
 CoreEngine::~CoreEngine()
@@ -47,7 +48,7 @@ bool CoreEngine::OnCreate(std::string name_, int width_, int height_)
 	}
 
 	Debug::Info("Everything worked", "CoreEngine.cpp", __LINE__);
-	timer.Start();
+	timer->Start();
 	return isRunning = true;
 }
 
@@ -57,10 +58,10 @@ void CoreEngine::Run()
 {
 	while (isRunning)
 	{
-		timer.UpdateFrameTicks();
-		Update(timer.GetDeltaTime());
+		timer->UpdateFrameTicks();
+		Update(timer->GetDeltaTime());
 		Render();
-		SDL_Delay(timer.GetSleepTime(fps));
+		SDL_Delay(timer->GetSleepTime(fps));
 	}
 	OnDestroy();
 }
@@ -80,6 +81,11 @@ void CoreEngine::SetCurrentScene(SceneList sceneName_)
 	currentScene = sceneName_;
 }
 
+void CoreEngine::SetCamera(Camera* camera_)
+{
+	camera = camera_;
+}
+
 void CoreEngine::Update(const float deltaTime_)
 {
 	if (gameInterface)
@@ -89,10 +95,10 @@ void CoreEngine::Update(const float deltaTime_)
 	}
 }
 
-//Clear screen, render game.
+//Clear screen to a set colour, render game.
 void CoreEngine::Render()
 {
-	glClearColor(1.0f, 0.25f, 0.25f, 1.0f);
+	glClearColor(0.0f, 0.00f, 1.00f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	if (gameInterface)
 	{
@@ -108,6 +114,12 @@ void CoreEngine::OnDestroy()
 
 	delete gameInterface;
 	gameInterface = nullptr;
+
+	delete camera;
+	camera = nullptr;
+
+	delete timer;
+	timer = nullptr;
 
 	delete window;
 	window = nullptr;

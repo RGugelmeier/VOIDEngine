@@ -1,9 +1,10 @@
 #include "Mesh.h"
 
 //Set default values and generate buffers.
-Mesh::Mesh(vector<Vertex>& vertexList_) : VAO(0), VBO(0), vertexList(vector<Vertex>())
+Mesh::Mesh(vector<Vertex>& vertexList_, GLuint shaderProgram_) : VAO(0), VBO(0), vertexList(vector<Vertex>()), shaderProgram(0), modelLocation(0), viewLocation(0), projectionLocation(0)
 {
 	vertexList = vertexList_;
+	shaderProgram = shaderProgram_;
 	GenerateBuffers();
 }
 
@@ -16,11 +17,19 @@ Mesh::~Mesh()
 	vertexList.clear();
 }
 
-//This function renders the mesh. First we bind the VAO to be drawn, then call the GL function to draw it by giving the function the draw type, starting position, and the end of the array.
+//This function renders the mesh. First we bind the VAO to be drawn, set the model transformation matrix, then call the GL function to draw it by giving the function the draw type, starting position, and the end of the array.
 // Then unbind the vertex array because we are no longer using it.
-void Mesh::Render()
+void Mesh::Render(mat4 transform_, Camera* camera_)
 {
 	glBindVertexArray(VAO);
+
+	//Enable GL depth
+	glEnable(GL_DEPTH_TEST);
+
+	//Set values of the uniforms.
+	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, value_ptr(transform_));
+	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, value_ptr(camera_->GetView()));
+	glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, value_ptr(camera_->GetPerspective()));
 
 	glDrawArrays(GL_TRIANGLES, 0, vertexList.size());
 
@@ -49,7 +58,7 @@ void Mesh::GenerateBuffers()
 	
 	//POSITION
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)0); //Ask about this. What is GLvoid* ?
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)0);
 
 	//NORMAL
 	glEnableVertexAttribArray(1);
@@ -66,4 +75,9 @@ void Mesh::GenerateBuffers()
 	//Last, unbind the vertex array and buffer because we have already set all of it's attributes and no longer need to work on it.
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	//Get the uniform locations. This is so we can change the values later on, allowing us to change the camera's view, and any model's size, rotation, or position.
+	modelLocation = glGetUniformLocation(shaderProgram, "model");
+	viewLocation = glGetUniformLocation(shaderProgram, "view");
+	projectionLocation = glGetUniformLocation(shaderProgram, "projection");
 }

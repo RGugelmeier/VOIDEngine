@@ -47,14 +47,15 @@ bool Window::OnCreate(std::string name_, int width_, int height_)
 		Debug::FatalError("Failed to initialize GLEW", "Window.cpp", __LINE__);
 		return false;
 	}
-
-	//Enable GL depth, then print OpenGl version to console.
-	glEnable(GL_DEPTH_TEST);
 	
 	Debug::Info("OpenGL Version: " + std::string((char*)glGetString(GL_VERSION)), "Window.cpp", __LINE__);
 	//std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl << std::endl;
 
 	Debug::Info("Window created", "Window.cpp", __LINE__);
+
+	//Sets the view from "clip space" to "screen space".
+	glViewport(0, 0, width, height);
+
 	return true;
 }
 

@@ -11,11 +11,16 @@ out vec3 Normal;
 out vec2 TexCoords;
 out vec3 Colour;
 
-void Main()
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projection;
+
+void main()
 {
 	//gl_Position is specific to vertex shaders. Takes the position that is passed in and tells OpenGL where the vertex should be.
 	//gl_Position is a vec4 so we need to convert the position to a vec4. Set the w to 1.0f.
-	gl_Position = vec4(position, 1.0f);
+	//We multiply the in position variable by the matricis to make sure the transformation applied to shapes are shown and continuously rendered properly.
+	gl_Position = projection * view * model * vec4(position, 1.0f);
 
 	//Set the out Colour to equal the in colour for the fragment shader.
 	Colour = colour;

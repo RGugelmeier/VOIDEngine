@@ -17,10 +17,10 @@ GameObject::~GameObject()
 }
 
 //Render the model by calling the model's render function.
-void GameObject::Render()
+void GameObject::Render(Camera* camera_)
 {
 	if (model)
 	{
-		model->Render();
+		model->Render(camera_);
 	}
 }
