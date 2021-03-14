@@ -28,6 +28,15 @@ orthographic(mat4()), view(mat4())
 
 Camera::~Camera()
 {
+	if (lights.size() > 0)
+	{
+		for (auto light : lights)
+		{
+			delete light;
+			light = nullptr;
+		}
+		lights.clear();
+	}
 }
 
 //This function gets the forward, right, and up vectors, then sets the camera to look at the correct spot.
@@ -47,4 +56,9 @@ void Camera::UpdateCameraVectors()
 	
 	//Set the view matrix.
 	view = lookAt(position, position + forward, up);
+}
+
+void Camera::AddLight(LightSource* light_)
+{
+	lights.push_back(light_);
 }

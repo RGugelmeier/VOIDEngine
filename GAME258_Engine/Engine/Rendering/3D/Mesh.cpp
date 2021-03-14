@@ -1,9 +1,10 @@
 #include "Mesh.h"
 
 //Set default values and generate buffers.
-Mesh::Mesh(vector<Vertex>& vertexList_, GLuint shaderProgram_) : VAO(0), VBO(0), vertexList(vector<Vertex>()), shaderProgram(0), modelLocation(0), viewLocation(0), projectionLocation(0)
+Mesh::Mesh(vector<Vertex>& vertexList_, GLuint textureID_, GLuint shaderProgram_) : VAO(0), VBO(0), vertexList(vector<Vertex>()), shaderProgram(0), textureID(0), modelLocation(0), viewLocation(0), projectionLocation(0), textureLocation(0)
 {
 	vertexList = vertexList_;
+	textureID = textureID_;
 	shaderProgram = shaderProgram_;
 	GenerateBuffers();
 }
@@ -21,6 +22,11 @@ Mesh::~Mesh()
 // Then unbind the vertex array because we are no longer using it.
 void Mesh::Render(mat4 transform_, Camera* camera_)
 {
+	//Set the parameters for the texture going onto this mesh.
+	glUniform1i(textureLocation, 0);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+
 	glBindVertexArray(VAO);
 
 	//Enable GL depth
@@ -30,6 +36,12 @@ void Mesh::Render(mat4 transform_, Camera* camera_)
 	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, value_ptr(transform_));
 	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, value_ptr(camera_->GetView()));
 	glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, value_ptr(camera_->GetPerspective()));
+	glUniform3fv(viewPos, 1, value_ptr(camera_->GetPosition()));
+	glUniform3fv(lightPos, 1, value_ptr(camera_->GetLights()[0]->GetPosition()));
+	glUniform1f(lightAmbientVal, camera_->GetLights()[0]->GetAmbient());
+	glUniform1f(lightDiffuseVal, camera_->GetLights()[0]->GetDiffuse());
+	glUniform1f(lightSpecularVal, camera_->GetLights()[0]->GetSpecular());
+	glUniform3fv(lightColour, 1, value_ptr(camera_->GetLights()[0]->GetColour()));
 
 	glDrawArrays(GL_TRIANGLES, 0, vertexList.size());
 
@@ -76,8 +88,16 @@ void Mesh::GenerateBuffers()
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	//Get the uniform locations. This is so we can change the values later on, allowing us to change the camera's view, and any model's size, rotation, or position.
+	//Get the uniform locations. This is so we can change the values later on, allowing us to change the camera's view, and any model's size, rotation, or position, as well as edit the texture.
 	modelLocation = glGetUniformLocation(shaderProgram, "model");
 	viewLocation = glGetUniformLocation(shaderProgram, "view");
 	projectionLocation = glGetUniformLocation(shaderProgram, "projection");
+	textureLocation = glGetUniformLocation(shaderProgram, "inputTexture");
+
+	viewPos = glGetUniformLocation(shaderProgram, "cameraPosition");
+	lightPos = glGetUniformLocation(shaderProgram, "light.position");
+	lightAmbientVal = glGetUniformLocation(shaderProgram, "light.ambientVal");
+	lightSpecularVal = glGetUniformLocation(shaderProgram, "light.specularVal");
+	lightDiffuseVal = glGetUniformLocation(shaderProgram, "light.diffuseVal");
+	lightColour = glGetUniformLocation(shaderProgram, "light.lightColour");
 }
