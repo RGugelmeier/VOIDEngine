@@ -44,8 +44,9 @@ void main()
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
 	vec3 specular = (spec * light.specularVal) * light.lightColour;
 
+	//Calculate the final light value on the fragment.
 	vec3 result = ambient + diffuse + specular;
 
-	//Set the fColour variable to the texture, using the input texture sampler and the texture coordinates.
+	//Set the fColour variable to the texture, using the result vec3 we just got.
 	fColour = vec4(result, 1.0f);
 }

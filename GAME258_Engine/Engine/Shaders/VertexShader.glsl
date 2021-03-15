@@ -23,9 +23,12 @@ void main()
 	//We multiply the in position variable by the matricis to make sure the transformation applied to shapes are shown and continuously rendered properly.
 	gl_Position = projection * view * model * vec4(position, 1.0f);
 
+	mat4 temp;
+
 	//Set the out variables to equal the proper values for the fragment shader.
 	Colour = colour;
 	TexCoords = texCoords;
-	Normal = transpose(inverse(mat3(model))) * normal;
-	FragPosition = vec3(gl_Position * model);
+	transpose(inverse(model));
+	Normal = mat3(model) * normal;
+	FragPosition = mat3(model) * position;
 }
