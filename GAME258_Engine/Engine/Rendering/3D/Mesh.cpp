@@ -1,51 +1,65 @@
 #include "Mesh.h"
 
 //Set default values and generate buffers.
-Mesh::Mesh(vector<Vertex>& vertexList_, GLuint textureID_, GLuint shaderProgram_) : VAO(0), VBO(0), vertexList(vector<Vertex>()), shaderProgram(0), textureID(0), modelLocation(0), viewLocation(0), projectionLocation(0), textureLocation(0)
+Mesh::Mesh(SubMesh& subMesh_, GLuint shaderProgram_) : VAO(0), VBO(0), shaderProgram(0), modelLocation(0), viewLocation(0), projectionLocation(0), textureLocation(0)
 {
-	vertexList = vertexList_;
-	textureID = textureID_;
+	subMesh = subMesh_;
 	shaderProgram = shaderProgram_;
 	GenerateBuffers();
 }
 
-//Delete vertex buffer and array (VAO + VBO), then clear the vertex list vector.
+//Delete vertex buffer and array (VAO + VBO), then clear the vertex list and mesh indicies lists of all sub meshes.
 Mesh::~Mesh()
 {
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
 
-	vertexList.clear();
+	if (subMesh.vertexList.size() > 0)
+	{
+		subMesh.vertexList.clear();
+	}
+
+	if (subMesh.meshIndicies.size() > 0)
+	{
+		subMesh.meshIndicies.clear();
+	}
 }
 
 //This function renders the mesh. First we bind the VAO to be drawn, set the model transformation matrix, then call the GL function to draw it by giving the function the draw type, starting position, and the end of the array.
 // Then unbind the vertex array because we are no longer using it.
-void Mesh::Render(mat4 transform_, Camera* camera_)
+void Mesh::Render(Camera* camera_, vector<mat4>& instances_)
 {
 	//Set the parameters for the texture going onto this mesh.
 	glUniform1i(textureLocation, 0);
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, textureID);
-
-	glBindVertexArray(VAO);
-
-	//Enable GL depth
-	glEnable(GL_DEPTH_TEST);
+	glBindTexture(GL_TEXTURE_2D, subMesh.textureID);
 
 	//Set values of the uniforms.
-	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, value_ptr(transform_));
 	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, value_ptr(camera_->GetView()));
 	glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, value_ptr(camera_->GetPerspective()));
 	glUniform3fv(viewPos, 1, value_ptr(camera_->GetPosition()));
+
 	glUniform3fv(lightPos, 1, value_ptr(camera_->GetLights()[0]->GetPosition()));
 	glUniform1f(lightAmbientVal, camera_->GetLights()[0]->GetAmbient());
 	glUniform1f(lightDiffuseVal, camera_->GetLights()[0]->GetDiffuse());
 	glUniform1f(lightSpecularVal, camera_->GetLights()[0]->GetSpecular());
 	glUniform3fv(lightColour, 1, value_ptr(camera_->GetLights()[0]->GetColour()));
 
-	glDrawArrays(GL_TRIANGLES, 0, vertexList.size());
+	glBindVertexArray(VAO);
 
+	//Enable GL depth
+	glEnable(GL_DEPTH_TEST);
+
+	//Set and draw each model for each mesh instance.
+	for (int i = 0; i < instances_.size(); i++)
+	{
+		glUniformMatrix4fv(modelLocation, 1, GL_FALSE, value_ptr(instances_[i]));
+		glDrawArrays(GL_TRIANGLES, 0, subMesh.vertexList.size());
+	}
+
+	//Unbind things.
 	glBindVertexArray(0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 //This function will generate the buffers for the mesh.
@@ -62,7 +76,7 @@ void Mesh::GenerateBuffers()
 
 	//Third, set the data to buffer. This will take in the type of buffer, the size of the object that is being added to the buffer, the first object of the array, and the draw type.
 	//If this gives an error, check to make sure the vertexList is actually filled in, as this will break if the list is empty.
-	glBufferData(GL_ARRAY_BUFFER, vertexList.size() * sizeof(Vertex), &vertexList[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, subMesh.vertexList.size() * sizeof(Vertex), &subMesh.vertexList[0], GL_STATIC_DRAW);
 
 	/* Fourth, set the attributes of the vertices by selecting what attribute to set, then setting how many values of which type this attribute 
 	has (ex. the position has 3 for x, y, and z), then set if the value should be normalized, then set the size of the jump needed to get from

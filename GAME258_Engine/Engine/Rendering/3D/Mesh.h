@@ -20,22 +20,29 @@ struct Vertex
 	vec3 colour;
 };
 
+//A SubMesh is what holds the verticies and texture ID of the mesh. This can end up holding more traits depending on how complex the mesh is.
+struct SubMesh
+{
+	vector<Vertex> vertexList;
+	vector<unsigned int> meshIndicies;
+	GLuint textureID;
+};
+
 class Mesh
 {
 public:
 	//Takes in a vector that holds vertices. A vector is a dynamic container, allowing for any number of vertices to be stored.
 	//Passes in the vector by reference rather than value because a vector can hold a large number of vertices, so passing by value could take a lot of resources.
-	Mesh(vector<Vertex>& vertexList_, GLuint textureID_, GLuint shaderProgram_);
+	Mesh(SubMesh& subMesh_, GLuint shaderProgram_);
 	~Mesh();
 
-	void Render(mat4 transform_, Camera* camera_);
+	void Render(Camera* camera_, vector<mat4>& instances_);
 
 private:
 	void GenerateBuffers();
 	GLuint VAO, VBO;
-	vector<Vertex> vertexList;
+	SubMesh subMesh;
 	GLuint shaderProgram;
-	GLuint textureID;
 	GLuint modelLocation, viewLocation, projectionLocation, textureLocation;
 	GLuint viewPos, lightPos, lightAmbientVal, lightSpecularVal, lightDiffuseVal, lightColour;
 };

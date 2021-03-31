@@ -95,14 +95,13 @@ void CoreEngine::Update(const float deltaTime_)
 	if (gameInterface)
 	{
 		gameInterface->Update(deltaTime_);
-		std::cout << deltaTime_ << std::endl;
 	}
 }
 
 //Clear screen to a set colour, render game.
 void CoreEngine::Render()
 {
-	glClearColor(0.0f, 0.00f, 1.00f, 1.0f);
+	glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	if (gameInterface)
 	{
