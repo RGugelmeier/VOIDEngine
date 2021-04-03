@@ -21,13 +21,9 @@ GameObject::GameObject(Model* model_, vec3 position_) : model(nullptr), position
 	}
 }
 
-//Delete the model and deallocate the space if there is one.
+//Deallocate the model's take space.
 GameObject::~GameObject()
 {
-	if (model)
-	{
-		delete model;
-	}
 	model = nullptr;
 }
 
@@ -79,4 +75,9 @@ inline void GameObject::SetScale(vec3 scale_)
 	{
 		model->UpdateInstance(modelInstance, position, angle, rotation, scale);
 	}
+}
+
+void GameObject::SetTag(string tag_)
+{
+	tag = tag_;
 }

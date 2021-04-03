@@ -7,6 +7,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "../../Camera/Camera.h"
+#include "../../Graphics/MaterialHandler.h"
 
 using namespace glm;
 using namespace std;
@@ -17,7 +18,6 @@ struct Vertex
 	vec3 position;
 	vec3 normal;
 	vec2 textureCoordinates;
-	vec3 colour;
 };
 
 //A SubMesh is what holds the verticies and texture ID of the mesh. This can end up holding more traits depending on how complex the mesh is.
@@ -25,7 +25,7 @@ struct SubMesh
 {
 	vector<Vertex> vertexList;
 	vector<unsigned int> meshIndicies;
-	GLuint textureID;
+	Material material;
 };
 
 class Mesh
@@ -43,7 +43,11 @@ private:
 	GLuint VAO, VBO;
 	SubMesh subMesh;
 	GLuint shaderProgram;
-	GLuint modelLocation, viewLocation, projectionLocation, textureLocation;
+	//Model and camera uniform locations.
+	GLuint modelLocation, viewLocation, projectionLocation;
+	//Material uniform locations.
+	GLuint diffuseMapLoc, shininessLoc, transparencyLoc, ambientLoc, diffuseLoc, specularLoc;
+	//Light uniform locations.
 	GLuint viewPos, lightPos, lightAmbientVal, lightSpecularVal, lightDiffuseVal, lightColour;
 };
 

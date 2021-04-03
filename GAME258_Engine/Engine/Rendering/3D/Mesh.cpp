@@ -1,7 +1,7 @@
 #include "Mesh.h"
 
 //Set default values and generate buffers.
-Mesh::Mesh(SubMesh& subMesh_, GLuint shaderProgram_) : VAO(0), VBO(0), shaderProgram(0), modelLocation(0), viewLocation(0), projectionLocation(0), textureLocation(0)
+Mesh::Mesh(SubMesh& subMesh_, GLuint shaderProgram_) : VAO(0), VBO(0), shaderProgram(0), modelLocation(0), viewLocation(0), projectionLocation(0), diffuseMapLoc(0)
 {
 	subMesh = subMesh_;
 	shaderProgram = shaderProgram_;
@@ -30,14 +30,21 @@ Mesh::~Mesh()
 void Mesh::Render(Camera* camera_, vector<mat4>& instances_)
 {
 	//Set the parameters for the texture going onto this mesh.
-	glUniform1i(textureLocation, 0);
+	glUniform1i(diffuseMapLoc, 0);
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, subMesh.textureID);
+	glBindTexture(GL_TEXTURE_2D, subMesh.material.diffuseMap);
 
 	//Set values of the uniforms.
 	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, value_ptr(camera_->GetView()));
 	glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, value_ptr(camera_->GetPerspective()));
 	glUniform3fv(viewPos, 1, value_ptr(camera_->GetPosition()));
+
+	glUniform3fv(ambientLoc, 1, value_ptr(subMesh.material.ambient));
+	glUniform3fv(specularLoc, 1, value_ptr(subMesh.material.specular));
+	glUniform3fv(diffuseLoc, 1, value_ptr(subMesh.material.diffuse));
+	glUniform1f(shininessLoc, subMesh.material.shininess);
+	glUniform1f(transparencyLoc, subMesh.material.transparency);
+	glUniform1i(diffuseMapLoc, 0);
 
 	glUniform3fv(lightPos, 1, value_ptr(camera_->GetLights()[0]->GetPosition()));
 	glUniform1f(lightAmbientVal, camera_->GetLights()[0]->GetAmbient());
@@ -94,19 +101,21 @@ void Mesh::GenerateBuffers()
 	glEnableVertexAttribArray(2);
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, textureCoordinates));
 
-	//COLOUR
-	glEnableVertexAttribArray(3);
-	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, colour));
-
 	//Last, unbind the vertex array and buffer because we have already set all of it's attributes and no longer need to work on it.
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	//Get the uniform locations. This is so we can change the values later on, allowing us to change the camera's view, and any model's size, rotation, or position, as well as edit the texture.
+	//Get the uniform locations. This is so we can change the values later on, allowing us to change the camera's view, and any model's size, rotation, or position, as well as edit the material.
 	modelLocation = glGetUniformLocation(shaderProgram, "model");
 	viewLocation = glGetUniformLocation(shaderProgram, "view");
 	projectionLocation = glGetUniformLocation(shaderProgram, "projection");
-	textureLocation = glGetUniformLocation(shaderProgram, "inputTexture");
+
+	diffuseMapLoc = glGetUniformLocation(shaderProgram, "material.diffuseMap");
+	shininessLoc = glGetUniformLocation(shaderProgram, "material.shininess");
+	transparencyLoc = glGetUniformLocation(shaderProgram, "material.transparency");
+	ambientLoc = glGetUniformLocation(shaderProgram, "material.ambient");
+	diffuseLoc = glGetUniformLocation(shaderProgram, "material.diffuse");
+	specularLoc = glGetUniformLocation(shaderProgram, "material.specular");
 
 	viewPos = glGetUniformLocation(shaderProgram, "cameraPosition");
 	lightPos = glGetUniformLocation(shaderProgram, "light.position");

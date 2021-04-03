@@ -17,11 +17,13 @@ public:
 	inline float GetAngle() const { return angle; }
 	inline vec3 GetRotation() const { return rotation; }
 	inline vec3 GetScale() const { return scale; }
-	
-	inline void SetPosition(vec3 position_);
-	inline void SetAngle(float angle_);
-	inline void SetRotation(vec3 rotation_);
-	inline void SetScale(vec3 scale_);
+	inline string GetTag() const { return tag; }
+
+	void SetPosition(vec3 position_);
+	void SetAngle(float angle_);
+	void SetRotation(vec3 rotation_);
+	void SetScale(vec3 scale_);
+	void SetTag(string tag_);
 private:
 	Model* model;
 	unsigned int modelInstance;
@@ -29,6 +31,7 @@ private:
 	float angle;
 	vec3 rotation;
 	vec3 scale;
+	string tag;
 };
 
 #endif // !GAMEOBJECT_H

@@ -1,6 +1,6 @@
 #include "LoadOBJModel.h"
 
-LoadOBJModel::LoadOBJModel() : vertices(vector<vec3>()), normals(vector<vec3>()), textureCoords(vector<vec2>()), indices(vector<unsigned int>()), meshVertices(vector<Vertex>()), subMeshes(vector<SubMesh>()), currentTexture(0)
+LoadOBJModel::LoadOBJModel() : vertices(vector<vec3>()), normals(vector<vec3>()), textureCoords(vector<vec2>()), indices(vector<unsigned int>()), meshVertices(vector<Vertex>()), subMeshes(vector<SubMesh>()), currentMaterial(Material())
 {
 	vertices.reserve(200);
 	normals.reserve(200);
@@ -54,7 +54,7 @@ void LoadOBJModel::PostProcessing()
 	SubMesh mesh;
 	mesh.vertexList = meshVertices;
 	mesh.meshIndicies = indices;
-	mesh.textureID = currentTexture;
+	mesh.material = currentMaterial;
 
 	subMeshes.push_back(mesh);
 
@@ -63,7 +63,7 @@ void LoadOBJModel::PostProcessing()
 	textureIndices.clear();
 	meshVertices.clear();
 
-	currentTexture = 0;
+	currentMaterial = Material();
 }
 
 //This actually loads in the OBJ file.
@@ -115,6 +115,7 @@ void LoadOBJModel::LoadModel(const string& filePath_)
 			textureCoords.push_back(vec2(x, y));
 		}
 
+		//TODO Use char to read in the slashes and ignore them rather than sstream ignore.
 		else if (line.substr(0, 2) == "f ")
 		{
 			stringstream f(line.substr(2));
@@ -161,37 +162,14 @@ void LoadOBJModel::LoadModel(const string& filePath_)
 	PostProcessing();
 }
 
-//If the given texture does not exist yet, load the given matName_ into the currentTexture.
-//MAKE SURE EVERY TEXTURE IS A PNG. FILE PATH IS HARD CODED.
+//Get the material from the material handler and set it to currentMaterial.
 void LoadOBJModel::LoadMaterial(const string& matName_)
 {
-	currentTexture = TextureHandler::GetInstance()->GetTexture(matName_);
-	if (currentTexture == 0)
-	{
-		TextureHandler::GetInstance()->CreateTexture(matName_, "Resources/Textures/" + matName_ + ".png");
-		currentTexture = TextureHandler::GetInstance()->GetTexture(matName_);
-	}
+	currentMaterial = MaterialHandler::GetInstance()->GetMaterial(matName_);
 }
 
-//Read the mtl file and run LoadMaterial on the line that contains the material's name.
+//Run the material loader's LoadMaterial which loads the material.
 void LoadOBJModel::LoadMaterialLibrary(const string& matFilePath_)
 {
-	ifstream in(matFilePath_.c_str(), ios::in);
-
-	//Error check.
-	if (!in)
-	{
-		Debug::Error("Cannot open MTL file: " + matFilePath_, "LoadOBJModel.cpp", __LINE__);
-		return;
-	}
-
-	string line;
-	while (getline(in, line))
-	{
-		if (line.substr(0, 7) == "newmtl ")
-		{
-			LoadMaterial(line.substr(7));
-		}
-	}
-	in.close();
+	MaterialLoader::LoadMaterial(matFilePath_);
 }

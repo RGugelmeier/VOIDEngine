@@ -15,9 +15,6 @@ public:
 	void Render() override;
 
 private:
-	GameObject* cube;
-
-	Model* cubeModel;
 };
 
 #endif // !GAMESCENE_H

@@ -21,6 +21,8 @@ public:
 	void UpdateInstance(unsigned int index, vec3 Position_, float angle_, vec3 rotation_, vec3 scale_);
 	mat4 GetTransform(unsigned int index_) const;
 
+	inline GLuint GetShaderProgram() const { return shaderProgram; }
+
 private:
 	mat4 CreateTransform(vec3 Position_, float angle_, vec3 rotation_, vec3 scale_) const;
 	void LoadModel();
