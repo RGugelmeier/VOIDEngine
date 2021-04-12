@@ -77,13 +77,16 @@ mat4 Model::CreateTransform(vec3 position_, float angle_, vec3 rotation_, vec3 s
 	return model;
 }
 
-//Load the all obj file data into a list of sub meshes, then delete the obj loader to free up space.
+//Load the all obj file data into a list of sub meshes, set the model's boundingBox to the obj's, then delete the obj loader to free up space.
 void Model::LoadModel()
 {
 	for (int i = 0; i < obj->GetSubMeshes().size(); i++)
 	{
 		meshes.push_back(new Mesh(obj->GetSubMeshes()[i], shaderProgram));
 	}
+
+	boundingBox = obj->GetBoundingBox();
+
 	delete obj;
 	obj = nullptr;
 }

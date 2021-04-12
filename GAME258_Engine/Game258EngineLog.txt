@@ -1,7 +1,6 @@
 [INFO]: OpenGL Version: 4.5.0 NVIDIA 460.89 in : Window.cpp on line: 51
 [INFO]: Window created in : Window.cpp on line: 54
 [INFO]: Start Scene started. in : StartScene.cpp on line: 14
-[INFO]: Everything worked in : CoreEngine.cpp on line: 54
+[INFO]: Everything worked in : CoreEngine.cpp on line: 59
 [INFO]: Start scene ended in : StartScene.cpp on line: 9
 [INFO]: Game Scene started. in : GameScene.cpp on line: 18
-[WARNING]: Could not find material with namediceTexture. Check spelling on GetMaterial functions. in : MaterialHandler.cpp on line: 44

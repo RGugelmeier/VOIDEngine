@@ -17,6 +17,8 @@
 
 #include "../Camera/Camera.h"
 
+#include "../Events/EventListener.h"
+
 class CoreEngine
 {
 public:
@@ -50,6 +52,12 @@ public:
 	void SetGameInterface(GameInterface* gameInterface_);
 	void SetCurrentScene(SceneList sceneNum_);
 	void SetCamera(Camera* camera_);
+
+	//Mouse event notify functions.
+	void NotifyOfMousePressed(ivec2 mouse_, int buttonType_);
+	void NotifyOfMouseReleased(ivec2 mouse_, int buttonType_);
+	void NotifyOfMouseMove(ivec2 mouse_);
+	void NotifyOfMouseScroll(int y_);
 
 private:
 	CoreEngine();

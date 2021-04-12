@@ -34,8 +34,13 @@ bool CoreEngine::OnCreate(std::string name_, int width_, int height_)
 		return isRunning = false;
 	}
 
-	//Get the shader instance singleton, and create the program with name, and file paths for the vertex and fragment shaders.
+	//Set the mouse to the centre of the screen.
+	SDL_WarpMouseInWindow(window->GetWindow(), window->GetWidth() / 2, window->GetHeight() / 2);
 
+	//Register engine to mouse event listener so it can perform it's functions here.
+	MouseEventListener::RegisterEngineObject(this);
+
+	//Get the shader instance singleton, and create the program with name, and file paths for the vertex and fragment shaders.
 	//Create colour shader program.
 	ShaderHandler::GetInstance()->CreateProgram("colourShader", "Engine/Shaders/ColourVertexShader.glsl", "Engine/Shaders/ColourFragmentShader.glsl");
 	//Create basic shader program.
@@ -56,13 +61,15 @@ bool CoreEngine::OnCreate(std::string name_, int width_, int height_)
 	return isRunning = true;
 }
 
-/*Main loop. While game is running, update game and timer, then render screen. Delay the engine by the timer's sleep time to ensure consistent engine speed.
+/*Main loop. While game is running, update timer, then check for events and update accordingly, the3n update game,
+		then render screen. Delay the engine by the timer's sleep time to ensure consistent engine speed.
   Whenever the game stops running, call OnDestroy(); */
 void CoreEngine::Run()
 {
 	while (isRunning)
 	{
 		timer->UpdateFrameTicks();
+		EventListener::Update();
 		Update(timer->GetDeltaTime());
 		Render();
 		SDL_Delay(timer->GetSleepTime(fps));
@@ -88,6 +95,32 @@ void CoreEngine::SetCurrentScene(SceneList sceneName_)
 void CoreEngine::SetCamera(Camera* camera_)
 {
 	camera = camera_;
+}
+
+void CoreEngine::NotifyOfMousePressed(ivec2 mouse_, int buttonType_)
+{
+}
+
+void CoreEngine::NotifyOfMouseReleased(ivec2 mouse_, int buttonType_)
+{
+}
+
+//Tell the camera to perform movement.
+void CoreEngine::NotifyOfMouseMove(ivec2 mouse_)
+{
+	if (camera)
+	{
+		camera->ProcessMouseMovement(MouseEventListener::GetMouseOffset());
+	}
+}
+
+//The the camera to perform zoom. (Forward back movement).
+void CoreEngine::NotifyOfMouseScroll(int y_)
+{
+	if (camera)
+	{
+		camera->ProcessMouseZoom(y_);
+	}
 }
 
 void CoreEngine::Update(const float deltaTime_)

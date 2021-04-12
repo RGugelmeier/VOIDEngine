@@ -69,7 +69,7 @@ void MaterialLoader::LoadMaterial(string filePath_)
 			m.transparency = transparency_;
 		}
 		//Shininess data.
-		else if (line.substr(0, 3) == "\tNs")
+		else if (line.substr(0, 2) == "\tNs")
 		{
 			stringstream ns(line.substr(0, 4));
 			float shininess_;

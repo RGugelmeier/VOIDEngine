@@ -39,6 +39,51 @@ Camera::~Camera()
 	}
 }
 
+//Process mouse inputs. (Movement and zoon)
+void Camera::ProcessMouseMovement(vec2 offset_)
+{
+	//Change mouse yaw and pitch. Rotate the camera.
+	offset_ *= 0.05f;
+
+	yaw += offset_.x;
+	pitch += offset_.y;
+
+	//Make sure pitch does not go out of bounds. If it does, it will flip the screen. No good.
+	if (pitch > 89.0f)
+	{
+		pitch = 89.0f;
+	}
+	if (pitch < -89.0f)
+	{
+		pitch = -89.0f;
+	}
+
+	//Make sure yaw does not go out of bounds. This makes it so we always have a positive yaw, and it always stays inside the range of one full circle.
+	if (yaw < 0.0f)
+	{
+		yaw += 360.0f;
+	}
+	if (yaw > 360.0f)
+	{
+		yaw -= 360.0f;
+	}
+
+	//Update the camera data.
+	UpdateCameraVectors();
+}
+
+void Camera::ProcessMouseZoom(int y_)
+{
+	//Depending on direction of scrolling, change position of camera.
+	if (y_ < 0 || y_ > 0)
+	{
+		position += static_cast<float>(y_) * (forward * 2.0f);
+	}
+
+	//Update the camera data.
+	UpdateCameraVectors();
+}
+
 //This function gets the forward, right, and up vectors, then sets the camera to look at the correct spot.
 void Camera::UpdateCameraVectors()
 {

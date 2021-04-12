@@ -91,6 +91,35 @@ void LoadOBJModel::LoadModel(const string& filePath_)
 			v >> x >> y >> z;
 			//Push vertex positon to vertices list.
 			vertices.push_back(vec3(x, y, z));
+
+			//Setup bounding box size for the OBJ.
+			if (x > boundingBox.maxVert.x)
+			{
+				boundingBox.maxVert.x = x;
+			}
+			else if (x < boundingBox.minVert.x)
+			{
+				boundingBox.minVert.x = x;
+			}
+
+			if (y > boundingBox.maxVert.y)
+			{
+				boundingBox.maxVert.y = y;
+			}
+			else if (y < boundingBox.minVert.y)
+			{
+				boundingBox.minVert.y = y;
+			}
+
+			if (z > boundingBox.maxVert.z)
+			{
+				boundingBox.maxVert.z = z;
+			}
+			else if (z < boundingBox.minVert.z)
+			{
+				boundingBox.minVert.z = z;
+			}
+			//end bounding box size setup.
 		}
 
 		//Read normal data. "vn" == vertex normal in obj file.
