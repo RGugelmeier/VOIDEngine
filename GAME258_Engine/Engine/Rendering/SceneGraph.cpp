@@ -133,10 +133,10 @@ void SceneGraph::Render(Camera* camera_)
 		glUseProgram(entry.first);
 		for (auto m : entry.second)
 		{
-			if (Frustum::GetInstance()->SeenCheck(m))
-			{
+			//if (Frustum::GetInstance()->SeenCheck(m))
+			//{
 				m->Render(camera_);
-			}
+			//}
 		}
 	}
 }
