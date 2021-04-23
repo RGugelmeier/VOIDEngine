@@ -103,6 +103,8 @@ void CoreEngine::NotifyOfMousePressed(ivec2 mouse_, int buttonType_)
 
 void CoreEngine::NotifyOfMouseReleased(ivec2 mouse_, int buttonType_)
 {
+	//Check for a ray-OBB collision.
+	CollisionHandler::GetInstance()->MouseUpdate(mouse_, buttonType_);
 }
 
 //Tell the camera to perform movement.
@@ -149,6 +151,7 @@ void CoreEngine::OnDestroy()
 	ShaderHandler::GetInstance()->OnDestroy();
 	TextureHandler::GetInstance()->OnDestroy();
 	MaterialHandler::GetInstance()->OnDestroy();
+	CollisionHandler::GetInstance()->OnDestroy();
 	SceneGraph::GetInstance()->OnDestroy();
 
 	delete gameInterface;

@@ -7,6 +7,8 @@
 #include <vector>
 
 #include "3D/GameObject.h"
+#include "../Math//CollisionHandler.h"
+#include "../Math/Frustum.h"
 
 class SceneGraph
 {
@@ -20,7 +22,7 @@ public:
 	static SceneGraph* GetInstance();
 	void OnDestroy();
 	void AddModel(Model* model);
-	void AddGameObject(GameObject* gameObject_, string tag_ = "");
+	void AddGameObject(GameObject* gameObject_, bool collidable = true, string tag_ = "");
 	GameObject* GetGameObject(string tag_);
 
 	void Update(const float deltaTime_);

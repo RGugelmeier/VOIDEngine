@@ -75,7 +75,7 @@ void SceneGraph::AddModel(Model* model_)
 }
 
 //Add a game object to the scene graph.
-void SceneGraph::AddGameObject(GameObject* gameObject_, string tag_)
+void SceneGraph::AddGameObject(GameObject* gameObject_, bool collidable_, string tag_)
 {
 	//If the object does not have a tag, create it with a default tag of "GameObject 'x'" where x is a number.
 	if (tag_ == "")
@@ -98,6 +98,12 @@ void SceneGraph::AddGameObject(GameObject* gameObject_, string tag_)
 		gameObject_->SetTag(newTag);
 		sceneGameObjects[newTag] = gameObject_;
 	}
+	if (collidable_)
+	{
+		//If this game object being added is collidable, add it to the collisioin handler so it can check for collisions on this object.
+		CollisionHandler::GetInstance()->AddObject(gameObject_);
+	}
+	
 }
 
 //Return the object with the provided tag, or return nullptr if the object being looked for does not exist.
@@ -127,7 +133,10 @@ void SceneGraph::Render(Camera* camera_)
 		glUseProgram(entry.first);
 		for (auto m : entry.second)
 		{
-			m->Render(camera_);
+			if (Frustum::GetInstance()->SeenCheck(m))
+			{
+				m->Render(camera_);
+			}
 		}
 	}
 }

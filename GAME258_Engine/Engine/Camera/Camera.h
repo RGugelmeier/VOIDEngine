@@ -4,6 +4,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <vector>
+
+//#include "../Math/Frustum.h"
 #include "../FX/LightSource.h"
 
 using namespace glm;
@@ -22,6 +24,9 @@ public:
 	inline mat4 GetPerspective() const { return perspective; }
 	inline mat4 GetOrthograpic() const { return orthographic; }
 	inline vec3 GetPosition() const { return position; }
+	inline float GetNearPlane() const { return nearPlane; }
+	inline float GetFarPlane() const { return farPlane; }
+	//inline Frustum GetFrustum() const { return frustum; }
 	inline vector<LightSource*> GetLights() const { return lights; }
 
 	//Setters
@@ -47,6 +52,7 @@ private:
 	float nearPlane, farPlane;
 	vec3 forward, up, right, worldUp;
 	
+	//Frustum* frustum;
 	vector<LightSource*> lights;
 };
 

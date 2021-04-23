@@ -78,6 +78,8 @@ void LoadOBJModel::LoadModel(const string& filePath_)
 	}
 
 	string line;
+	//Give initial value to the bounding box min and max.
+
 
 	//Read each line.
 	while (getline(in, line))

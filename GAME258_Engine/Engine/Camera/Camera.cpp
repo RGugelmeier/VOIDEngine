@@ -10,7 +10,7 @@ orthographic(mat4()), view(mat4())
 	forward = vec3(0.0f, 0.0f, -1.0f);
 	up = vec3(0.0f, 1.0f, 0.0f);
 	worldUp = up;
-	nearPlane = 2.0f;
+	nearPlane = 0.5f;
 	farPlane = 50.0f;
 	yaw = -90.0f;
 	pitch = 0.0f;
@@ -70,6 +70,7 @@ void Camera::ProcessMouseMovement(vec2 offset_)
 
 	//Update the camera data.
 	UpdateCameraVectors();
+	Frustum::GetInstance()->UpdatePlanes(GetView() * GetPerspective());
 }
 
 void Camera::ProcessMouseZoom(int y_)
@@ -82,6 +83,7 @@ void Camera::ProcessMouseZoom(int y_)
 
 	//Update the camera data.
 	UpdateCameraVectors();
+	Frustum::GetInstance()->UpdatePlanes(GetView() * GetPerspective());
 }
 
 //This function gets the forward, right, and up vectors, then sets the camera to look at the correct spot.
