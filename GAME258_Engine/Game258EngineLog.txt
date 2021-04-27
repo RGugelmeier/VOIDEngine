@@ -4,4 +4,3 @@
 [INFO]: Everything worked in : CoreEngine.cpp on line: 59
 [INFO]: Start scene ended in : StartScene.cpp on line: 9
 [INFO]: Game Scene started. in : GameScene.cpp on line: 18
-[INFO]: Game scene ended in : GameScene.cpp on line: 12

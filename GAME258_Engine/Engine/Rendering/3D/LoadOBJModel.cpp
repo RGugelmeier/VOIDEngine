@@ -79,7 +79,8 @@ void LoadOBJModel::LoadModel(const string& filePath_)
 
 	string line;
 	//Give initial value to the bounding box min and max.
-
+	boundingBox.maxVert = vec3(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+	boundingBox.minVert = vec3(FLT_MAX, FLT_MAX, FLT_MAX);
 
 	//Read each line.
 	while (getline(in, line))
