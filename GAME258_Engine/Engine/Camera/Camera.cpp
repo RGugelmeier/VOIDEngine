@@ -70,7 +70,7 @@ void Camera::ProcessMouseMovement(vec2 offset_)
 
 	//Update the camera data.
 	UpdateCameraVectors();
-	Frustum::GetInstance()->UpdatePlanes(GetView() * GetPerspective());
+	Frustum::GetInstance()->UpdatePlanes(perspective * view);
 }
 
 void Camera::ProcessMouseZoom(int y_)
@@ -83,7 +83,7 @@ void Camera::ProcessMouseZoom(int y_)
 
 	//Update the camera data.
 	UpdateCameraVectors();
-	Frustum::GetInstance()->UpdatePlanes(GetView() * GetPerspective());
+	Frustum::GetInstance()->UpdatePlanes(perspective * view);
 }
 
 //This function gets the forward, right, and up vectors, then sets the camera to look at the correct spot.

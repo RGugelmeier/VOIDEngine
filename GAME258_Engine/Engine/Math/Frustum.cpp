@@ -11,9 +11,6 @@ Frustum::Frustum()
 	engineInstance = CoreEngine::GetInstance();
 	cam_ = engineInstance->GetCamera();
 	UpdatePlanes(cam_->GetView() * cam_->GetPerspective());
-
-	//Normalize all planes.
-	//PlaneNormalization();
 }
 
 //Clean up.
@@ -34,10 +31,13 @@ Frustum* Frustum::GetInstance()
 	return frustumInstance.get();
 }
 
-//Checks if the model that is passed in is inside of the frustum.
+//Checks if the model that is passed in is inside of the frustum by using the dot product of a point on the bounding box and each frustum wall.
+//TODO change this to take a gameobject, not a model.
 bool Frustum::SeenCheck(Model* modelToCheck_)
 {
+	//Check will hold the distance from a point to a frustum plane.
 	float check;
+	//Get the bounding box of the model we are checking.
 	BoundingBox box = modelToCheck_->GetBoundingBox();
 	
 	//Left plane check;
@@ -137,4 +137,6 @@ void Frustum::UpdatePlanes(mat4 targetMatrix)
 	farPlane.b = targetMatrix[3][1] - targetMatrix[2][1];
 	farPlane.c = targetMatrix[3][2] - targetMatrix[2][2];
 	farPlane.d = targetMatrix[3][3] - targetMatrix[2][3];
+
+	//TODO Normalize all planes.
 }

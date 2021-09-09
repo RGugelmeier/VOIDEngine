@@ -1,4 +1,4 @@
-//TODO Add a function that allows deletion of gameobject from a noide, and functionality to move an object from one cell to another.
+//TODO Add a function that allows deletion of gameobject from a cell, and functionality to move an object from one cell to another.
 //These are needed to update the spatialpartition system. For example if an object moves from one cell to the other, the system will not know...
 //and it can cause the collision to not be detected properly.
 
@@ -61,13 +61,13 @@ private:
 	static int childNum;
 };
 
+//Contains functionality to use the spatial partition with objects.
 class OctSpatialPartition {
 public:
 	OctSpatialPartition(float worldSize_);
 	~OctSpatialPartition();
 	void AddObject(GameObject* obj_);
 	GameObject* GetCollision(Ray ray_);
-
 private:
 	OctNode* root;
 	vector<OctNode*> rayIntersectionList;

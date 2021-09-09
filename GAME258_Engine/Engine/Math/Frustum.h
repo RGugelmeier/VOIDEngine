@@ -17,13 +17,7 @@ struct Plane {
 	float a, b, c, d;
 };
 
-//Used to check if a model is on the "seen" or "not seen" side of the frustum planes.
-enum Seen
-{
-	SEEN = 1,
-	ON_PLANE = 0,
-	NOT_SEEN = -1
-};
+
 
 class Frustum
 {

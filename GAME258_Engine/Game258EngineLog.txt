@@ -1,4 +1,4 @@
-[INFO]: OpenGL Version: 4.5.0 NVIDIA 460.89 in : Window.cpp on line: 51
+[INFO]: OpenGL Version: 4.5.0 NVIDIA 471.11 in : Window.cpp on line: 51
 [INFO]: Window created in : Window.cpp on line: 54
 [INFO]: Start Scene started. in : StartScene.cpp on line: 14
 [INFO]: Everything worked in : CoreEngine.cpp on line: 59
