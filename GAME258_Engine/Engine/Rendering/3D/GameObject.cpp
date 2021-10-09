@@ -1,5 +1,11 @@
 #include "GameObject.h"
 
+//Use this constructor if the GameObject has no model.
+GameObject::GameObject(vec3 position_) : model(NULL), position(vec3()), angle(0.0f), rotation(vec3(0.0f, 1.0f, 0.0f)), scale(vec3(1.0f)), modelInstance(0), hit(false) 
+{
+	position = position_;
+}
+
 //Set default values. Set model to be the model passed in. Check if the model passed in is not nullptr, and then create the instance and set it's bounding box values.
 GameObject::GameObject(Model* model_, vec3 position_) : model(nullptr), position(vec3()), angle(0.0f), rotation(vec3(0.0f, 1.0f, 0.0f)), scale(vec3(1.0f)), modelInstance(0), hit(false)
 {
@@ -10,8 +16,6 @@ GameObject::GameObject(Model* model_, vec3 position_) : model(nullptr), position
 		modelInstance = model->CreateInstance(position, angle, rotation, scale);
 		boundingBox = model->GetBoundingBox();
 		boundingBox.transform = model->GetTransform(modelInstance);
-
-		cout << "Min: " << to_string(boundingBox.minVert) << ", Max: " << to_string(boundingBox.maxVert) << endl;
 	}
 }
 
@@ -23,7 +27,10 @@ GameObject::~GameObject()
 
 void GameObject::Update(const float deltaTime_)
 {
-	SetAngle(angle + 0.005f);
+	for (auto component : components)
+	{
+		component->Update(deltaTime_);
+	}
 }
 
 //Render the model by calling the model's render function.
@@ -84,7 +91,7 @@ void GameObject::SetScale(vec3 scale_)
 //Set the object's tag.
 void GameObject::SetTag(string tag_)
 {
-	tag = tag_;
+	name = tag_;
 }
 
 void GameObject::SetHit(bool hit_, int buttonType_)
@@ -94,6 +101,6 @@ void GameObject::SetHit(bool hit_, int buttonType_)
 	//Print a message if the GameObject is hit.
 	if (hit)
 	{
-		cout << tag << " was hit.\n";
+		cout << name << " was hit.\n";
 	}
 }

@@ -3,7 +3,7 @@
 std::unique_ptr<CoreEngine> CoreEngine::engineInstance = nullptr;
 
 //Set window, isRunning, and gameInterface to null as default to make sure that when they are created, there is no junk data. Set fps to 60 and current scene to the start scene as default.
-CoreEngine::CoreEngine() : window(nullptr), isRunning(false), fps(60), gameInterface(nullptr), camera(nullptr), timer(nullptr), currentScene(SceneList::START_SCENE)
+CoreEngine::CoreEngine() : window(nullptr), isRunning(false), fps(60), gameInterface(nullptr), camera(nullptr), timer(nullptr), currentScene(SceneList::START_SCENE), sceneGraphInstance(SceneGraph::GetInstance())
 {
 	timer = new Timer();
 }
@@ -39,6 +39,7 @@ bool CoreEngine::OnCreate(std::string name_, int width_, int height_)
 
 	//Register engine to mouse event listener so it can perform it's functions here.
 	MouseEventListener::RegisterEngineObject(this);
+	KeyboardEventListener::RegisterEngineObject(this);
 
 	//Get the shader instance singleton, and create the program with name, and file paths for the vertex and fragment shaders.
 	//Create colour shader program.
@@ -123,6 +124,59 @@ void CoreEngine::NotifyOfMouseScroll(int y_)
 	{
 		camera->ProcessMouseZoom(y_);
 	}
+}
+
+void CoreEngine::NotifyOfKeyboardPress(SDL_Keycode e_)
+{
+	if (camera)
+	{
+		if (e_ == SDLK_w)
+		{
+			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(0.0f, 0.0f, -0.1f));
+		}
+		else if (e_== SDLK_a)
+		{
+			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(-0.1f, 0.0f, 0.0f));
+		}
+		else if (e_ == SDLK_s)
+		{
+			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(0.0f, 0.0f, 0.1f));
+		}
+		else if (e_ == SDLK_d)
+		{
+			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(0.1f, 0.0f, 0.0f));
+		}
+		else if (e_ == SDLK_SPACE)
+		{
+			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(0.0f, 0.1f, 0.0f));
+		}
+	}
+}
+
+void CoreEngine::NotifyOfKeyboardRelease(SDL_Keycode e_)
+{
+	if (camera)
+	{
+		if (e_ == SDLK_w || e_ == SDLK_a || e_ == SDLK_s || e_ == SDLK_d)
+		{
+			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetAccel(vec3(0.0f, 0.0f, 0.0f));
+			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(0.0f, 0.0f, 0.0f));
+		}
+	}
+}
+
+void CoreEngine::MoveCamera(vec3 position_)
+{
+	if (sceneGraphInstance->GetGameObject("Player"))
+	{
+		sceneGraphInstance->GetGameObject("Player")->GetComponent<Camera>()->SetPosition(position_);
+		//camera->SetPosition(position_);
+		
+		camera->ProcessCameraMovement(sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->GetVel().x, sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->GetVel().y, sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->GetVel().z);
+		return;
+	}
+
+	Debug::FatalError("Camera is not attached to a game object named 'Player'. Make sure to name the game object 'Player' before moving the camera.", "CoreEngine.cpp", __LINE__);
 }
 
 void CoreEngine::Update(const float deltaTime_)

@@ -44,7 +44,6 @@ bool Frustum::SeenCheck(Model* modelToCheck_)
 	check = leftPlane.a * box.maxVert.x + leftPlane.b * box.maxVert.y + leftPlane.c * box.maxVert.z + leftPlane.d;
 	if (check < 0)
 	{
-		cout << "Left: " << leftPlane.a << " " << leftPlane.b << " " << leftPlane.c << "\n\n";
 		return false;
 	}
 	
@@ -52,7 +51,6 @@ bool Frustum::SeenCheck(Model* modelToCheck_)
 	check = rightPlane.a * box.minVert.x + rightPlane.b * box.minVert.y + rightPlane.c * box.minVert.z + rightPlane.d;
 	if (check < 0)
 	{
-		cout << "Right: " << rightPlane.a << " " << rightPlane.b << " " << rightPlane.c << "\n\n";
 		return false;
 	}
 	
@@ -60,7 +58,6 @@ bool Frustum::SeenCheck(Model* modelToCheck_)
 	check = topPlane.a * box.minVert.x + topPlane.b * box.minVert.y + topPlane.c * box.minVert.z + topPlane.d;
 	if (check < 0)
 	{
-		cout << "Top: " << topPlane.a << " " << topPlane.b << " " << topPlane.c << "\n\n";
 		return false;
 	}
 	
@@ -68,7 +65,6 @@ bool Frustum::SeenCheck(Model* modelToCheck_)
 	check = bottomPlane.a * box.maxVert.x + bottomPlane.b * box.maxVert.y + bottomPlane.c * box.maxVert.z + bottomPlane.d;
 	if (check < 0)
 	{
-		cout << "Bottom: " << rightPlane.a << " " << rightPlane.b << " " << rightPlane.c << "\n\n";
 		return false;
 	}
 	
@@ -76,7 +72,6 @@ bool Frustum::SeenCheck(Model* modelToCheck_)
 	check = nearPlane.a * box.maxVert.x + nearPlane.b * box.maxVert.y + nearPlane.c * box.maxVert.z + nearPlane.d;
 	if (check < 0)
 	{
-		cout << "Near: " << nearPlane.a << " " << nearPlane.b << " " << nearPlane.c << "\n\n";
 		return false;
 	}
 	
@@ -84,7 +79,6 @@ bool Frustum::SeenCheck(Model* modelToCheck_)
 	check = farPlane.a * box.minVert.x + farPlane.b * box.minVert.y + farPlane.c * box.minVert.z + farPlane.d;
 	if (check < 0)
 	{
-		cout << "Far: " << farPlane.a << " " << farPlane.b << " " << farPlane.c << "\n\n";
 		return false;
 	}
 

@@ -39,14 +39,32 @@ Camera::~Camera()
 	}
 }
 
-//Process mouse inputs. (Movement and zoon)
+void Camera::Update(const float deltaTime)
+{
+	CoreEngine::GetInstance()->MoveCamera(SceneGraph::GetInstance()->GetGameObject("Player")->position);
+}
+
+void Camera::OnCreate(GameObject* parent_)
+{
+	parent = parent_;
+}
+
+void Camera::OnDestroy()
+{
+}
+
+void Camera::Render() const
+{
+}
+
+//Process mouse inputs. (Movement and zoom)
 void Camera::ProcessMouseMovement(vec2 offset_)
 {
 	//Change mouse yaw and pitch. Rotate the camera.
 	offset_ *= 0.05f;
 
 	yaw += offset_.x;
-	pitch += offset_.y;
+	pitch -= offset_.y;
 
 	//Make sure pitch does not go out of bounds. If it does, it will flip the screen. No good.
 	if (pitch > 89.0f)
@@ -57,7 +75,7 @@ void Camera::ProcessMouseMovement(vec2 offset_)
 	{
 		pitch = -89.0f;
 	}
-
+	
 	//Make sure yaw does not go out of bounds. This makes it so we always have a positive yaw, and it always stays inside the range of one full circle.
 	if (yaw < 0.0f)
 	{
@@ -82,6 +100,16 @@ void Camera::ProcessMouseZoom(int y_)
 	}
 
 	//Update the camera data.
+	UpdateCameraVectors();
+	Frustum::GetInstance()->UpdatePlanes(perspective * view);
+}
+
+void Camera::ProcessCameraMovement(float x_, float y_, float z_)
+{
+	position += static_cast<vec3>(right * x_, y_ * up, z_ * -forward);
+	//cout << x_ << "\n";
+	//position.x += right.x * x_;
+	//position += right;
 	UpdateCameraVectors();
 	Frustum::GetInstance()->UpdatePlanes(perspective * view);
 }

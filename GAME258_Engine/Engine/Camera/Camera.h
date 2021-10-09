@@ -7,15 +7,21 @@
 
 //#include "../Math/Frustum.h"
 #include "../FX/LightSource.h"
+#include "../../Components/Component.h"
 
 using namespace glm;
 using namespace std;
 
-class Camera
+class Camera : public Component
 {
 public:
 	Camera();
 	~Camera();
+
+	virtual void Update(const float deltaTime);
+	virtual void OnCreate(GameObject* parent_);
+	virtual void OnDestroy();
+	virtual void Render() const;
 
 	void AddLight(LightSource* light_);
 
@@ -43,8 +49,9 @@ public:
 
 	void ProcessMouseMovement(vec2 offset_);
 	void ProcessMouseZoom(int y_);
-private:
+	void ProcessCameraMovement(float x_, float y_, float z_);
 	void UpdateCameraVectors();
+private:
 	vec3 position;
 	mat4 perspective, orthographic, view;
 	float fieldOfView;

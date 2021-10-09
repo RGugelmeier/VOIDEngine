@@ -29,6 +29,7 @@ private:
 	mat4 CreateTransform(vec3 Position_, float angle_, vec3 rotation_, vec3 scale_) const;
 	void LoadModel();
 
+
 	vector<Mesh*> meshes;
 	GLuint shaderProgram;
 	vector<mat4> modelInstances;

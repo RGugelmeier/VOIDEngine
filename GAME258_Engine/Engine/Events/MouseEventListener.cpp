@@ -93,7 +93,14 @@ ivec2 MouseEventListener::GetMousePosition()
 //the y value is flipper because the bottom of the screen is supposed to be 0 due to how SDL works with y screen coords.
 ivec2 MouseEventListener::GetMouseOffset()
 {
-	return ivec2(mouse.x - prevMouse.x, prevMouse.y - mouse.y);
+	if (SDL_GetRelativeMouseMode() == SDL_TRUE)
+	{
+		return ivec2(mouse.x, mouse.y);
+	}
+	else
+	{
+		return ivec2(mouse.x - prevMouse.x, prevMouse.y - mouse.y);
+	}
 }
 //End getters
 
@@ -102,24 +109,40 @@ void MouseEventListener::UpdateMousePosition()
 {
 	//Create temp x and y variables.
 	int tmpX, tmpY;
-	//Pass temp variables into sdl function to set the variables to be the current mouse position.
-	SDL_GetMouseState(&tmpX, &tmpY);
-	//Get the y position of the mouse properly by subtracting the y position variable from the top of the screen. Again this is due to wanting 0 y to be the bottom of the screen.
-	//Cast this to an int.
-	tmpY = static_cast<int>(engineInstance->GetScreenHeight()) - tmpY;
-	//If this is the first time the mouse position is being updated, set prev and mouse values to be the tmp values.
-	if (firstUpdate)
+
+	//Use this code if in relative mouse mode. (Decided by the scene).
+	if (SDL_GetRelativeMouseMode() == SDL_TRUE)
 	{
-		prevMouse.x = mouse.x = tmpX;
-		prevMouse.y = mouse.y = tmpY;
-		firstUpdate = false;
-	}
-	//If the mouse position has been updated before, set prev position to current mouse pos, then set current mouse position to the tmp values.
-	else
-	{
-		prevMouse.x = mouse.x;
-		prevMouse.y = mouse.y;
+		//Pass temp variables into sdl function to set the variables to be the current relative mouse state.
+		SDL_GetRelativeMouseState(&tmpX, &tmpY);
+
 		mouse.x = tmpX;
 		mouse.y = tmpY;
+	}
+
+	//Use this code if not in relative mouse mode. (Decided by the scene).
+	else if (SDL_GetRelativeMouseMode() == SDL_FALSE)
+	{
+		//Pass temp variables into sdl function to set the variables to be the current mouse position in the window.
+		SDL_GetMouseState(&tmpX, &tmpY);
+
+		//Get the y position of the mouse properly by subtracting the y position variable from the top of the screen. Again this is due to wanting 0 y to be the bottom of the screen.
+		//Cast this to an int.
+		//tmpY = static_cast<int>(engineInstance->GetScreenHeight()) - tmpY;
+		//If this is the first time the mouse position is being updated, set prev and mouse values to be the tmp values.
+		if (firstUpdate)
+		{
+			prevMouse.x = mouse.x = tmpX;
+			prevMouse.y = mouse.y = tmpY;
+			firstUpdate = false;
+		}
+		//If the mouse position has been updated before, set prev position to current mouse pos, then set current mouse position to the tmp values.
+		else
+		{
+			prevMouse.x = mouse.x;
+			prevMouse.y = mouse.y;
+			mouse.x = tmpX;
+			mouse.y = tmpY;
+		}
 	}
 }

@@ -19,6 +19,8 @@
 
 #include "../Events/EventListener.h"
 
+#include "../../Physics/Physics.h"
+
 class CoreEngine
 {
 public:
@@ -46,7 +48,13 @@ public:
 	inline SceneList GetCurrentScene() const { return currentScene; }
 	inline float GetScreenWidth() const { return static_cast<float>(window->GetWidth()); }
 	inline float GetScreenHeight() const { return static_cast<float>(window->GetHeight()); }
+	inline Window* GetWindow() const { return window; };
 	inline Camera* GetCamera() const { return camera; };
+	inline glm::vec2 GetMousePos() {
+		//GetMouseState is used here to assign the mouse's current x and y position into the mousePos vec2 values.
+		SDL_GetMouseState(&mousePos.x, &mousePos.y);
+		return glm::ivec2(mousePos.x, mousePos.y);
+	}
 
 	//Setters
 	void SetGameInterface(GameInterface* gameInterface_);
@@ -58,6 +66,13 @@ public:
 	void NotifyOfMouseReleased(ivec2 mouse_, int buttonType_);
 	void NotifyOfMouseMove(ivec2 mouse_);
 	void NotifyOfMouseScroll(int y_);
+
+	//Keyboard event notify functions.
+	void NotifyOfKeyboardPress(SDL_Keycode e_);
+	void NotifyOfKeyboardRelease(SDL_Keycode e_);
+
+	//Moves the camera component and object.
+	void MoveCamera(vec3 position_);
 
 private:
 	CoreEngine();
@@ -76,6 +91,7 @@ private:
 	* fps = the max number of frames per second the engine should run at.
 	* gameInterface = the game interface that will be used as a parent class for a game.
 	* currentScene = the current scene being used/rendered. See SceneList enum class at the top of this file.
+	* mousePos = the mouse's x and y position. Used in the GetMousePos member function.
 	*/
 	Window* window;
 	bool isRunning;
@@ -88,6 +104,10 @@ private:
 	SceneList currentScene;
 
 	Camera* camera;
+
+	glm::ivec2 mousePos;
+
+	SceneGraph* sceneGraphInstance;
 };
 
 #endif // !COREENGINE_H

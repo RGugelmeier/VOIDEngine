@@ -2,7 +2,7 @@
 #define EVENTLISTENER_H
 
 #include "MouseEventListener.h"
-//#include "KeyBoardEventListener.h" Uncomment when KeyboardEventListener is implemented
+#include "KeyBoardEventListener.h"
 
 class EventListener {
 public:

@@ -1,6 +1,9 @@
-[INFO]: OpenGL Version: 4.5.0 NVIDIA 471.11 in : Window.cpp on line: 51
+[INFO]: OpenGL Version: 4.5.0 NVIDIA 472.12 in : Window.cpp on line: 51
 [INFO]: Window created in : Window.cpp on line: 54
 [INFO]: Start Scene started. in : StartScene.cpp on line: 14
-[INFO]: Everything worked in : CoreEngine.cpp on line: 59
+[INFO]: Everything worked in : CoreEngine.cpp on line: 60
 [INFO]: Start scene ended in : StartScene.cpp on line: 9
 [INFO]: Game Scene started. in : GameScene.cpp on line: 18
+[ERROR]: Surface for texture None failed to be created. in : TextureHandler.cpp on line: 63
+[WARNING]: Could not find material with nameNone. Check spelling on GetMaterial functions. in : MaterialHandler.cpp on line: 44
+[INFO]: Game scene ended in : GameScene.cpp on line: 12

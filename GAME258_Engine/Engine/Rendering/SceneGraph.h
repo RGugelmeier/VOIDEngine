@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "3D/GameObject.h"
-#include "../Math//CollisionHandler.h"
+#include "../Math/CollisionHandler.h"
 #include "../Math/Frustum.h"
 
 class SceneGraph

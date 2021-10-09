@@ -16,7 +16,17 @@ void EventListener::Update()
 		{
 			CoreEngine::GetInstance()->Exit();
 		}
-		//Do stuff depending on what event happens. In this case, if any mouse event happens, run MouseEventListener's update with whatever event happens as the parameter.
+
+		//If the event is a keyboard button press, call the keyboard event listener's update to check what button was pressed.
+		if (sdlEvent.type == SDL_KEYDOWN || sdlEvent.type == SDL_KEYUP)
+		{
+			if (sdlEvent.key.repeat == 0)
+			{
+				KeyboardEventListener::Update(sdlEvent);
+			}
+		}
+
+		//If the event is not the X button nor keyboard button press.
 		switch (sdlEvent.type)
 		{
 			case SDL_MOUSEBUTTONDOWN:
