@@ -23,7 +23,8 @@ public:
 	//Setters
 	void SetPosition(vec3 position_);
 	void SetAngle(float angle_);
-	void SetRotation(vec3 rotation_);
+	void SetRotation(vec3 vRotation_);
+	void SetRotation(quat qRotation_);
 	void SetScale(vec3 scale_);
 	void SetTag(string tag_);
 	void SetHit(bool hit_, int buttonType_);
@@ -76,7 +77,8 @@ public:
 
 	vec3 position;
 	float angle;
-	vec3 rotation;
+	vec3 vRotation;
+	quat qRotation;
 
 private:
 	Model* model;

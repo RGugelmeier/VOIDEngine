@@ -14,10 +14,12 @@ class Physics : public Component
 {
 private:
 	Quaternion qAngularVel, orientation;
+	//ANGLES NEED TO BE VECTORS. THIS IS 3D ROTATION, NOT 2D.
 	float mass, rotationalInertia, angle, angularAcc, angularVel;
 	vec3 accel, vel;
 public:
 	Physics();
+	Physics(float mass_, float rotationalInertia_);
 	~Physics();
 
 	virtual void OnCreate(GameObject* parent_);
@@ -28,7 +30,8 @@ public:
 	void ApplyGravity();
 	void ApplyGravity(vec3 forceOfGravity);
 	void ApplyForce(vec3 force);
-	void ApplyRotation(vec3 axisOfRotation, Quaternion orientation, vec3 angularVel);
+	void ApplyRotation(Quaternion orientation, vec3 angularVel);
+	void ApplyTorque(vec3 torque);
 
 	//Setters
 	inline void SetVel(vec3 newVel_) { vel = newVel_; }

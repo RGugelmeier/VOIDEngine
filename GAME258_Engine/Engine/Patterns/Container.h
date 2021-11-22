@@ -30,7 +30,7 @@ public:
 	{
 		for (auto item : container)
 		{
-			std::cout << item << "\n";
+			//std::cout << item << "\n";
 		}
 	}
 private:

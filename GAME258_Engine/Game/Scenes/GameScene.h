@@ -5,6 +5,7 @@
 #include "../../Engine/Core/CoreEngine.h"
 #include "../../Physics/Physics.h"
 #include "../../Components/AI.h"
+#include "../../Components/Grid.h"
 
 //Inherit from Scene
 class GameScene : public Scene
@@ -18,9 +19,12 @@ public:
 	void Render() override;
 
 private:
-	Container<int>* test = new Container<int>;
 	SceneGraph* sceneInstance;
 	float testTimer = 0.0f;
+
+	float test2;
+
+	Window* window;
 };
 
 #endif // !GAMESCENE_H

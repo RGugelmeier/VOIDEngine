@@ -61,6 +61,12 @@ void Model::UpdateInstance(unsigned int index_, vec3 position_, float angle_, ve
 	modelInstances[index_] = CreateTransform(position_, angle_, rotation_, scale_);
 }
 
+//Update the instance but using a quaternion for rotation.
+void Model::UpdateInstance(unsigned int index_, vec3 position_, quat rotation_, vec3 scale_)
+{
+	modelInstances[index_] = CreateTransform(position_, rotation_, scale_);
+}
+
 //Transform getter.
 mat4 Model::GetTransform(unsigned int index_) const
 {
@@ -68,11 +74,22 @@ mat4 Model::GetTransform(unsigned int index_) const
 }
 
 //CReate the transform of the model based on given values.
+//This creates the model matrix for the model.
 mat4 Model::CreateTransform(vec3 position_, float angle_, vec3 rotation_, vec3 scale_) const
 {
 	mat4 model;
 	model = translate(model, position_);
 	model = rotate(model, angle_, rotation_);
+	model = scale(model, scale_);
+	return model;
+}
+
+mat4 Model::CreateTransform(vec3 position_, quat rotation_, vec3 scale_) const
+{
+	mat4 model;
+	mat4 rotationMatrix = glm::toMat4(rotation_);
+	model = translate(model, position_);
+	model *= rotationMatrix;
 	model = scale(model, scale_);
 	return model;
 }

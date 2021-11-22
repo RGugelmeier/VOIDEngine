@@ -157,6 +157,8 @@
     <ClCompile Include="Engine\FX\LightSource.cpp" />
     <ClCompile Include="Engine\Rendering\3D\LoadOBJModel.cpp" />
     <ClCompile Include="Engine\Events\KeyboardEventListener.cpp" />
+    <ClCompile Include="Engine\Math\Graph.cpp" />
+    <ClCompile Include="Components\Grid.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Engine\Core\Window.cpp" />
     <ClCompile Include="Engine\Core\Timer.cpp" />
@@ -204,6 +206,8 @@
     <ClInclude Include="Engine\Events\MouseEventListener.h" />
     <ClInclude Include="Engine\Core\OctSpatialPartition.h" />
     <ClInclude Include="Engine\Events\KeyboardEventListener.h" />
+    <ClInclude Include="Engine\Math\Graph.h" />
+    <ClInclude Include="Components\Grid.h" />
     <ClInclude Include="Physics\Physics.h" />
     <ClInclude Include="Engine\Math\Quaternion.h" />
   </ItemGroup>

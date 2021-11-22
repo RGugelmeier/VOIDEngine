@@ -2,6 +2,8 @@
 #define MODEL_H
 
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
 #include <string>
 #include "LoadOBJModel.h"
 
@@ -18,7 +20,8 @@ public:
 	void Render(Camera* camera_);
 	void AddMesh(Mesh* mesh_);
 	unsigned int CreateInstance(vec3 position_, float angle_, vec3 rotation_, vec3 scale_);
-	void UpdateInstance(unsigned int index, vec3 Position_, float angle_, vec3 rotation_, vec3 scale_);
+	void UpdateInstance(unsigned int index_, vec3 position_, float angle_, vec3 rotation_, vec3 scale_);
+	void UpdateInstance(unsigned int index_, vec3 position_, quat rotation_, vec3 scale_);
 	mat4 GetTransform(unsigned int index_) const;
 
 	//Getters
@@ -27,6 +30,7 @@ public:
 
 private:
 	mat4 CreateTransform(vec3 Position_, float angle_, vec3 rotation_, vec3 scale_) const;
+	mat4 CreateTransform(vec3 Position_, quat rotation_, vec3 scale_) const;
 	void LoadModel();
 
 
