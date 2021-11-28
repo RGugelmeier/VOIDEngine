@@ -28,6 +28,9 @@ Model::~Model()
 	{
 		modelInstances.clear();
 	}
+
+	delete obj;
+	obj = nullptr;
 }
 
 //Set which shader program to use, then call the render function for each mesh in the model.
@@ -73,7 +76,20 @@ mat4 Model::GetTransform(unsigned int index_) const
 	return modelInstances[index_];
 }
 
-//CReate the transform of the model based on given values.
+//Gets the vertex positions of the model BEFORE being translated.
+vector<vec3> Model::GetVertices() const
+{
+	vector<vec3> v;
+
+	for (int i = 0; i < obj->GetVerticies().size(); i++)
+	{
+		v.push_back(obj->GetVerticies()[i]);
+	}
+
+	return v;
+}
+
+//Create the transform of the model based on given values.
 //This creates the model matrix for the model.
 mat4 Model::CreateTransform(vec3 position_, float angle_, vec3 rotation_, vec3 scale_) const
 {
@@ -104,6 +120,5 @@ void Model::LoadModel()
 
 	boundingBox = obj->GetBoundingBox();
 
-	delete obj;
-	obj = nullptr;
+	
 }

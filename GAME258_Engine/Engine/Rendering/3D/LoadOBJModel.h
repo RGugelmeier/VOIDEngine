@@ -17,6 +17,7 @@ public:
 
 	void LoadModel(const string& objFilePath_, const string& mtlFilePath_);
 	vector<SubMesh> GetSubMeshes();
+	inline vector<vec3> GetVerticies() const { return vertices; }
 	inline BoundingBox GetBoundingBox() const { return boundingBox; }
 
 private:

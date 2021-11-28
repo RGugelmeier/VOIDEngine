@@ -18,7 +18,9 @@ public:
 	inline vec3 GetScale() const { return scale; }
 	inline string GetTag() const { return name; }
 	inline BoundingBox GetBoundingBox() const { return boundingBox; }
-	inline bool GetHit() const { return hit; };
+	inline bool GetHit() const { return hit; }
+	inline Model* GetModel() const { return model; }
+	vector<vec3> GetVertices();
 
 	//Setters
 	void SetPosition(vec3 position_);

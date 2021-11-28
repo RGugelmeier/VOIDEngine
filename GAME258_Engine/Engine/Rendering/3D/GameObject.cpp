@@ -47,6 +47,18 @@ void GameObject::Render(Camera* camera_)
 	}
 }
 
+vector<vec3> GameObject::GetVertices()
+{
+	vector<vec3> v;
+
+	for (int i = 0; i < model->GetVertices().size(); i++)
+	{
+		v.push_back(model->GetVertices()[i] + position);
+	}
+
+	return v;
+}
+
 //Setters. Set the model's data as well as the bounding box's data, if there is a model.
 void GameObject::SetPosition(vec3 position_)
 {

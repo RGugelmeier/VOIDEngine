@@ -172,6 +172,7 @@
     <ClCompile Include="Engine\Core\OctSpatialPartition.cpp" />
     <ClCompile Include="Physics\Physics.cpp" />
     <ClCompile Include="Engine\Math\Quaternion.cpp" />
+    <ClCompile Include="Physics\Simplex.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\AI.h" />
@@ -210,6 +211,7 @@
     <ClInclude Include="Components\Grid.h" />
     <ClInclude Include="Physics\Physics.h" />
     <ClInclude Include="Engine\Math\Quaternion.h" />
+    <ClInclude Include="Physics\Simplex.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Shaders\ColourFragmentShader.glsl" />
