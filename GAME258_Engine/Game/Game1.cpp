@@ -49,6 +49,9 @@ void Game1::BuildScene()
 
 	switch (CoreEngine::GetInstance()->GetCurrentScene())
 	{
+	case CoreEngine::SceneList::PHYSICS_SCENE:
+		currentScene = new PhysicsScene();
+		break;
 	case CoreEngine::SceneList::GAME_SCENE:
 		currentScene = new GameScene();
 		break;

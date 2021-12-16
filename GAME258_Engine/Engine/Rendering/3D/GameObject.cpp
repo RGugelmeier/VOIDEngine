@@ -31,10 +31,6 @@ void GameObject::Update(const float deltaTime_)
 	for (auto component : components)
 	{
 		component->Update(deltaTime_);
-		//if (dynamic_cast<Camera*>(component))
-		//{
-		//	component.
-		//}
 	}
 }
 

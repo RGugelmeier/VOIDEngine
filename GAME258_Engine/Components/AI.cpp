@@ -183,15 +183,15 @@ vector<int> AI::AStar(Graph* graph, int startNode, int goalNode)
 			//
 			//find_if searches a list and returns an iterator to the found value if found, and an iterator to the end of the container if not found.
 			//Here we use this to see if the next node is not in the costSoFar by checking if find_if returns an iterator to the end of the container costSoFar.
-			if (find_if(costSoFar.begin(), costSoFar.end(), [next](const auto& mo) {return mo.second == next; }) == costSoFar.end() || newCost < costSoFar[next])
+			if (costSoFar.count(next) == 0 || newCost < costSoFar[next])
 			{
 				costSoFar[next] = newCost;
-				currentNodeAndPriority->priority = newCost + graph->heuristic(next, goalNode);
+				float priority = newCost + graph->heuristic(next, goalNode);
 
 				//Create a new Priortiy Queue Node to add to be filled with data and added to the frontier.
 				PriorityQNode* nodeAndPriorityToAdd;
 				//Fill it with data.
-				nodeAndPriorityToAdd = new PriorityQNode(next, currentNodeAndPriority->priority);
+				nodeAndPriorityToAdd = new PriorityQNode(next, priority);
 				//Add it to the frontier.
 				frontier.push(*nodeAndPriorityToAdd); //TODO Clean this up somehow. Maybe use smart pointers so when the AI object gets deleted, these delet as well?
 													  //I can't just delete them in the deconstructor because frontier only exists in this function and I need to loop through it to delete all the nodes.

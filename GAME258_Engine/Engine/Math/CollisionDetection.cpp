@@ -200,17 +200,7 @@ bool CollisionDetection::RayOBBIntersetion(Ray* ray_, BoundingBox* box_)
 
 bool CollisionDetection::GJKDetection(GameObject* obj1, GameObject* obj2)
 {
-	//Check which object has more vertices so we can check how many times to loop through the determinate checker.
-	GameObject* largerModel;
 	mat4 m;
-	if (obj1->GetModel()->GetVertices().size() > obj2->GetModel()->GetVertices().size())
-	{
-		largerModel = obj1;
-	}
-	else
-	{
-		largerModel = obj2;
-	}
 #pragma region GetSimplexPoints
 	Simplex* simplex = new Simplex();
 	vec3 direction = Simplex::GetDirectionBetweenShapes(obj1, obj2);
@@ -360,10 +350,6 @@ inline bool CollisionDetection::SameSign(valueType x, valueType y)
 	{
 		return true;
 	}
-	//else if (x == 0 && y == 0)
-	//{
-	//	return true;
-	//}
 	else
 	{
 		return false;

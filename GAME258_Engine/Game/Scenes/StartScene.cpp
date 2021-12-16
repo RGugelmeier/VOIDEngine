@@ -23,4 +23,5 @@ void StartScene::Update(const float deltaTime_)
 
 void StartScene::Render()
 {
+	SceneGraph::GetInstance()->Render(CoreEngine::GetInstance()->GetCamera());
 }

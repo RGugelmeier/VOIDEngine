@@ -5,6 +5,7 @@
 class Camera;	
 class CoreEngine;
 class Model;
+class GameObject;
 
 #include <memory>
 #include <glm/glm.hpp>
@@ -27,7 +28,7 @@ public:
 	Frustum(Frustum&&) = delete;
 	Frustum& operator=(const Frustum&) = delete;
 	Frustum& operator=(Frustum&&) = delete;
-	
+
 	Frustum();
 	~Frustum();
 	
@@ -39,7 +40,7 @@ public:
 	inline Plane GetNear() const { return nearPlane; }
 	inline Plane GetFar() const { return farPlane; }
 
-	bool SeenCheck(Model* modelToCheck_);
+	bool SeenCheck(GameObject* objectToCheck_);
 
 	static Frustum* GetInstance();
 
@@ -50,7 +51,7 @@ private:
 	friend default_delete<Frustum>;
 	
 	//Normalize a plane.
-	void PlaneNormalization();
+	void PlaneNormalization(Plane plane_);
 	
 	
 	Camera* cam_;

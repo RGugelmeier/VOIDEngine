@@ -15,8 +15,8 @@ public:
 	virtual void OnDestroy() = 0;
 	virtual void Render() const = 0;
 
-protected:
 	GameObject* parent;
+protected:
 private:
 	//bool hasPosition;
 };

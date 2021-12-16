@@ -1,19 +1,17 @@
-#ifndef GAMESCENE_H
-#define GAMESCENE_H
+#ifndef PHYSICSSCENE_H
+#define PHYSICSSCENE_H
 
-#include "../../Engine/Patterns/Container.h"
 #include "../../Engine/Core/CoreEngine.h"
 #include "../../Physics/Physics.h"
-#include "../../Components/AI.h"
 #include "../../Components/Grid.h"
-#include "../Characters/CubePerson.h"
+#include <thread>
 
 //Inherit from Scene
-class GameScene : public Scene
+class PhysicsScene : public Scene
 {
 public:
-	GameScene();
-	virtual ~GameScene();
+	PhysicsScene();
+	virtual ~PhysicsScene();
 
 	bool OnCreate() override;
 	void Update(const float deltaTime_) override;
@@ -21,9 +19,12 @@ public:
 
 private:
 	SceneGraph* sceneInstance;
-	float testTimer = 0.0f;
 
 	Window* window;
+
+	thread th1, th2;
+
+	static void TestThread(int threadNum);
 };
 
 #endif // !GAMESCENE_H

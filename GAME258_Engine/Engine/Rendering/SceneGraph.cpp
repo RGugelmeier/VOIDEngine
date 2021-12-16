@@ -131,12 +131,13 @@ void SceneGraph::Render(Camera* camera_)
 	for (auto entry : sceneModels)
 	{
 		glUseProgram(entry.first);
-		for (auto m : entry.second)
+		for (auto object : sceneGameObjects)
 		{
-			//if (Frustum::GetInstance()->SeenCheck(m))
-			//{
-				m->Render(camera_);
-			//}
+			if (Frustum::GetInstance()->SeenCheck(object.second))
+			{
+				object.second->Render(camera_);
+				//m->Render(camera_);
+			}
 		}
 	}
 }

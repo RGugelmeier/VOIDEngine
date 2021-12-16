@@ -18,7 +18,6 @@ public:
 private:
 	//TODO Make the simplex be created from bounding boxes rather than the actual model. Using the can take a lot more time due to the amount of vertices a model can have.
 	//If you use a bounding box instead it will only ever have to check 8 verices.
-	//MAYBE THESE CAN'T ALL BE STATIC? IF SOMETHING GOES WRONG, CHECK THAT.
 	static vec3 GetFurthestPointInDirection(GameObject* s_, vec3 d_);
 	static vec3 GetClosestPointInDirection(GameObject* s_, vec3 d);
 

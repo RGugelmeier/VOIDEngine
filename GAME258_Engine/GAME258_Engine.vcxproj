@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -141,6 +141,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Components\StateMachine\Conditions\CIdle.cpp" />
+    <ClCompile Include="Components\StateMachine\Conditions\CFollowPlayer.cpp" />
+    <ClCompile Include="Components\StateMachine\Condition.cpp" />
+    <ClCompile Include="Game\Characters\CubePerson.cpp" />
+    <ClCompile Include="Game\Characters\Character.cpp" />
     <ClCompile Include="Components\AI.cpp" />
     <ClCompile Include="Engine\Math\CollisionHandler.cpp" />
     <ClCompile Include="Engine\Math\CollisionDetection.cpp" />
@@ -170,11 +175,21 @@
     <ClCompile Include="Engine\FX\MaterialLoader.cpp" />
     <ClCompile Include="Engine\Events\MouseEventListener.cpp" />
     <ClCompile Include="Engine\Core\OctSpatialPartition.cpp" />
+    <ClCompile Include="Game\Scenes\PhysicsScene.cpp" />
     <ClCompile Include="Physics\Physics.cpp" />
     <ClCompile Include="Engine\Math\Quaternion.cpp" />
     <ClCompile Include="Physics\Simplex.cpp" />
+    <ClCompile Include="Components\StateMachine\State.cpp" />
+    <ClCompile Include="Components\StateMachine\StateMachine.cpp" />
+    <ClCompile Include="Components\StateMachine\Transition.cpp" />
+    <ClCompile Include="Components\StateMachine\StateMachines\SMCubePerson.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Components\StateMachine\Conditions\CIdle.h" />
+    <ClInclude Include="Components\StateMachine\Conditions\CFollowPlayer.h" />
+    <ClInclude Include="Components\StateMachine\Condition.h" />
+    <ClInclude Include="Game\Characters\CubePerson.h" />
+    <ClInclude Include="Game\Characters\Character.h" />
     <ClInclude Include="Components\AI.h" />
     <ClInclude Include="Components\Component.h" />
     <ClInclude Include="Engine\Math\CollisionHandler.h" />
@@ -209,9 +224,14 @@
     <ClInclude Include="Engine\Events\KeyboardEventListener.h" />
     <ClInclude Include="Engine\Math\Graph.h" />
     <ClInclude Include="Components\Grid.h" />
+    <ClInclude Include="Game\Scenes\PhysicsScene.h" />
     <ClInclude Include="Physics\Physics.h" />
     <ClInclude Include="Engine\Math\Quaternion.h" />
     <ClInclude Include="Physics\Simplex.h" />
+    <ClInclude Include="Components\StateMachine\State.h" />
+    <ClInclude Include="Components\StateMachine\StateMachine.h" />
+    <ClInclude Include="Components\StateMachine\Transition.h" />
+    <ClInclude Include="Components\StateMachine\StateMachines\SMCubePerson.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Shaders\ColourFragmentShader.glsl" />

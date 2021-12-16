@@ -132,23 +132,23 @@ void CoreEngine::NotifyOfKeyboardPress(SDL_Keycode e_)
 	{
 		if (e_ == SDLK_w)
 		{
-			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(0.0f, 0.0f, -0.1f));
+			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(0.0f, 0.0f, -5.0f));
 		}
 		else if (e_== SDLK_a)
 		{
-			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(-0.1f, 0.0f, 0.0f));
+			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(-5.0f, 0.0f, 0.0f));
 		}
 		else if (e_ == SDLK_s)
 		{
-			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(0.0f, 0.0f, 0.1f));
+			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(0.0f, 0.0f, 5.0f));
 		}
 		else if (e_ == SDLK_d)
 		{
-			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(0.1f, 0.0f, 0.0f));
+			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(5.0f, 0.0f, 0.0f));
 		}
 		else if (e_ == SDLK_SPACE)
 		{
-			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(0.0f, 0.1f, 0.0f));
+			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(0.0f, 5.0f, 0.0f));
 		}
 	}
 }

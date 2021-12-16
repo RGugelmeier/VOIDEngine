@@ -17,12 +17,13 @@ bool GameScene::OnCreate()
 {
 	Debug::Info("Game Scene started.", "GameScene.cpp", __LINE__);
 
-	//Model* diceModel = new Model("Resources/Models/Dice.obj", "Resources/Materials/Dice.mtl", ShaderHandler::GetInstance()->GetShader("basicShader"));
-	//SceneGraph::GetInstance()->AddModel(diceModel);
-	Model* tetrahedronModel = new Model("Resources/Models/Tetrahedron.obj", "Resources/Materials/Tetrahedron.mtl", ShaderHandler::GetInstance()->GetShader("basicShader"));
-	SceneGraph::GetInstance()->AddModel(tetrahedronModel);
-	//Model* appleModel = new Model("Resources/Models/Apple.obj", "Resources/Materials/Apple.mtl", ShaderHandler::GetInstance()->GetShader("basicShader"));
-	//SceneGraph::GetInstance()->AddModel(appleModel);
+	Model* diceModel = new Model("Resources/Models/Dice.obj", "Resources/Materials/Dice.mtl", ShaderHandler::GetInstance()->GetShader("basicShader"));
+	SceneGraph::GetInstance()->AddModel(diceModel);
+
+	Model* appleModel = new Model("Resources/Models/Apple.obj", "Resources/Materials/Apple.mtl", ShaderHandler::GetInstance()->GetShader("basicShader"));
+	SceneGraph::GetInstance()->AddModel(appleModel);
+
+	sceneInstance->AddGameObject(new CubePerson(diceModel, vec3(-2.0f, 0.0f, 0.0f)), true, "Cube");
 
 	sceneInstance = SceneGraph::GetInstance();
 
@@ -35,34 +36,27 @@ bool GameScene::OnCreate()
 	CollisionHandler::GetInstance()->OnCreate(100.0f);
 
 	//sceneInstance->AddGameObject(new GameObject(diceModel, vec3(-2.0f, 0.0f, -2.0f)), true, "Cube");
-	//sceneInstance->AddGameObject(new GameObject(appleModel, vec3(1.5f, 0.0f, 0.0f)), true, "Apple");
+	sceneInstance->AddGameObject(new GameObject(appleModel, vec3(1.5f, 0.0f, 0.0f)), true, "Apple");
 	
 	sceneInstance->GetGameObject("Player")->AddComponent<Physics>();
 	sceneInstance->GetGameObject("Player")->AddComponent<Camera>();
 	
-	//sceneInstance->GetGameObject("Cube")->AddComponent<AI>();
-	//sceneInstance->GetGameObject("Cube")->AddComponent<Physics>();
-	//sceneInstance->GetGameObject("Cube")->SetRotation(vec3(1.0f, 0.0f, 0.0f));
-	//sceneInstance->GetGameObject("Apple")->SetRotation(vec3(1.0f, 0.0f, 0.0f));
+	sceneInstance->GetGameObject("Cube")->AddComponent<AI>();
+	sceneInstance->GetGameObject("Cube")->AddComponent<Physics>();
 
-	sceneInstance->AddGameObject(new GameObject(tetrahedronModel, vec3(-6.0f, 0.0f, 0.0f)), true, "TetrahedronL");
-	sceneInstance->AddGameObject(new GameObject(tetrahedronModel, vec3(6.0f, 0.0f, 0.0f)), true, "TetrahedronR");
-	
-	sceneInstance->GetGameObject("TetrahedronL")->AddComponent<Physics>();
-	sceneInstance->GetGameObject("TetrahedronR")->AddComponent<Physics>();
+	sceneInstance->GetGameObject("Cube")->SetRotation(vec3(1.0f, 0.0f, 0.0f));
+	sceneInstance->GetGameObject("Apple")->SetRotation(vec3(1.0f, 0.0f, 0.0f));
 
-	sceneInstance->GetGameObject("TetrahedronL")->GetComponent<Physics>()->ApplyRotation(Quaternion(0.1f, 0, 0, 0), vec3(1.0f, 1.0f, 1.0f));
-	sceneInstance->GetGameObject("TetrahedronR")->GetComponent<Physics>()->ApplyRotation(Quaternion(0.1f, 0, 0, 0), vec3(1.0f, 1.0f, 1.0f));
-	tetrahedronModel = nullptr;
-	//diceModel = nullptr;
-	//appleModel = nullptr;
+	Grid levelGrid = Grid(1.0f, vec3(10, 10, 10));
 
-	//sceneInstance->AddGameObject(new GameObject(vec3(0.0f, 0.0f, 0.0f)), false, "TestGrid");
-	//sceneInstance->GetGameObject("TestGrid")->AddComponent<Grid>(1.0f, vec3(4.0f, 4.0f, 4.0f));
-	//
-	//sceneInstance->GetGameObject("Cube")->GetComponent<AI>()->AStar(sceneInstance->GetGameObject("TestGrid")->GetComponent<Grid>()->getGraph(), 2, 14);
+	sceneInstance->AddGameObject(new GameObject(vec3(0.0f, 0.0f, 0.0f)), false, "Graph");
+	sceneInstance->GetGameObject("Graph")->AddComponent<Grid>(levelGrid);
 
-	//sceneInstance->GetGameObject("TetrahedronR")->GetModel()->GetVertices();
+	sceneInstance->GetGameObject("Cube")->GetComponent<AI>()->AStar(sceneInstance->GetGameObject("Graph")->GetComponent<Grid>()->getGraph(), 0, 35);
+
+	diceModel = nullptr;
+	appleModel = nullptr;
+
 	return true;
 }
 
@@ -70,30 +64,12 @@ bool GameScene::OnCreate()
 void GameScene::Update(const float deltaTime_)
 {
 	SceneGraph::GetInstance()->Update(deltaTime_);
-
-	//This is for AI assignment testing
-	//Remove these later. Thyis needs to be optimized.
-	sceneInstance->GetGameObject("Player")->SetPosition(CoreEngine::GetInstance()->GetCamera()->GetPosition());
-
+	CoreEngine::GetInstance()->GetCamera()->SetPosition(sceneInstance->GetGameObject("Player")->position);
+	//cout << "Distance: " << distance(sceneInstance->GetGameObject("Cube")->position, sceneInstance->GetGameObject("Player")->position) << "\n";
+	//cout << "Cube pos: " << sceneInstance->GetGameObject("Cube")->position.x << ", " << sceneInstance->GetGameObject("Cube")->position.y << ", " << sceneInstance->GetGameObject("Cube")->position.z << "\n";
+	//cout << "Player pos: " << sceneInstance->GetGameObject("Player")->position.x << ", " << sceneInstance->GetGameObject("Player")->position.y << ", " << sceneInstance->GetGameObject("Player")->position.z << "\n";
 	//sceneInstance->GetGameObject("Cube")->GetComponent<AI>()->Arrive(sceneInstance->GetGameObject("Player")->position, 5.0f, 10.0f, 5.0f, 10.0f, 0.1f);
 	//sceneInstance->GetGameObject("Cube")->GetComponent<AI>()->Seek(sceneInstance->GetGameObject("Player")->position, 20.0f);
-
-	
-
-	//This is for physics assignment testing.
-	
-	//sceneInstance->GetGameObject("TetrahedronL")->angle += 0.01f;
-	sceneInstance->GetGameObject("TetrahedronL")->GetComponent<Physics>()->ApplyForce(vec3(0.5f, 0.0f, 0.0f));
-
-	
-	//sceneInstance->GetGameObject("TetrahedronR")->angle += 0.01f;
-
-	if (CollisionDetection::GJKDetection(sceneInstance->GetGameObject("TetrahedronL"), sceneInstance->GetGameObject("TetrahedronR")))
-	{
-		cout << "Collision detected!\n";
-	}
-
-	testTimer += deltaTime_;
 }
 
 //This function renders things to the screen.

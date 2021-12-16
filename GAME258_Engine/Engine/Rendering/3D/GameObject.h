@@ -11,7 +11,7 @@ public:
 	GameObject(Model* model_, vec3 position_ = vec3());
 	~GameObject();
 
-	void Update(const float deltaTime_);
+	virtual void Update(const float deltaTime_);
 	void Render(Camera* camera_);
 
 	//Getters

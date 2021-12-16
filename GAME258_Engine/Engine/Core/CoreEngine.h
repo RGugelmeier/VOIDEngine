@@ -28,7 +28,8 @@ public:
 	enum class SceneList
 	{
 		START_SCENE,
-		GAME_SCENE
+		GAME_SCENE,
+		PHYSICS_SCENE
 	};
 
 	//Next 4 lines prevent use of copy or move constructor. Ensures only one engine will exist at any time.
