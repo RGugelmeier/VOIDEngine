@@ -4,7 +4,6 @@
 #include "../../Engine/Core/CoreEngine.h"
 #include "../../Physics/Physics.h"
 #include "../../Components/Grid.h"
-#include <thread>
 
 //Inherit from Scene
 class PhysicsScene : public Scene
@@ -21,10 +20,6 @@ private:
 	SceneGraph* sceneInstance;
 
 	Window* window;
-
-	thread th1, th2;
-
-	static void TestThread(int threadNum);
 };
 
 #endif // !GAMESCENE_H

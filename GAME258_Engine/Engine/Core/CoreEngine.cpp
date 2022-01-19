@@ -46,6 +46,8 @@ bool CoreEngine::OnCreate(std::string name_, int width_, int height_)
 	ShaderHandler::GetInstance()->CreateProgram("colourShader", "Engine/Shaders/ColourVertexShader.glsl", "Engine/Shaders/ColourFragmentShader.glsl");
 	//Create basic shader program.
 	ShaderHandler::GetInstance()->CreateProgram("basicShader", "Engine/Shaders/VertexShader.glsl", "Engine/Shaders/FragmentShader.glsl");
+	//Create the skybox shader program;
+	ShaderHandler::GetInstance()->CreateProgram("skyboxShader", "Engine/Shaders/SkyboxVert.glsl", "Engine/Shaders/SkyboxFrag.glsl");
 
 	if (gameInterface)
 	{
@@ -132,23 +134,24 @@ void CoreEngine::NotifyOfKeyboardPress(SDL_Keycode e_)
 	{
 		if (e_ == SDLK_w)
 		{
-			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(0.0f, 0.0f, -5.0f));
+			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(0.0f, 0.0f, -0.3f));
 		}
 		else if (e_== SDLK_a)
 		{
-			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(-5.0f, 0.0f, 0.0f));
+			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(-0.3f, 0.0f, 0.0f));
 		}
 		else if (e_ == SDLK_s)
 		{
-			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(0.0f, 0.0f, 5.0f));
+			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(0.0f, 0.0f, 0.3f));
 		}
 		else if (e_ == SDLK_d)
 		{
-			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(5.0f, 0.0f, 0.0f));
+			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(0.3f, 0.0f, 0.0f));
 		}
 		else if (e_ == SDLK_SPACE)
 		{
-			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(0.0f, 5.0f, 0.0f));
+  			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(0.0f, 0.3f, 0.0f));
+			cout << sceneGraphInstance->GetGameObject("Player")->position.y << "\n";
 		}
 	}
 }
@@ -157,7 +160,7 @@ void CoreEngine::NotifyOfKeyboardRelease(SDL_Keycode e_)
 {
 	if (camera)
 	{
-		if (e_ == SDLK_w || e_ == SDLK_a || e_ == SDLK_s || e_ == SDLK_d)
+		if (e_ == SDLK_w || e_ == SDLK_a || e_ == SDLK_s || e_ == SDLK_d || e_ == SDLK_SPACE)
 		{
 			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetAccel(vec3(0.0f, 0.0f, 0.0f));
 			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(0.0f, 0.0f, 0.0f));

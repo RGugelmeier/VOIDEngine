@@ -7,6 +7,11 @@ CubePerson::CubePerson(Model* model_, vec3 position_) : Character(model_, positi
 
 CubePerson::~CubePerson()
 {
+	if (stateMachine)
+	{
+		stateMachine = nullptr;
+		delete(stateMachine);
+	}
 }
 
 void CubePerson::OnCreate()

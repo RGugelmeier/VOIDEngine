@@ -24,7 +24,7 @@ void SMCubePerson::OnCreate()
 	Transition* idleToFollow = new Transition(persuePlayer, followCondition);
 	idle->AddTransition(idleToFollow);
 
-	//Add a condition from follow player to idle. It takes the same condition as the other way but when we test it we will negate the check.
+	//Add a transition from follow player to idle. Also create an idleCondition for this transition.
 	CIdle* idleCondition;
 	idleCondition = new CIdle(owner);
 	Transition* followToIdle = new Transition(idle, idleCondition);

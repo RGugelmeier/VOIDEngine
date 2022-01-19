@@ -11,6 +11,7 @@ public:
 	GameObject(Model* model_, vec3 position_ = vec3());
 	~GameObject();
 
+	void OnCreate();
 	virtual void Update(const float deltaTime_);
 	void Render(Camera* camera_);
 
@@ -19,7 +20,7 @@ public:
 	inline string GetTag() const { return name; }
 	inline BoundingBox GetBoundingBox() const { return boundingBox; }
 	inline bool GetHit() const { return hit; }
-	inline Model* GetModel() const { return model; }
+	inline Model* GetModel() const {  if(model) return model; }
 	vector<vec3> GetVertices();
 
 	//Setters

@@ -15,6 +15,7 @@ public:
 	LoadOBJModel();
 	~LoadOBJModel();
 
+	void LoadModel(const string& filePath_);
 	void LoadModel(const string& objFilePath_, const string& mtlFilePath_);
 	vector<SubMesh> GetSubMeshes();
 	inline vector<vec3> GetVerticies() const { return vertices; }
@@ -22,7 +23,6 @@ public:
 
 private:
 	void PostProcessing();
-	void LoadModel(const string& filePath_);
 	void LoadMaterial(const string& matName_);
 	void LoadMaterialLibrary(const string& matFilePath_);
 

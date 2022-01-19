@@ -1,5 +1,7 @@
 #include "Camera.h"
 
+#include "../Rendering/SceneGraph.h"
+#include "../Rendering/Skybox.h"
 #include "../Core/CoreEngine.h"
 
 //Zero out values first, then set default values of the camera.
@@ -41,7 +43,10 @@ Camera::~Camera()
 
 void Camera::Update(const float deltaTime)
 {
-	CoreEngine::GetInstance()->MoveCamera(SceneGraph::GetInstance()->GetGameObject("Player")->position);
+	if (position != SceneGraph::GetInstance()->GetGameObject("Player")->position)
+	{
+		CoreEngine::GetInstance()->MoveCamera(SceneGraph::GetInstance()->GetGameObject("Player")->position);
+	}
 }
 
 void Camera::OnCreate(GameObject* parent_)
@@ -55,6 +60,28 @@ void Camera::OnDestroy()
 
 void Camera::Render() const
 {
+	//If there is a skybox, render it.
+	if (skyBox)
+	{
+		glDisable(GL_DEPTH_TEST);
+		glDisable(GL_CULL_FACE);
+
+		GLuint programID = ShaderHandler::GetInstance()->GetShader("skyboxShader");
+
+		glUseProgram(programID);
+
+		mat4 skyboxView = mat4(mat3(GetView()));
+
+		glUniformMatrix4fv(1, 1, GL_FALSE, value_ptr(perspective));
+		glUniformMatrix4fv(0, 1, GL_FALSE, value_ptr(skyboxView));
+
+		skyBox->Render();
+
+		glUseProgram(0);
+
+		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_CULL_FACE);
+	}
 }
 
 //Process mouse inputs. (Movement and zoom)

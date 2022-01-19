@@ -33,6 +33,15 @@ Model::~Model()
 	obj = nullptr;
 }
 
+void Model::SkyboxRender(Camera* camera_)
+{
+	//glUseProgram(shaderProgram);
+	for (auto m : meshes)
+	{
+		m->SkyboxRender(camera_);
+	}
+}
+
 //Set which shader program to use, then call the render function for each mesh in the model.
 void Model::Render(Camera* camera_)
 {
@@ -119,6 +128,4 @@ void Model::LoadModel()
 	}
 
 	boundingBox = obj->GetBoundingBox();
-
-	
 }

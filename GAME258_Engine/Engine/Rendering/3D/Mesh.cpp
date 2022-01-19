@@ -69,6 +69,13 @@ void Mesh::Render(Camera* camera_, vector<mat4>& instances_)
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+void Mesh::SkyboxRender(Camera* camera_)
+{
+	glBindVertexArray(VAO);
+	glDrawArrays(GL_TRIANGLES, 0, subMesh.vertexList.size());
+	glBindVertexArray(0);
+}
+
 //This function will generate the buffers for the mesh.
 void Mesh::GenerateBuffers()
 {

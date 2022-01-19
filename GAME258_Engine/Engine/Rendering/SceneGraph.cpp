@@ -1,5 +1,7 @@
 #include "SceneGraph.h"
 
+#include "../Rendering/Skybox.h"
+
 //Redeclaration of static variables.
 unique_ptr<SceneGraph> SceneGraph::sceneGraphInstance = nullptr;
 unordered_map<GLuint, vector<Model*>> SceneGraph::sceneModels =

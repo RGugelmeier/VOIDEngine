@@ -71,12 +71,6 @@ public:
 	void Wander(float wanderOffset, float wanderRadius, float wanderRate, float wanderOrientation, float maxAccel);
 	void FollowAPath(Path* pathToFollow, Grid* gridToFollow, vec3 target, float maxSpeed, float maxAccel, float targetRadius, float slowRadius, float timeToTarget);
 
-	//jlkasdhfuiyasdgfuytavbsdgufhjvKHJBASDUFYIVBASDUIYTFVGASYUTDFV HEY RYAN
-	//THIS IS WHERE YOU CAN GO BACK TO
-	//HEY GO BACK HERE
-	//STOP HERE RYAN
-	//HEY STOP
-
 	//Pathfinding algorithms
 	vector<int> AStar(Graph* graph, int start, int goal);
 

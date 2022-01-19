@@ -12,6 +12,8 @@
 using namespace glm;
 using namespace std;
 
+class Skybox;
+
 class Camera : public Component
 {
 public:
@@ -34,6 +36,7 @@ public:
 	inline float GetFarPlane() const { return farPlane; }
 	//inline Frustum GetFrustum() const { return frustum; }
 	inline vector<LightSource*> GetLights() const { return lights; }
+	inline void setSkybox(Skybox* skyBox_) { skyBox = skyBox_; }
 
 	//Setters
 	//Set the given value, then update the camera's vectors to be proper.
@@ -61,6 +64,7 @@ private:
 	
 	//Frustum* frustum;
 	vector<LightSource*> lights;
+	Skybox* skyBox;
 };
 
 #endif // !CAMERA_H

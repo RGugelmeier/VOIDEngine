@@ -183,6 +183,7 @@
     <ClCompile Include="Components\StateMachine\StateMachine.cpp" />
     <ClCompile Include="Components\StateMachine\Transition.cpp" />
     <ClCompile Include="Components\StateMachine\StateMachines\SMCubePerson.cpp" />
+    <ClCompile Include="Engine\Rendering\Skybox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Components\StateMachine\Conditions\CIdle.h" />
@@ -232,11 +233,14 @@
     <ClInclude Include="Components\StateMachine\StateMachine.h" />
     <ClInclude Include="Components\StateMachine\Transition.h" />
     <ClInclude Include="Components\StateMachine\StateMachines\SMCubePerson.h" />
+    <ClInclude Include="Engine\Rendering\Skybox.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Engine\Shaders\ColourFragmentShader.glsl" />
     <None Include="Engine\Shaders\ColourVertexShader.glsl" />
     <None Include="Engine\Shaders\FragmentShader.glsl" />
+    <None Include="Engine\Shaders\SkyboxFrag.glsl" />
+    <None Include="Engine\Shaders\SkyboxVert.glsl" />
     <None Include="Engine\Shaders\VertexShader.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

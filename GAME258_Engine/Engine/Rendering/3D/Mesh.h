@@ -37,7 +37,7 @@ public:
 	~Mesh();
 
 	void Render(Camera* camera_, vector<mat4>& instances_);
-
+	void SkyboxRender(Camera* camera_);
 private:
 	void GenerateBuffers();
 	GLuint VAO, VBO;

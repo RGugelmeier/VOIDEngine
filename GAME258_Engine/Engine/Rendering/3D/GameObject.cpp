@@ -1,9 +1,18 @@
 #include "GameObject.h"
+#include "../Skybox.h"
 
 //Use this constructor if the GameObject has no model.
 GameObject::GameObject(vec3 position_) : model(NULL), position(vec3()), angle(0.0f), vRotation(vec3(0.0f, 0.0f, 0.0f)), scale(vec3(1.0f)), modelInstance(0), hit(false)
 {
 	position = position_;
+
+	if (components.size() > 0)
+	{
+		for (auto component : components)
+		{
+			component->OnCreate(this);
+		}
+	}
 }
 
 //Set default values. Set model to be the model passed in. Check if the model passed in is not nullptr, and then create the instance and set it's bounding box values.
@@ -24,6 +33,10 @@ GameObject::GameObject(Model* model_, vec3 position_) : model(nullptr), position
 GameObject::~GameObject()
 {
 	model = nullptr;
+}
+
+void GameObject::OnCreate()
+{
 }
 
 void GameObject::Update(const float deltaTime_)

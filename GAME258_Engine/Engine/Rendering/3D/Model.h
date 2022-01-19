@@ -17,6 +17,7 @@ public:
 	Model(const string& objPath_, const string& matPath_, GLuint shaderProgram_);
 	~Model();
 
+	void SkyboxRender(Camera* camera_);
 	void Render(Camera* camera_);
 	void AddMesh(Mesh* mesh_);
 	unsigned int CreateInstance(vec3 position_, float angle_, vec3 rotation_, vec3 scale_);

@@ -4,9 +4,7 @@
 #include "../../Engine/Patterns/Container.h"
 #include "../../Engine/Core/CoreEngine.h"
 #include "../../Physics/Physics.h"
-#include "../../Components/AI.h"
-#include "../../Components/Grid.h"
-#include "../Characters/CubePerson.h"
+#include "../../Engine/Rendering/Skybox.h"
 
 //Inherit from Scene
 class GameScene : public Scene
@@ -24,6 +22,7 @@ private:
 	float testTimer = 0.0f;
 
 	Window* window;
+	Skybox* testSkybox;
 };
 
 #endif // !GAMESCENE_H

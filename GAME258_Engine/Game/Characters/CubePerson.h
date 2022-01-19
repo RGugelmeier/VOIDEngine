@@ -6,12 +6,6 @@
 #include "../../Components/StateMachine/StateMachines/SMCubePerson.h"
 #include "Character.h"
 
-enum class StateNames
-{
-	Idle,
-	PersuePlayer
-};
-
 class CubePerson : public Character
 {
 public:
