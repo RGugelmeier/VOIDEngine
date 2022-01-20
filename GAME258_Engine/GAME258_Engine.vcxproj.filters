@@ -299,4 +299,9 @@
     <None Include="Engine\Shaders\SkyboxFrag.glsl" />
     <None Include="Engine\Shaders\SkyboxVert.glsl" />
   </ItemGroup>
+  <ItemGroup>
+    <Object Include="Resources\Models\Apple.obj" />
+    <Object Include="Resources\Models\Dice.obj" />
+    <Object Include="Resources\Models\Tetrahedron.obj" />
+  </ItemGroup>
 </Project>

@@ -243,6 +243,11 @@
     <None Include="Engine\Shaders\SkyboxVert.glsl" />
     <None Include="Engine\Shaders\VertexShader.glsl" />
   </ItemGroup>
+  <ItemGroup>
+    <Object Include="Resources\Models\Apple.obj" />
+    <Object Include="Resources\Models\Dice.obj" />
+    <Object Include="Resources\Models\Tetrahedron.obj" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
