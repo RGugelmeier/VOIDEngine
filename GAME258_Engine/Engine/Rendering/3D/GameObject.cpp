@@ -2,9 +2,13 @@
 #include "../Skybox.h"
 
 //Use this constructor if the GameObject has no model.
-GameObject::GameObject(vec3 position_) : model(NULL), position(vec3()), angle(0.0f), vRotation(vec3(0.0f, 0.0f, 0.0f)), scale(vec3(1.0f)), modelInstance(0), hit(false)
+GameObject::GameObject(vec3 position_) : model(NULL), position(vec3()), angle(0.0f), vRotation(vec3(0.0f, 0.0f, 0.0f)), scale(vec3(1.0f)), modelInstance(0), hit(false), 
+										 forward(vec3()), right(vec3()), up(vec3()), worldUp(vec3())
 {
 	position = position_;
+	forward = vec3(0.0f, 0.0f, -1.0f);
+	up = vec3(0.0f, 1.0f, 0.0f);
+	worldUp = up;
 
 	if (components.size() > 0)
 	{
@@ -16,10 +20,15 @@ GameObject::GameObject(vec3 position_) : model(NULL), position(vec3()), angle(0.
 }
 
 //Set default values. Set model to be the model passed in. Check if the model passed in is not nullptr, and then create the instance and set it's bounding box values.
-GameObject::GameObject(Model* model_, vec3 position_) : model(nullptr), position(vec3()), angle(0.0f), vRotation(vec3(0.0f, 0.0f, 0.0f)), scale(vec3(1.0f)), modelInstance(0), hit(false)
+GameObject::GameObject(Model* model_, vec3 position_) : model(nullptr), position(vec3()), angle(0.0f), vRotation(vec3(0.0f, 0.0f, 0.0f)), scale(vec3(1.0f)), modelInstance(0), hit(false),
+														forward(vec3()), right(vec3()), up(vec3()), worldUp(vec3())
 {
 	model = model_;
 	position = position_;
+	forward = vec3(0.0f, 0.0f, -1.0f);
+	up = vec3(0.0f, 1.0f, 0.0f);
+	worldUp = up;
+
 	if (model)
 	{
 		modelInstance = model->CreateInstance(position, angle, vRotation, scale);
@@ -139,4 +148,19 @@ void GameObject::SetHit(bool hit_, int buttonType_)
 	{
 		cout << name << " was hit.\n";
 	}
+}
+
+//Update the up, right and forward vectors.
+//Also updates yaw and pitch to be used to update the vectors.
+void GameObject::UpdateVectors(float yaw, float pitch)
+{
+	//Set the forward vector.
+	forward.x = cos(radians(yaw)) * cos(radians(pitch));
+	forward.y = sin(radians(pitch));
+	forward.z = sin(radians(yaw)) * cos(radians(pitch));
+
+	//Normalize forward vector then set the up and right vectors by getting the normal of the cross of the two other vectors.
+	forward = normalize(forward);
+	right = normalize(cross(forward, worldUp));
+	up = normalize(cross(right, forward));
 }

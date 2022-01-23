@@ -119,13 +119,13 @@ void CoreEngine::NotifyOfMouseMove(ivec2 mouse_)
 	}
 }
 
-//The the camera to perform zoom. (Forward back movement).
+//Notify of when the mouse wheel has been scrolled.
 void CoreEngine::NotifyOfMouseScroll(int y_)
 {
-	if (camera)
-	{
-		camera->ProcessMouseZoom(y_);
-	}
+	//if (camera)
+	//{
+	//	camera->ProcessMouseZoom(y_);
+	//}
 }
 
 void CoreEngine::NotifyOfKeyboardPress(SDL_Keycode e_)
@@ -134,24 +134,23 @@ void CoreEngine::NotifyOfKeyboardPress(SDL_Keycode e_)
 	{
 		if (e_ == SDLK_w)
 		{
-			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(0.0f, 0.0f, -0.3f));
+			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(0.0f, 0.0f, -0.5f));
 		}
 		else if (e_== SDLK_a)
 		{
-			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(-0.3f, 0.0f, 0.0f));
+			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(-0.5f, 0.0f, 0.0f));
 		}
 		else if (e_ == SDLK_s)
 		{
-			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(0.0f, 0.0f, 0.3f));
+			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(0.0f, 0.0f, 0.5f));
 		}
 		else if (e_ == SDLK_d)
 		{
-			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(0.3f, 0.0f, 0.0f));
+			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(0.5f, 0.0f, 0.0f));
 		}
 		else if (e_ == SDLK_SPACE)
 		{
-  			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(0.0f, 0.3f, 0.0f));
-			cout << sceneGraphInstance->GetGameObject("Player")->position.y << "\n";
+  			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(0.0f, 0.5f, 0.0f));
 		}
 	}
 }
@@ -171,10 +170,7 @@ void CoreEngine::NotifyOfKeyboardRelease(SDL_Keycode e_)
 void CoreEngine::MoveCamera(vec3 position_)
 {
 	if (sceneGraphInstance->GetGameObject("Player"))
-	{
-		sceneGraphInstance->GetGameObject("Player")->GetComponent<Camera>()->SetPosition(position_);
-		//camera->SetPosition(position_);
-		
+	{		
 		camera->ProcessCameraMovement(sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->GetVel().x, sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->GetVel().y, sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->GetVel().z);
 		return;
 	}

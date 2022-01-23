@@ -16,6 +16,9 @@ public:
 	bool OnCreate() override;
 	void Update(const float deltaTime_) override;
 	void Render() override;
+
+	//Getters
+	inline const Scene* GetCurrentScene() { return currentScene; }
 private:
 	CoreEngine::SceneList currentSceneName;
 	Scene* currentScene;

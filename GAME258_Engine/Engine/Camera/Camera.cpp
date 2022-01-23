@@ -113,6 +113,15 @@ void Camera::ProcessMouseMovement(vec2 offset_)
 		yaw -= 360.0f;
 	}
 
+	if (SceneGraph::GetInstance()->GetGameObject("Player"))
+	{
+		SceneGraph::GetInstance()->GetGameObject("Player")->UpdateVectors(yaw, pitch);
+	}
+	else
+	{
+		Debug::Warning("There is no player game object for the camera to use.", "Camera.cpp", __LINE__);
+	}
+
 	//Update the camera data.
 	UpdateCameraVectors();
 	Frustum::GetInstance()->UpdatePlanes(perspective * view);
@@ -131,13 +140,24 @@ void Camera::ProcessMouseZoom(int y_)
 	Frustum::GetInstance()->UpdatePlanes(perspective * view);
 }
 
+//This actually moves the camera. x y and z are how much the camera should move each call.
+//Multiplies the x y and z args with the neg forward, up, and right vectors to move acurately with the camera rotated.
 void Camera::ProcessCameraMovement(float x_, float y_, float z_)
 {
 	position += static_cast<vec3>(right * x_, y_ * up, z_ * -forward);
-	//cout << x_ << "\n";
-	//position.x += right.x * x_;
-	//position += right;
+	position += right * x_;
 	UpdateCameraVectors();
+
+	if (SceneGraph::GetInstance()->GetGameObject("Player"))
+	{
+		SceneGraph::GetInstance()->GetGameObject("Player")->UpdateVectors(yaw, pitch);
+		SceneGraph::GetInstance()->GetGameObject("Player")->SetPosition(position);
+	}
+	else
+	{
+		Debug::Warning("There is no player game object for the camera to use.", "Camera.cpp", __LINE__);
+	}
+
 	Frustum::GetInstance()->UpdatePlanes(perspective * view);
 }
 

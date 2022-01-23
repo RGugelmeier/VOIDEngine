@@ -3,5 +3,5 @@
 [INFO]: Start Scene started. in : StartScene.cpp on line: 14
 [INFO]: Everything worked in : CoreEngine.cpp on line: 62
 [INFO]: Start scene ended in : StartScene.cpp on line: 9
-[INFO]: Game Scene started. in : GameScene.cpp on line: 23
+[INFO]: Game Scene started. in : GameScene.cpp on line: 22
 [INFO]: Game scene ended in : GameScene.cpp on line: 12

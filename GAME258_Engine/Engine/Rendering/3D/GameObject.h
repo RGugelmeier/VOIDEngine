@@ -31,6 +31,7 @@ public:
 	void SetScale(vec3 scale_);
 	void SetTag(string tag_);
 	void SetHit(bool hit_, int buttonType_);
+	void UpdateVectors(float yaw, float pitch);
 
 	//Component functions
 	//Templated function. Allows for any object type to be used as an argument passed into this function.
@@ -87,6 +88,8 @@ private:
 	Model* model;
 	unsigned int modelInstance;
 	vec3 scale;
+	vec3 forward, right, up, worldUp;
+	//float yaw, pitch;
 	string name;
 
 	BoundingBox boundingBox;
@@ -94,6 +97,7 @@ private:
 	bool hit;
 
 	vector<Component*> components;
+
 };
 
 #endif // !GAMEOBJECT_H

@@ -19,7 +19,6 @@ GameScene::~GameScene()
 //This function gets called the first frame of the scene.
 bool GameScene::OnCreate()
 {
-
 	Debug::Info("Game Scene started.", "GameScene.cpp", __LINE__);
 
 	Model* diceModel = new Model("Resources/Models/Dice.obj", "Resources/Materials/Dice.mtl", ShaderHandler::GetInstance()->GetShader("basicShader"));
@@ -57,25 +56,15 @@ bool GameScene::OnCreate()
 void GameScene::Update(const float deltaTime_)
 {
 	SceneGraph::GetInstance()->Update(deltaTime_);
+	
 }
 
 //This function renders things to the screen.
 void GameScene::Render()
 {
-	//glClearColor(0.0f, 0.0f, 0.0f, 0.0f);//
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//
-
-	//glDisable(GL_DEPTH_TEST);//
-	//glDisable(GL_CULL_FACE);//
-
 	//Render camera.
 	CoreEngine::GetInstance()->GetCamera()->Render();
 
 	//Render scene objects.
 	SceneGraph::GetInstance()->Render(CoreEngine::GetInstance()->GetCamera());
-
-	//glEnable(GL_DEPTH_TEST);//
-	//glEnable(GL_CULL_FACE);//
-
-	//glUseProgram(0);//
 }
