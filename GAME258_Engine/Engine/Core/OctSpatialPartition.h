@@ -43,10 +43,11 @@ public:
 	inline OctNode* GetChild(OctChildren childPos_) { return children[static_cast<int>(childPos_)]; }
 	inline OctNode* GetParent() { return parent; }
 	inline int GetObjectCount() const { return objectList.size(); }
-	//Return if the node is a leaf (has no children) or not.
-	bool IsLeaf() const;
 	inline BoundingBox* GetBoundingBox() const { return octBounds; }
 	inline int GetChildCount() const { return childNum; }
+	inline vector<GameObject*> GetCollidedObjects() const { return objectList; }
+	//Return if the node is a leaf (has no children) or not.
+	bool IsLeaf() const;
 
 	
 private:
@@ -64,15 +65,19 @@ private:
 //Contains functionality to use the spatial partition with objects.
 class OctSpatialPartition {
 public:
-	OctSpatialPartition(float worldSize_);
+	OctSpatialPartition(float worldSize_, int timesToOctify_);
 	~OctSpatialPartition();
 	void AddObject(GameObject* obj_);
 	GameObject* GetCollision(Ray ray_);
+	inline const vector<OctNode*> GetLeafNodes() { return leafNodes; }
+	void RemoveObjectFromCell(GameObject* obj_);
 private:
 	OctNode* root;
 	vector<OctNode*> rayIntersectionList;
+	vector<OctNode*> leafNodes;
 	void AddObjectToCell(OctNode* cell_, GameObject* obj_);
 	void PrepareCollisionQuery(OctNode* cell_, Ray ray_);
+	void FillLeafList(OctNode* cell_);
 };
 
 #endif // !OCTSPATIALPARTITION_H

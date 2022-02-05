@@ -3,6 +3,7 @@
 
 #include "../Components/Component.h"
 #include "../Engine/Math/Quaternion.h"
+#include "../Engine/Math/CollisionHandler.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>

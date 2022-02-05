@@ -86,7 +86,7 @@ mat4 Model::GetTransform(unsigned int index_) const
 }
 
 //Gets the vertex positions of the model BEFORE being translated.
-vector<vec3> Model::GetVertices() const
+vector<vec3> Model::GetVertices()
 {
 	vector<vec3> v;
 

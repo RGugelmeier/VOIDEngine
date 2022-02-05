@@ -28,7 +28,7 @@ public:
 	//Getters
 	inline GLuint GetShaderProgram() const { return shaderProgram; }
 	inline BoundingBox GetBoundingBox() const { return boundingBox; }
-	vector<vec3> GetVertices() const;
+	vector<vec3> GetVertices();
 
 	mat4 CreateTransform(vec3 Position_, float angle_, vec3 rotation_, vec3 scale_) const;
 	mat4 CreateTransform(vec3 Position_, quat rotation_, vec3 scale_) const;
@@ -37,6 +37,7 @@ private:
 
 
 	vector<Mesh*> meshes;
+	vector<vec3> vertices;
 	GLuint shaderProgram;
 	vector<mat4> modelInstances;
 	LoadOBJModel* obj;

@@ -25,13 +25,11 @@ public:
 	~CollisionDetection();
 
 	static Ray MousePosToWorldRay(vec2 mouseCoords_, float screenWidth_, float screenHeight_, Camera* camera_);
+
 	static bool RayOBBIntersetion(Ray* ray_, BoundingBox* box_);
+	static bool OBBOBBIntersection(BoundingBox box1_, BoundingBox box2_);
 
 	static bool GJKDetection(GameObject* obj1, GameObject* obj2);
-
-	//TODO Put this in a math library. It just checks if the two passed values reside on the same side of 0.
-	template<typename valueType>
-	static bool SameSign(valueType x, valueType y);
 };
 
 #endif // !COLLISIONDETECTION_H

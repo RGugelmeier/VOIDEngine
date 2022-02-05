@@ -19,6 +19,7 @@ public:
 	void OnCreate(float worldSize_);
 	void AddObject(GameObject* go_);
 	void MouseUpdate(vec2 mousePosition_, int buttonType_);
+	void CheckObjCollisions();
 	void OnDestroy();
 private:
 	CollisionHandler();
@@ -27,7 +28,7 @@ private:
 	static unique_ptr<CollisionHandler> collisionInstance;
 	friend default_delete<CollisionHandler>;
 
-	//List of collided with game objects.
+	//List of collided with game objects by the last ray fired.
 	static vector<GameObject*> prevCollision;
 	//Hold the spactial partition system.
 	static OctSpatialPartition* scenePartition;

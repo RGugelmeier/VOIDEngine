@@ -90,6 +90,7 @@ void OctNode::AddCollisionObject(GameObject* obj_)
 	objectList.push_back(obj_);
 }
 
+//Checks if the cell passed is a leaf. (Has no children)
 bool OctNode::IsLeaf() const
 {
 	if (children[0] == nullptr)
@@ -100,15 +101,18 @@ bool OctNode::IsLeaf() const
 }
 
 //Initialise partitioning values.
-OctSpatialPartition::OctSpatialPartition(float worldSize_) : root(nullptr), rayIntersectionList(vector<OctNode*>())
+OctSpatialPartition::OctSpatialPartition(float worldSize_, int timesToOctify_) : root(nullptr), rayIntersectionList(vector<OctNode*>()), leafNodes(vector<OctNode*>())
 {
 	//Create a root node with the size passed in for the world.
 	//The way this root is created, it puts the position (bottom back left corner) at the correct spot.
 	//This makes the middle of the root node the middle of the world properly.
 	root = new OctNode(vec3(-(worldSize_ / 2.0f)), worldSize_, nullptr);
 	//Octify the root node 3 times.
-	root->Octify(3);
+	root->Octify(timesToOctify_);
 	cout << "There are " << root->GetChildCount() << " child nodes." << endl;
+
+	FillLeafList(root);
+	cout << "There are " << leafNodes.size() << " leaf nodes." << endl;
 
 	//Reserve space for list.
 	rayIntersectionList.reserve(20);
@@ -188,6 +192,10 @@ GameObject* OctSpatialPartition::GetCollision(Ray ray_)
 	return nullptr;
 }
 
+void OctSpatialPartition::RemoveObjectFromCell(GameObject* obj_)
+{
+}
+
 //Adds an object to a cell.
 void OctSpatialPartition::AddObjectToCell(OctNode* cell_, GameObject* obj_)
 {
@@ -233,6 +241,25 @@ void OctSpatialPartition::PrepareCollisionQuery(OctNode* cell_, Ray ray_)
 		for (int i = 0; i < CHILDREN_NUMBER; i++)
 		{
 			PrepareCollisionQuery(cell_->children[i], ray_);
+		}
+	}
+}
+
+//Adds all leaf nodes to a vector.
+void OctSpatialPartition::FillLeafList(OctNode* cell_)
+{
+	//If the cell we are looking at is a leaf...
+	if (cell_->IsLeaf())
+	{
+		//...add it to the leaf list.
+		leafNodes.push_back(cell_);
+	}
+	else
+	{
+		//Otherwise run this function on all of the cell's children.	
+		for (int i = 0; i < CHILDREN_NUMBER; i++)
+		{
+			FillLeafList(cell_->children[i]);
 		}
 	}
 }

@@ -31,7 +31,7 @@ CollisionHandler* CollisionHandler::GetInstance()
 void CollisionHandler::OnCreate(float worldSize_)
 {
 	prevCollision.clear();
-	scenePartition = new OctSpatialPartition(worldSize_);
+	scenePartition = new OctSpatialPartition(worldSize_, 3);
 }
 
 //Add the passed game object into the scene partition's object list.
@@ -75,6 +75,27 @@ void CollisionHandler::MouseUpdate(vec2 mousePosition_, int buttonType_)
 		if (hitResult)
 		{
 			prevCollision.push_back(hitResult);
+		}
+	}
+}
+
+void CollisionHandler::CheckObjCollisions()
+{
+	//Loop through each leaf node.
+	for (auto leafNode : scenePartition->GetLeafNodes())
+	{
+		//Loop through all collided objects in the current node.
+		for (auto obj1InNode : leafNode->GetCollidedObjects())
+		{
+			//Loop through all objs again so we have a way to check each obj with another.
+			for (auto obj2InNode : leafNode->GetCollidedObjects())
+			{
+				//If the two objects being checked are not the same, check for collision on them.
+				if (obj1InNode != obj2InNode)
+				{
+					if (CollisionDetection::GJKDetection(obj1InNode, obj2InNode));
+				}
+			}
 		}
 	}
 }

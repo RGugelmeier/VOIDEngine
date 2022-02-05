@@ -198,160 +198,54 @@ bool CollisionDetection::RayOBBIntersetion(Ray* ray_, BoundingBox* box_)
 	return true;
 }
 
+bool CollisionDetection::OBBOBBIntersection(BoundingBox box1_, BoundingBox box2_)
+{
+	//Get box and ray values.
+	mat4 modelMatrix1 = box1_.transform;
+	mat4 modelMatrix2 = box2_.transform;
+	vec3 box1Min = box1_.minVert;
+	vec3 box2Min = box2_.minVert;
+	vec3 box1Max = box1_.maxVert;
+	vec3 box2Max = box2_.maxVert;
+
+	//Check x 
+	if (dot(box1Max.x, box2Min.x) > 0.0f || dot(box1Max.y, box2Min.y) > 0.0f || dot(box1Max.z, box2Min.z) > 0.0f)
+	{
+		return true;
+	}
+
+	return true;
+}
+
 bool CollisionDetection::GJKDetection(GameObject* obj1, GameObject* obj2)
 {
-	mat4 m;
-#pragma region GetSimplexPoints
-	Simplex* simplex = new Simplex();
-	vec3 direction = Simplex::GetDirectionBetweenShapes(obj1, obj2);
-	//Get the first point of the simplex. d = direction from center of shape 1 to 2.
-	simplex->a = Simplex::Support(obj1, obj2, direction);
-	//Get the second point of the simplex. d = inverse direction from center of shape 1 to 2.
-	simplex->b = Simplex::Support(obj1, obj2, -direction);
-	//Get the third point of the simplex. d = Perpendicular line of the line created from previous two points that points towards the origin (0, 0, 0).
-	simplex->c = Simplex::Support(obj1, obj2, cross(cross((simplex->b - simplex->a), simplex->a - vec3(0.0f, 0.0f, 0.0f)), (simplex->b - simplex->a)));
-	//Get the fourth point of the simplex. d = normal of triangle created by previous 3 points (abc), directed towards the origin (0, 0 ,0).
-	vec3 N = cross((simplex->b - simplex->a), (simplex->c - simplex->a));
+	Simplex simplex;
+	//vec3 direction = Simplex::GetDirectionBetweenShapes(obj1, obj2);
 
-	//Check if the dot product of the normal and the line from the center of the triangle to the origin is positive. If it is, use N, if not, use -N.
-	if (dot(N, vec3(0.0f, 0.0f, 0.0f) - (vec3((simplex->a + simplex->b + simplex->c) / 3.0f))) > 0)
+	//Calculate and add the first simplex point using the direction between the two shapes.
+	vec3 support = Simplex::Support(obj1, obj2, vec3(1.0f, 0.0f, 0.0f));
+	simplex.push_front(support);
+
+	//Set the new direction to be opposite the first simplex point.
+	vec3 direction = -support;
+
+	while (true)
 	{
-		simplex->d = Simplex::Support(obj1, obj2, N);
-	}
-	else
-	{
-		simplex->d = Simplex::Support(obj1, obj2, -N);
-	}
-#pragma endregion
+		//Calculate next simplex point
+		support = Simplex::Support(obj1, obj2, direction);
 
-#pragma region CheckForCollisionWithSimplex
-	int check = 0;
+		//There is no collision already. End.
+		if (dot(support, direction) <= 0)
+		{
+			return false;
+		}
 
-	while (check <= 2)
-	{
-		check++;
-		#pragma region CheckDeterminates
-		//Get determinate 0.
-		m = mat4(simplex->a.x, simplex->a.y, simplex->a.z, 1,
-			simplex->b.x, simplex->b.y, simplex->b.z, 1,
-			simplex->c.x, simplex->c.y, simplex->c.z, 1,
-			simplex->d.x, simplex->d.y, simplex->d.z, 1);
-		float D0 = determinant(m);
+		//Add next simplex point.
+		simplex.push_front(support);
 
-		//Get determinate 1
-		m = mat4(0, 0, 0, 1,
-			simplex->b.x, simplex->b.y, simplex->b.z, 1,
-			simplex->c.x, simplex->c.y, simplex->c.z, 1,
-			simplex->d.x, simplex->d.y, simplex->d.z, 1);
-		float D1 = determinant(m);
-
-		//Get determinate 2
-		m = mat4(simplex->a.x, simplex->a.y, simplex->a.z, 1,
-			0, 0, 0, 1,
-			simplex->c.x, simplex->c.y, simplex->c.z, 1,
-			simplex->d.x, simplex->d.y, simplex->d.z, 1);
-		float D2 = determinant(m);
-
-		//Get determinate 3
-		m = mat4(simplex->a.x, simplex->a.y, simplex->a.z, 1,
-			simplex->b.x, simplex->b.y, simplex->b.z, 1,
-			0, 0, 0, 1,
-			simplex->d.x, simplex->d.y, simplex->d.z, 1);
-		float D3 = determinant(m);
-
-		//Get determinate 4
-		m = mat4(simplex->a.x, simplex->a.y, simplex->a.z, 1,
-			simplex->b.x, simplex->b.y, simplex->b.z, 1,
-			simplex->c.x, simplex->c.y, simplex->c.z, 1,
-			0, 0, 0, 1);
-		float D4 = determinant(m);
-#pragma endregion
-
-		//Check if they're all the same sign. If they are, we're done. Collision has happened.
-		if (SameSign(D0, D1) && SameSign(D0, D2) && SameSign(D0, D3) && SameSign(D0, D4))
+		if (simplex.NextSimplex(simplex.m_points, direction))
 		{
 			return true;
 		}
-
-		//1 does not match
-		if (SameSign(D0, D2) && SameSign(D0, D3) && SameSign(D0, D4))
-		{
-			N = cross((simplex->b - simplex->d), (simplex->c - simplex->d));
-
-			if (dot(N, vec3(0.0f, 0.0f, 0.0f) - vec3((simplex->b + simplex->c + simplex->d) / 3.0f)) > 0)
-			{
-				simplex->a = Simplex::Support(obj1, obj2, N);
-			}
-			else
-			{
-				simplex->a = Simplex::Support(obj1, obj2, -N);
-			}
-		}
-		//2 does not match
-		else if (SameSign(D0, D1) && SameSign(D0, D3) && SameSign(D0, D4))
-		{
-			N = cross((simplex->d - simplex->a), (simplex->c - simplex->a));
-
-			if (dot(N, vec3(0.0f, 0.0f, 0.0f) - vec3((simplex->a + simplex->c + simplex->d) / 3.0f)) > 0)
-			{
-				simplex->b = Simplex::Support(obj1, obj2, N);
-			}
-			else
-			{
-				simplex->b = Simplex::Support(obj1, obj2, -N);
-			}
-		}
-		//3 does not match
-		else if (SameSign(D0, D1) && SameSign(D0, D2) && SameSign(D0, D4))
-		{
-			N = cross((simplex->b - simplex->a), (simplex->d - simplex->a));
-
-			//Check if the dot product of the normal and the line from the center of the triangle to the origin is positive. If it is, use N, if not, use -N.
-			if (dot(N, vec3(0.0f, 0.0f, 0.0f) - vec3((simplex->a + simplex->b + simplex->d) / 3.0f)) > 0)
-			{
-				simplex->c = Simplex::Support(obj1, obj2, N);
-			}
-			else
-			{
-				simplex->c = Simplex::Support(obj1, obj2, -N);
-			}
-		}
-		//4 does not match
-		else if (SameSign(D0, D1) && SameSign(D0, D2) && SameSign(D0, D3))
-		{
-			N = cross((simplex->b - simplex->a), (simplex->c - simplex->a));
-
-			//Check if the dot product of the normal and the line from the center of the triangle to the origin is positive. If it is, use N, if not, use -N.
-			if (dot(N, vec3(0.0f, 0.0f, 0.0f) - vec3((simplex->a + simplex->b + simplex->c) / 3.0f)) > 0)
-			{
-				simplex->d = Simplex::Support(obj1, obj2, N);
-			}
-			else
-			{
-				simplex->d = Simplex::Support(obj1, obj2, -N);
-			}
-		}
-	}
-#pragma endregion
-
-	delete simplex;
-	simplex = nullptr;
-	return false;
-}
-
-template<typename valueType>
-inline bool CollisionDetection::SameSign(valueType x, valueType y)
-{
-	if (x > 0 && y > 0)
-	{
-		return true;
-	}
-	else if (x < 0 && y < 0)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
 	}
 }
