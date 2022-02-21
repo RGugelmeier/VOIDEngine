@@ -122,6 +122,8 @@ void LoadOBJModel::LoadModel(const string& filePath_)
 			{
 				boundingBox.minVert.z = z;
 			}
+
+			boundingBox.size = vec3(distance(boundingBox.maxVert.x, boundingBox.minVert.x), distance(boundingBox.maxVert.y, boundingBox.minVert.y), distance(boundingBox.maxVert.z, boundingBox.minVert.z));
 			//end bounding box size setup.
 		}
 

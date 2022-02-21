@@ -135,11 +135,11 @@ void SceneGraph::Render(Camera* camera_)
 		glUseProgram(entry.first);
 		for (auto object : sceneGameObjects)
 		{
-			if (Frustum::GetInstance()->SeenCheck(object.second))
-			{
+			//Un-comment this to turn frustum culling on.
+			//if (Frustum::GetInstance()->SeenCheck(object.second))
+			//{
 				object.second->Render(camera_);
-				//m->Render(camera_);
-			}
+			//}
 		}
 	}
 }

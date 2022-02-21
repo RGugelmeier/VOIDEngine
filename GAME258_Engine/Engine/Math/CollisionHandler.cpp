@@ -32,6 +32,7 @@ void CollisionHandler::OnCreate(float worldSize_)
 {
 	prevCollision.clear();
 	scenePartition = new OctSpatialPartition(worldSize_, 3);
+	leafNodes = scenePartition->GetLeafNodes();
 }
 
 //Add the passed game object into the scene partition's object list.
@@ -82,7 +83,7 @@ void CollisionHandler::MouseUpdate(vec2 mousePosition_, int buttonType_)
 void CollisionHandler::CheckObjCollisions()
 {
 	//Loop through each leaf node.
-	for (auto leafNode : scenePartition->GetLeafNodes())
+	for (auto leafNode : leafNodes)
 	{
 		//Loop through all collided objects in the current node.
 		for (auto obj1InNode : leafNode->GetCollidedObjects())
@@ -93,7 +94,19 @@ void CollisionHandler::CheckObjCollisions()
 				//If the two objects being checked are not the same, check for collision on them.
 				if (obj1InNode != obj2InNode)
 				{
-					if (CollisionDetection::GJKDetection(obj1InNode, obj2InNode));
+					//Used to store values from DynamicOBBOBBIntersects
+					vec3 contactPoint, contactNormal;
+					Ray testRay;
+					float contactTime = 0.0f;
+					//Do OBBOBB check first, then do GJK check inside OBBOBB algorithm.
+					if (CollisionDetection::DynamicOBBOBBIntersects(obj1InNode, obj2InNode, contactPoint, contactNormal, contactTime, testRay))
+					{
+						cout << obj1InNode->GetTag() << " collision with " << obj2InNode->GetTag() << endl;
+						
+						obj1InNode->GetComponent<Physics>()->SetVel(obj1InNode->GetComponent<Physics>()->GetVel() + (contactNormal * abs(obj1InNode->GetComponent<Physics>()->GetVel())));
+						//cout << obj1InNode->GetComponent<Physics>()->GetVel().x << " , " << obj1InNode->GetComponent<Physics>()->GetVel().y << " , " << obj1InNode->GetComponent<Physics>()->GetVel().z << endl;
+						//obj1InNode->SetPosition(obj1InNode->position - testRay.direction);
+					}
 				}
 			}
 		}
@@ -112,5 +125,3 @@ void CollisionHandler::OnDestroy()
 	}
 	prevCollision.clear();
 }
-
-

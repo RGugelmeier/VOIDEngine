@@ -7,6 +7,7 @@
 struct Ray {
 	vec3 origin;
 	vec3 direction;
+	vec3 intersectionPoint, intersectionNormal;
 	float intersectionDist;
 
 	//Constructor. Set default values to empty or 0.
@@ -31,13 +32,15 @@ struct Ray {
 		origin = ray_.origin;
 		direction = ray_.direction;
 		intersectionDist = 0.0f;
+
+		return *this;
 	}
 
 	//Check if this ray collides with the provided bounding box.
 	inline bool IsColliding(BoundingBox* box_)
 	{
 		intersectionDist = -1.0f;
-		return CollisionDetection::RayOBBIntersetion(this, box_);
+		return CollisionDetection::RayOBBIntersetion(this, box_, intersectionPoint, intersectionNormal);
 	}
 };
 

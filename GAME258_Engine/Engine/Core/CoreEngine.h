@@ -49,8 +49,9 @@ public:
 	inline SceneList GetCurrentScene() const { return currentScene; }
 	inline float GetScreenWidth() const { return static_cast<float>(window->GetWidth()); }
 	inline float GetScreenHeight() const { return static_cast<float>(window->GetHeight()); }
-	inline Window* GetWindow() const { return window; };
-	inline Camera* GetCamera() const { return camera; };
+	inline Window* GetWindow() const { return window; }
+	inline Camera* GetCamera() const { return camera; }
+	inline Timer* GetMainTimer() const { return timer; }
 	inline glm::vec2 GetMousePos() {
 		//GetMouseState is used here to assign the mouse's current x and y position into the mousePos vec2 values.
 		SDL_GetMouseState(&mousePos.x, &mousePos.y);

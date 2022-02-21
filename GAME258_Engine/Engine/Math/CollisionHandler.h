@@ -30,6 +30,7 @@ private:
 
 	//List of collided with game objects by the last ray fired.
 	static vector<GameObject*> prevCollision;
+	vector<OctNode*> leafNodes;
 	//Hold the spactial partition system.
 	static OctSpatialPartition* scenePartition;
 };

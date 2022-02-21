@@ -12,7 +12,7 @@ orthographic(mat4()), view(mat4())
 	forward = vec3(0.0f, 0.0f, -1.0f);
 	up = vec3(0.0f, 1.0f, 0.0f);
 	worldUp = up;
-	nearPlane = 0.5f;
+	nearPlane = 0.1f;
 	farPlane = 50.0f;
 	yaw = -90.0f;
 	pitch = 0.0f;

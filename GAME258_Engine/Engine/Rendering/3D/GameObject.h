@@ -4,11 +4,16 @@
 #include "../../../Components/Component.h"
 #include "Model.h"
 
+#include <list>
+
+class OctNode;
+class CollisionHandler;
+
 class GameObject
 {
 public:
 	GameObject(vec3 position_ = vec3());
-	GameObject(Model* model_, vec3 position_ = vec3());
+	GameObject(Model* model_, vec3 position_ = vec3(), bool moveable_ = false);
 	~GameObject();
 
 	void OnCreate();
@@ -19,8 +24,10 @@ public:
 	inline vec3 GetScale() const { return scale; }
 	inline string GetTag() const { return name; }
 	inline BoundingBox GetBoundingBox() const { return boundingBox; }
+	inline BoundingBox* GetBoundingBoxPtr() { return &boundingBox; }
 	inline bool GetHit() const { return hit; }
 	inline Model* GetModel() const {  if(model) return model; }
+	inline vec3 GetPosition() const { return position; }
 	vector<vec3> GetVertices();
 
 	//Setters
@@ -83,21 +90,26 @@ public:
 	float angle;
 	vec3 vRotation;
 	quat qRotation;
-
+	list<OctNode*> collidedNodes;
+	list<OctNode*>::iterator collidedNodesIterator;
+	bool moveable;
+	vec3 forward, right, up, worldUp;
 private:
+	vector<vec3> FillVertices();
 	Model* model;
 	unsigned int modelInstance;
 	vec3 scale;
-	vec3 forward, right, up, worldUp;
 	//float yaw, pitch;
 	string name;
 
 	BoundingBox boundingBox;
 
-	bool hit;
+	bool hit, setNewOctNodes;
 
 	vector<Component*> components;
+	vector<vec3> modelVertices;
 
+	CollisionHandler* collisionHandlerInstance;
 };
 
 #endif // !GAMEOBJECT_H

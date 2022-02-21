@@ -1,14 +1,17 @@
 #include "GameObject.h"
+#include "../../Core/OctSpatialPartition.h"
+#include "../../Math/CollisionHandler.h"
 #include "../Skybox.h"
 
 //Use this constructor if the GameObject has no model.
-GameObject::GameObject(vec3 position_) : model(NULL), position(vec3()), angle(0.0f), vRotation(vec3(0.0f, 0.0f, 0.0f)), scale(vec3(1.0f)), modelInstance(0), hit(false), 
-										 forward(vec3()), right(vec3()), up(vec3()), worldUp(vec3())
+GameObject::GameObject(vec3 position_) : model(NULL), position(vec3()), angle(0.0f), vRotation(vec3(0.0f, 0.0f, 0.0f)), scale(vec3(1.0f)), modelInstance(0), hit(false), setNewOctNodes(false),
+										 forward(vec3()), right(vec3()), up(vec3()), worldUp(vec3()), collidedNodes(list<OctNode*>()), moveable(false)
 {
 	position = position_;
 	forward = vec3(0.0f, 0.0f, -1.0f);
 	up = vec3(0.0f, 1.0f, 0.0f);
 	worldUp = up;
+	collisionHandlerInstance = CollisionHandler::GetInstance();
 
 	if (components.size() > 0)
 	{
@@ -20,14 +23,17 @@ GameObject::GameObject(vec3 position_) : model(NULL), position(vec3()), angle(0.
 }
 
 //Set default values. Set model to be the model passed in. Check if the model passed in is not nullptr, and then create the instance and set it's bounding box values.
-GameObject::GameObject(Model* model_, vec3 position_) : model(nullptr), position(vec3()), angle(0.0f), vRotation(vec3(0.0f, 0.0f, 0.0f)), scale(vec3(1.0f)), modelInstance(0), hit(false),
-														forward(vec3()), right(vec3()), up(vec3()), worldUp(vec3())
+GameObject::GameObject(Model* model_, vec3 position_, bool moveable_) : model(nullptr), position(vec3()), angle(0.0f), vRotation(vec3(0.0f, 0.0f, 0.0f)), scale(vec3(1.0f)), modelInstance(0), hit(false), setNewOctNodes(false),
+														forward(vec3()), right(vec3()), up(vec3()), worldUp(vec3()), collidedNodes(list<OctNode*>()), moveable(false)
 {
 	model = model_;
 	position = position_;
+	moveable = moveable_;
 	forward = vec3(0.0f, 0.0f, -1.0f);
 	up = vec3(0.0f, 1.0f, 0.0f);
 	worldUp = up;
+	collisionHandlerInstance = CollisionHandler::GetInstance();
+	modelVertices = FillVertices();
 
 	if (model)
 	{
@@ -69,9 +75,21 @@ vector<vec3> GameObject::GetVertices()
 {
 	vector<vec3> v;
 
+	for (int i = 0; i < modelVertices.size(); i++)
+	{
+		v.push_back(modelVertices[i] + position);
+	}
+
+	return v;
+}
+
+vector<vec3> GameObject::FillVertices()
+{
+	vector<vec3> v;
+
 	for (int i = 0; i < model->GetVertices().size(); i++)
 	{
-		v.push_back(model->GetVertices()[i] + position);
+		v.push_back(model->GetVertices()[i]);
 	}
 
 	return v;
@@ -85,6 +103,34 @@ void GameObject::SetPosition(vec3 position_)
 	{
 		model->UpdateInstance(modelInstance, position, angle, vRotation, scale);
 		boundingBox.transform = model->GetTransform(modelInstance);
+	}
+
+	collidedNodesIterator = collidedNodes.begin();
+
+	//Loop through each OctNode that this obj is in...
+	while (collidedNodesIterator != collidedNodes.end())
+	{
+		//If the obj is no longer collided with the node being checked...
+		if (!boundingBox.Intersects((*collidedNodesIterator)->GetBoundingBox()))
+		{
+			//...remove it from the list.
+			(*collidedNodesIterator)->RemoveCollisionObject(this);
+
+			//And remove it from the list here as well.
+			collidedNodesIterator = collidedNodes.erase(collidedNodesIterator);
+
+			setNewOctNodes = true;
+		}
+		else
+		{
+			collidedNodesIterator++;
+		}
+	}
+
+	if (setNewOctNodes)
+	{
+		collisionHandlerInstance->AddObject(this);
+		setNewOctNodes = false;
 	}
 }
 
@@ -164,3 +210,5 @@ void GameObject::UpdateVectors(float yaw, float pitch)
 	right = normalize(cross(forward, worldUp));
 	up = normalize(cross(right, forward));
 }
+
+

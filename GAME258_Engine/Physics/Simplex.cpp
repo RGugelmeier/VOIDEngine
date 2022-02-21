@@ -44,46 +44,6 @@ void Simplex::push_front(vec3 point_)
 	size = std::min(size + 1, 4);
 }
 
-//This will send to 
-bool Simplex::NextSimplex(array<vec3, 4> points, vec3 direction_)
-{
-	switch (points.size())
-	{
-	case 2: return Line(points, direction_);
-	case 3: return Triangle(points, direction_);
-	case 4: return Tetrahedron(points, direction_);
-	}
-	return false;
-}
-
-bool Simplex::SameDirection(const vec3 direction_, vec3 ao_)
-{
-	return dot(direction_, ao_) > 0;
-}
-
-//Gets the second point of a simplex, making it a line.
-bool Simplex::Line(array<vec3, 4> points, vec3 direction_)
-{
-	vec3 a = points[0];
-	vec3 b = points[1];
-
-	vec3 ab = b - a;
-	vec3 ao = -a;
-
-	if (SameDirection(ab, ao))
-	{
-		direction_ = cross(ab, ao);
-		direction_ = cross(direction_, ab);
-	}
-	else
-	{
-		points = { a };
-		direction_ = ao;
-	}
-
-	return false;
-}
-
 vec3 Simplex::GetFurthestPointInDirection(GameObject* s_, vec3 d_)
 {
 	vec3 furthest = vec3();
@@ -106,54 +66,6 @@ vec3 Simplex::GetFurthestPointInDirection(GameObject* s_, vec3 d_)
 	return furthest;
 }
 
-bool Simplex::Triangle(array<vec3, 4> points_, vec3 direction_)
-{
-	vec3 a = points_[0];
-	vec3 b = points_[1];
-	vec3 c = points_[2];
-
-	vec3 ab = b - a;
-	vec3 ac = c - a;
-	vec3 ao = -a;
-
-	vec3 abc = cross(ab, ac);
-
-	if (SameDirection(cross(abc, ac), ao))
-	{
-		if (SameDirection(ac, ao))
-		{
-			points_ = { a, c };
-			direction_ = cross(ac, ao);
-			direction_ = cross(direction_, ac);
-		}
-		else
-		{
-			return Line(points_ = { a, b }, direction_);
-		}
-	}
-	else
-	{
-		if (SameDirection(cross(ab, abc), ao))
-		{
-			return Line(points_ = { a, b }, direction_);
-		}
-		else
-		{
-			if (SameDirection(abc, ao))
-			{
-				direction_ = abc;
-			}
-			else
-			{
-				points_ = { a, c, b };
-				direction_ = -abc;
-			}
-		}
-	}
-
-	return false;
-}
-
 vec3 Simplex::GetClosestPointInDirection(GameObject* s_, vec3 d_)
 {
 	vec3 closest = vec3();
@@ -173,40 +85,6 @@ vec3 Simplex::GetClosestPointInDirection(GameObject* s_, vec3 d_)
 	}
 
 	return closest;
-}
-
-bool Simplex::Tetrahedron(array<vec3, 4> points_, vec3 direction_)
-{
-	vec3 a = points_[0];
-	vec3 b = points_[1];
-	vec3 c = points_[2];
-	vec3 d = points_[3];
-
-	vec3 ab = b - a;
-	vec3 ac = c - a;
-	vec3 ad = d - a;
-	vec3 ao = -a;
-
-	vec3 abc = cross(ab, ac);
-	vec3 acd = cross(ac, ad);
-	vec3 adb = cross(ad, ab);
-
-	if (SameDirection(abc, ao))
-	{
-		return Triangle(points_ = { a,b,c }, direction_);
-	}
-
-	if (SameDirection(acd, ao))
-	{
-		return Triangle(points_ = { a,c,d }, direction_);
-	}
-
-	if (SameDirection(adb, ao))
-	{
-		return Triangle(points_ = { a,d,b }, direction_);
-	}
-
-	return true;
 }
 
 //Gets a point of the simplex given the two shapes and the direction.

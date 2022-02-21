@@ -10,22 +10,28 @@ using namespace glm;
 
 //Oriented bounding box.
 struct BoundingBox {
-	vec3 maxVert, minVert;
+	vec3 maxVert, minVert, size;
 	mat4 transform;
 
 	//Empty constructor. Make a box that has empty data.
 	inline BoundingBox()
 	{
-		maxVert = minVert = vec3();
+		maxVert = minVert = size = vec3();
 		transform = mat4();
+
+		//Set size to be the distance between the max and min vert on each vertex.
+		size = vec3(distance(maxVert, minVert));
 	}
 
-	//Manual constructor. Sets passed data in for the box.
+	//Manual constructor. Sets passed data in for the box. Set the bounding box's size.
 	inline BoundingBox(vec3 maxVert_, vec3 minVert_, mat4 transform_)
 	{
 		maxVert = maxVert_;
 		minVert = minVert_;
 		transform = transform_;
+
+		//Set size to be the distance between the max and min vert on each vertex.
+		size = vec3(distance(maxVert.x, minVert.x), distance(maxVert.y, minVert.y), distance(maxVert.z, minVert.z));
 	}
 
 	//This check to see if this box intersects with another box when both are transormed to be AABBs (Axis alligned bounding boxes).

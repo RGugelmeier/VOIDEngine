@@ -27,10 +27,10 @@ bool GameScene::OnCreate()
 	SceneGraph::GetInstance()->AddModel(diceModel);
 	sceneInstance = SceneGraph::GetInstance();
 
-	sceneInstance->AddGameObject(new GameObject(diceModel, vec3(-2.0f, 0.0f, 0.0f)), true, "Cube");
-	sceneInstance->AddGameObject(new GameObject(diceModel, vec3(-1.5f, 0.0f, 0.0f)), true, "Cube2");
+	sceneInstance->AddGameObject(new GameObject(diceModel, vec3(0.0f, 0.0f, 0.0f), false), true, "Cube");
+	sceneInstance->AddGameObject(new GameObject(diceModel, vec3(5.0f, 5.0f, 5.0f)), true, "Cube2");
 
-	sceneInstance->AddGameObject(new GameObject(vec3(0.0f, 0.0f, 20.0f)), false, "Player");
+	sceneInstance->AddGameObject(new GameObject(diceModel, vec3(0.0f, 0.0f, 20.0f), true), true, "Player");
 
 	CoreEngine::GetInstance()->SetCamera(new Camera());
 	CoreEngine::GetInstance()->GetCamera()->SetPosition(sceneInstance->GetGameObject("Player")->position);
@@ -44,12 +44,14 @@ bool GameScene::OnCreate()
 
 	sceneInstance->GetGameObject("Cube")->SetRotation(vec3(1.0f, 0.0f, 0.0f));
 	sceneInstance->GetGameObject("Cube2")->SetRotation(vec3(1.0f, 0.0f, 0.0f));
+	sceneInstance->GetGameObject("Player")->SetRotation(vec3(1.0f, 0.0f, 0.0f));
 
 	testSkybox = new Skybox();
 	testSkybox->OnCreate();
 	CoreEngine::GetInstance()->GetCamera()->setSkybox(testSkybox);
 
-	sceneInstance->GetGameObject("Cube")->GetComponent<Physics>()->SetVel(vec3(1.0f, 0.0f, 0.0f));
+	//sceneInstance->GetGameObject("Cube")->GetComponent<Physics>()->SetVel(vec3(1.0f, 0.0f, 0.0f));
+	
 
 	diceModel = nullptr;
 
@@ -62,12 +64,12 @@ void GameScene::Update(const float deltaTime_)
 	//Update scene objects.
 	SceneGraph::GetInstance()->Update(deltaTime_);
 	//Check for collisions in scene.
-	//CollisionHandler::GetInstance()->CheckObjCollisions();
-	//if (CollisionDetection::GJKDetection(sceneInstance->GetGameObject("Cube"), sceneInstance->GetGameObject("Cube2")))
-	//{
-	//	cout << "Collision\n";
-	//}
-	CollisionDetection::GJKDetection(sceneInstance->GetGameObject("Cube"), sceneInstance->GetGameObject("Cube2"));
+	sceneInstance->GetGameObject("Cube2")->GetComponent<Physics>()->SetVel(vec3(-1.0f, -0.8f, 0.0f));
+	
+	CollisionHandler::GetInstance()->CheckObjCollisions();
+
+	cout << sceneInstance->GetGameObject("Player")->GetComponent<Physics>()->GetVel().x << " , " << sceneInstance->GetGameObject("Player")->GetComponent<Physics>()->GetVel().y << " , " << sceneInstance->GetGameObject("Player")->GetComponent<Physics>()->GetVel().z << endl;
+	//cout << sceneInstance->GetGameObject("Player")->forward.x << " , " << sceneInstance->GetGameObject("Player")->forward.y << " , " << sceneInstance->GetGameObject("Player")->forward.z << endl;
 }
 
 //This function renders things to the screen.

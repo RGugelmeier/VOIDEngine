@@ -38,6 +38,7 @@ public:
 	~OctNode();
 	void Octify(int depth_);
 	void AddCollisionObject(GameObject* obj_);
+	void RemoveCollisionObject(GameObject* obj_);
 
 	//Getters
 	inline OctNode* GetChild(OctChildren childPos_) { return children[static_cast<int>(childPos_)]; }
@@ -58,6 +59,7 @@ private:
 	BoundingBox* octBounds;
 	OctNode* parent;
 	vector<GameObject*> objectList;
+	vector<GameObject*>::iterator objectIterator;
 	float size;
 	static int childNum;
 };

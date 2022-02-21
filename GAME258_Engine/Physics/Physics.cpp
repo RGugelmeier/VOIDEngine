@@ -33,7 +33,6 @@ void Physics::Update(const float deltaTime)
 
 	parent->SetPosition(parent->position);
 	parent->SetRotation(parent->vRotation);
-	//cout << parent->GetTag() << ": " << parent->vRotation.x << ", " << parent->vRotation.y << ", " << parent->vRotation.z << "\n\n\n";
 }
 
 void Physics::OnCreate(GameObject* parent_)

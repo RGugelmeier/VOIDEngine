@@ -24,7 +24,7 @@ bool PhysicsScene::OnCreate()
 
 	//Create a camera and attach it's position to the player game object.
 	CoreEngine::GetInstance()->SetCamera(new Camera());
-	CoreEngine::GetInstance()->GetCamera()->SetPosition(sceneInstance->GetGameObject("Player")->position);
+	CoreEngine::GetInstance()->GetCamera()->SetPosition(sceneInstance->GetGameObject("Player")->GetPosition());
 
 	//Add components to player.
 	sceneInstance->GetGameObject("Player")->AddComponent<Physics>();

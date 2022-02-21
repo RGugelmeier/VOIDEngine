@@ -90,6 +90,15 @@ void OctNode::AddCollisionObject(GameObject* obj_)
 	objectList.push_back(obj_);
 }
 
+void OctNode::RemoveCollisionObject(GameObject* obj_)
+{
+	objectIterator = find(objectList.begin(), objectList.end(), obj_);
+	if (objectIterator != objectList.end())
+	{
+		objectList.erase(objectIterator);
+	}
+}
+
 //Checks if the cell passed is a leaf. (Has no children)
 bool OctNode::IsLeaf() const
 {
@@ -205,9 +214,11 @@ void OctSpatialPartition::AddObjectToCell(OctNode* cell_, GameObject* obj_)
 		//...and the cell is a leaf...
 		if (obj_->GetBoundingBox().Intersects(cell_->GetBoundingBox()))
 		{
-			//...add the object to the cell.
+			//...add the object to the cell...
 			cell_->AddCollisionObject(obj_);
 			cout << obj_->GetTag() << " was added to a cell with position: vec3(" << cell_->octBounds->maxVert.x << ", " << cell_->octBounds->maxVert.y << ", " << cell_->octBounds->maxVert.z << ")\n";
+			//...and add the cell to the object's collided nodes list.
+			obj_->collidedNodes.push_front(cell_);
 		}
 	}
 	//...and the cell is not a leaf...
