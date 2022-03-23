@@ -49,7 +49,6 @@ bool Window::OnCreate(std::string name_, int width_, int height_)
 	}
 	
 	Debug::Info("OpenGL Version: " + std::string((char*)glGetString(GL_VERSION)), "Window.cpp", __LINE__);
-	//std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl << std::endl;
 
 	Debug::Info("Window created", "Window.cpp", __LINE__);
 

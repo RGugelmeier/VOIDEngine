@@ -59,6 +59,8 @@ bool CoreEngine::OnCreate(std::string name_, int width_, int height_)
 		}
 	}
 
+	player = sceneGraphInstance->GetGameObject("Player");
+
 	Debug::Info("Everything worked", "CoreEngine.cpp", __LINE__);
 	timer->Start();
 	return isRunning = true;
@@ -73,6 +75,7 @@ void CoreEngine::Run()
 	{
 		timer->UpdateFrameTicks();
 		EventListener::Update();
+		CollisionHandler::GetInstance()->CheckObjCollisions();
 		Update(timer->GetDeltaTime());
 		Render();
 		SDL_Delay(timer->GetSleepTime(fps));
@@ -113,9 +116,45 @@ void CoreEngine::NotifyOfMouseReleased(ivec2 mouse_, int buttonType_)
 //Tell the camera to perform movement.
 void CoreEngine::NotifyOfMouseMove(ivec2 mouse_)
 {
+	movespeed = 5.0f;
+	float maxSpeed = 1.0f;
 	if (camera)
 	{
 		camera->ProcessMouseMovement(MouseEventListener::GetMouseOffset());
+
+		if (movingLeft)
+		{
+			float yVel = player->GetComponent<Physics>()->GetVel().y;
+
+			player->GetComponent<Physics>()->SetVel(static_cast<vec3>(-movespeed * player->right, player->GetComponent<Physics>()->GetVel().y, 0.0f));
+			player->GetComponent<Physics>()->SetVel(player->GetComponent<Physics>()->GetVel() - (player->right * movespeed));
+			
+			player->GetComponent<Physics>()->SetVel(vec3(player->GetComponent<Physics>()->GetVel().x, yVel, player->GetComponent<Physics>()->GetVel().z));
+		}
+		else if (movingForward)
+		{
+			float yVel = player->GetComponent<Physics>()->GetVel().y;
+
+			player->GetComponent<Physics>()->SetVel(static_cast<vec3>(0.0f, player->GetComponent<Physics>()->GetVel().y, movespeed * vec3(player->forward.x, 0.0f, player->forward.z)));
+			player->GetComponent<Physics>()->SetVel(vec3(player->GetComponent<Physics>()->GetVel().x, yVel, player->GetComponent<Physics>()->GetVel().z));
+		}
+		else if (movingRight)
+		{
+			float yVel = player->GetComponent<Physics>()->GetVel().y;
+
+			player->GetComponent<Physics>()->SetVel(static_cast<vec3>(movespeed * player->right, player->GetComponent<Physics>()->GetVel().y , 0.0f));
+			player->GetComponent<Physics>()->SetVel(player->GetComponent<Physics>()->GetVel() + (player->right * movespeed));
+
+			player->GetComponent<Physics>()->SetVel(vec3(player->GetComponent<Physics>()->GetVel().x, yVel, player->GetComponent<Physics>()->GetVel().z));
+		}
+		else if (movingBack)
+		{
+			float yVel = player->GetComponent<Physics>()->GetVel().y;
+
+			player->GetComponent<Physics>()->SetVel(static_cast<vec3>(0.0f, player->GetComponent<Physics>()->GetVel().y, -movespeed * vec3(player->forward.x, 0.0f, player->forward.z)));
+
+			player->GetComponent<Physics>()->SetVel(vec3(player->GetComponent<Physics>()->GetVel().x, yVel, player->GetComponent<Physics>()->GetVel().z));
+		}
 	}
 }
 
@@ -130,27 +169,36 @@ void CoreEngine::NotifyOfMouseScroll(int y_)
 
 void CoreEngine::NotifyOfKeyboardPress(SDL_Keycode e_)
 {
+	player = sceneGraphInstance->GetGameObject("Player");
+	movespeed = 5.0f;
+
 	if (camera)
 	{
 		if (e_ == SDLK_w)
 		{
-			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(0.0f, 0.0f, -0.5f));
+			player->GetComponent<Physics>()->AddVel(static_cast<vec3>(0.0f, 0.0f, movespeed * vec3(player->forward.x, 0.0f, player->forward.z)));
+			movingForward = true;
 		}
 		else if (e_== SDLK_a)
 		{
-			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(-0.5f, 0.0f, 0.0f));
+			player->GetComponent<Physics>()->AddVel(static_cast<vec3>(-movespeed * player->right, 0.0f, 0.0f));
+			player->GetComponent<Physics>()->AddVel(static_cast<vec3>(player->GetComponent<Physics>()->GetVel().x - (player->right * movespeed), 0.0f, player->GetComponent<Physics>()->GetVel().z - (player->right * movespeed)));
+			movingLeft = true;
 		}
 		else if (e_ == SDLK_s)
 		{
-			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(0.0f, 0.0f, 0.5f));
+			player->GetComponent<Physics>()->AddVel(static_cast<vec3>(0.0f, 0.0f , -movespeed * vec3(player->forward.x, 0.0f, player->forward.z)));
+			movingBack = true;
 		}
 		else if (e_ == SDLK_d)
 		{
-			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(0.5f, 0.0f, 0.0f));
+			player->GetComponent<Physics>()->AddVel(static_cast<vec3>(movespeed * player->right, 0.0f, 0.0f));
+			player->GetComponent<Physics>()->AddVel(static_cast<vec3>(player->GetComponent<Physics>()->GetVel().x + (player->right * movespeed), 0.0f, player->GetComponent<Physics>()->GetVel().z + (player->right * movespeed)));
+			movingRight = true;
 		}
 		else if (e_ == SDLK_SPACE)
 		{
-  			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(0.0f, 0.5f, 0.0f));
+			player->GetComponent<Physics>()->SetVel(static_cast<vec3>(0.0f, movespeed * player->up, 0.0f));
 		}
 	}
 }
@@ -161,19 +209,15 @@ void CoreEngine::NotifyOfKeyboardRelease(SDL_Keycode e_)
 	{
 		if (e_ == SDLK_w || e_ == SDLK_a || e_ == SDLK_s || e_ == SDLK_d || e_ == SDLK_SPACE)
 		{
-			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetAccel(vec3(0.0f, 0.0f, 0.0f));
-			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(0.0f, 0.0f, 0.0f));
+			sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->SetVel(vec3(0.0f, player->GetComponent<Physics>()->GetVel().y, 0.0f));
+			movingForward = movingRight = movingLeft = movingBack = false;
 		}
 	}
 }
 
 void CoreEngine::MoveCamera(vec3 position_)
 {
-	if (sceneGraphInstance->GetGameObject("Player"))
-	{		
-		camera->ProcessCameraMovement(sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->GetVel().x, sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->GetVel().y, sceneGraphInstance->GetGameObject("Player")->GetComponent<Physics>()->GetVel().z);
-		return;
-	}
+	camera->SetPosition(position_);
 
 	Debug::FatalError("Camera is not attached to a game object named 'Player'. Make sure to name the game object 'Player' before moving the camera.", "CoreEngine.cpp", __LINE__);
 }

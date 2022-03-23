@@ -144,7 +144,7 @@ void Camera::ProcessMouseZoom(int y_)
 //Multiplies the x y and z args with the neg forward, up, and right vectors to move acurately with the camera rotated.
 void Camera::ProcessCameraMovement(float x_, float y_, float z_)
 {
-	position += static_cast<vec3>(right * x_, y_ * up, z_ * -forward);
+	position += static_cast<vec3>(x_ * right, y_ * up, z_ * -forward);
 	position += right * x_;
 	UpdateCameraVectors();
 

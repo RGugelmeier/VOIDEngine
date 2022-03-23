@@ -29,6 +29,7 @@ public:
 	{
 		START_SCENE,
 		GAME_SCENE,
+		DEMO_SCENE,
 		PHYSICS_SCENE
 	};
 
@@ -110,6 +111,11 @@ private:
 	glm::ivec2 mousePos;
 
 	SceneGraph* sceneGraphInstance;
+
+	bool movingRight, movingLeft, movingForward, movingBack;
+
+	GameObject* player;
+	float movespeed;
 };
 
 #endif // !COREENGINE_H

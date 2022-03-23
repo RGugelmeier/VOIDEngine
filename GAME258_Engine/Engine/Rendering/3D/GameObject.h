@@ -28,6 +28,7 @@ public:
 	inline bool GetHit() const { return hit; }
 	inline Model* GetModel() const {  if(model) return model; }
 	inline vec3 GetPosition() const { return position; }
+	inline bool GetGroundCheck() const { return groundCheck; }
 	vector<vec3> GetVertices();
 
 	//Setters
@@ -38,6 +39,8 @@ public:
 	void SetScale(vec3 scale_);
 	void SetTag(string tag_);
 	void SetHit(bool hit_, int buttonType_);
+	void SetGroundCheck(bool groundCheck_);
+
 	void UpdateVectors(float yaw, float pitch);
 
 	//Component functions
@@ -104,7 +107,7 @@ private:
 
 	BoundingBox boundingBox;
 
-	bool hit, setNewOctNodes;
+	bool hit, setNewOctNodes, groundCheck;
 
 	vector<Component*> components;
 	vector<vec3> modelVertices;

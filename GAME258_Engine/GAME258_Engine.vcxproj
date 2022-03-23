@@ -144,6 +144,7 @@
     <ClCompile Include="Components\StateMachine\Conditions\CIdle.cpp" />
     <ClCompile Include="Components\StateMachine\Conditions\CFollowPlayer.cpp" />
     <ClCompile Include="Components\StateMachine\Condition.cpp" />
+    <ClCompile Include="Game\Scenes\DemoScene.cpp" />
     <ClCompile Include="Game\Characters\CubePerson.cpp" />
     <ClCompile Include="Game\Characters\Character.cpp" />
     <ClCompile Include="Components\AI.cpp" />
@@ -189,6 +190,7 @@
     <ClInclude Include="Components\StateMachine\Conditions\CIdle.h" />
     <ClInclude Include="Components\StateMachine\Conditions\CFollowPlayer.h" />
     <ClInclude Include="Components\StateMachine\Condition.h" />
+    <ClInclude Include="Game\Scenes\DemoScene.h" />
     <ClInclude Include="Game\Characters\CubePerson.h" />
     <ClInclude Include="Game\Characters\Character.h" />
     <ClInclude Include="Components\AI.h" />
