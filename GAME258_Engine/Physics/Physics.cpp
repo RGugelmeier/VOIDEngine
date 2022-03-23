@@ -18,18 +18,19 @@ Physics::~Physics()
 
 void Physics::Update(const float deltaTime)
 {
-	//Update velocity.
-	vel += vec3(accel.x * deltaTime, accel.y * deltaTime, accel.z * deltaTime);
 	//Update position.
-	parent->position += vec3(vel.x * deltaTime + 0.5f * accel.x * deltaTime * deltaTime,
-							 vel.y * deltaTime + 0.5f * accel.y * deltaTime * deltaTime,
-							 vel.z * deltaTime + 0.5f * accel.z * deltaTime * deltaTime);
+	//TODO change this to vectors.
+	parent->position.x += vel.x * deltaTime + 0.5f * accel.x * deltaTime * deltaTime;
+	vel.x += accel.x * deltaTime;
+	parent->position.y += vel.y * deltaTime + 0.5f * accel.y * deltaTime * deltaTime;
+	vel.y += accel.y * deltaTime;
+	parent->position.z += vel.z * deltaTime + 0.5f * accel.z * deltaTime * deltaTime;
+	vel.z += accel.z * deltaTime;
 
 	//Update angle.
 	angularVel += angularAcc * deltaTime;
 	parent->angle += angularVel * deltaTime + 0.5f * angularAcc * deltaTime * deltaTime;
 
-	//Set the position of the parent GameObject to match the physics component.
 	parent->SetPosition(parent->position);
 	parent->SetRotation(parent->vRotation);
 }

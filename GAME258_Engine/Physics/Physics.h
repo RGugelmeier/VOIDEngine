@@ -23,10 +23,10 @@ public:
 	Physics(float mass_, float rotationalInertia_);
 	~Physics();
 
-	void OnCreate(GameObject* parent_);
-	void OnDestroy();
-	void Update(const float deltaTime_);
-	void Render() const;
+	virtual void OnCreate(GameObject* parent_);
+	virtual void OnDestroy();
+	virtual void Update(const float deltaTime_);
+	virtual void Render() const;
 
 	void ApplyGravity();
 	void ApplyGravity(vec3 forceOfGravity);
@@ -36,7 +36,6 @@ public:
 
 	//Setters
 	inline void SetVel(vec3 newVel_) { vel = newVel_; }
-	inline void AddVel(vec3 addedVel_) { vel += addedVel_; }
 	inline void SetAccel(vec3 newAccel_) { accel = newAccel_; }
 
 	//Getters

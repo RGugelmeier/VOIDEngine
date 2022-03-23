@@ -201,8 +201,6 @@ bool CollisionDetection::RayOBBIntersetion(Ray* ray_, BoundingBox* box_, vec3& p
 
 	//Set the distance from the collision and return true.
 	ray_->intersectionDist = tMin;
-	
-
 	pointOfContact = ray_->origin + tMin * ray_->direction;
 
 	//contactNormal = normalize(pointOfContact); //Make either 0 0 1, 1 0 0, or 0 1 0.
@@ -244,8 +242,6 @@ bool CollisionDetection::RayOBBIntersetion(Ray* ray_, BoundingBox* box_, vec3& p
 		}
 	}
 
-	rayDirection = normalize(rayDirection);
-
 	return true;
 }
 
@@ -253,11 +249,9 @@ bool CollisionDetection::DynamicOBBOBBIntersects(GameObject* dynamicObj, GameObj
 {
 	Physics* dynamicPhysics = dynamicObj->GetComponent<Physics>();
 
-	vec3 dynamicObjVel = dynamicPhysics->GetVel();
-
 	//If the obj is not moving, there is already no collisions.
 	//TODO this might be able to be removed. Just check how collisions are handled again oops. Might be redundant.
-	if (dynamicObjVel == vec3(0.0f, 0.0f, 0.0f))
+	if (dynamicPhysics->GetVel() == vec3(0.0f, 0.0f, 0.0f))
 	{
 		return false;
 	}
@@ -265,34 +259,19 @@ bool CollisionDetection::DynamicOBBOBBIntersects(GameObject* dynamicObj, GameObj
 	BoundingBox* expandedBox = new BoundingBox(staticObj->GetBoundingBox().maxVert + (staticObj->GetBoundingBox().size / 2.0f), staticObj->GetBoundingBox().minVert - (staticObj->GetBoundingBox().size / 2.0f), staticObj->GetBoundingBox().transform);
 	//Create and cast a ray from the 
 	//The ray is not using the right velocity. The player's vel is the same always in only one direction, which ruins the rayobb collision code when getting the dotDir.
-
-	//TODO find a way to del;ete this ray. MEMORY LEAK OH NO.
-	Ray* testRay = new Ray(dynamicObj->GetPosition(), dynamicObjVel * CoreEngine::GetInstance()->GetMainTimer()->GetDeltaTime(), 0.0f);
-	Ray* groundTest = new Ray(dynamicObj->GetPosition(), vec3(0.0f, -1.0f, 0.0f) * CoreEngine::GetInstance()->GetMainTimer()->GetDeltaTime(), 0.0f);
-	groundTest->direction = normalize(groundTest->direction);
-	//cout << groundTest->direction.y << endl;
-	//Turn this ground check bit into it's own function and call it in the collision handler loop to check for ground collisions.
-	if(RayOBBIntersetion(groundTest, expandedBox, contactPoint, contactNormal))
-	{
-		if (groundTest->intersectionDist >= 0.0f && groundTest->intersectionDist <= 1.0f)
-		{
-			dynamicObj->GetComponent<Physics>()->SetVel(dynamicObj->GetComponent<Physics>()->GetVel() + (contactNormal * abs(dynamicObj->GetComponent<Physics>()->GetVel())));
-			dynamicObj->SetGroundCheck(true);
-		}
-	}
-	else if (!RayOBBIntersetion(groundTest, expandedBox, contactPoint, contactNormal) && dynamicObj->GetGroundCheck())
-	{
-		dynamicObj->SetGroundCheck(false);
-	}
+	Ray* testRay = new Ray(dynamicObj->GetPosition(), dynamicPhysics->GetVel() * CoreEngine::GetInstance()->GetMainTimer()->GetDeltaTime(), 0.0f);
 
 	//Check to see if the ray collides with the other object. If it does, send the contactPoint, normal, and time forward.
 	if (RayOBBIntersetion(testRay, expandedBox, contactPoint, contactNormal))
 	{
 		intersectionDist_ = testRay->intersectionDist;
 		//If the contactTime is between 0 and 1, there is a collision in the next frame. The collision is resolved in CollisionHandler.
-		testRay_ = *testRay;
 		return (testRay->intersectionDist >= 0.0f && testRay->intersectionDist <= 1.0f);
-	}	
+	}
+
+	cout << testRay->direction.x << " , " << testRay->direction.y << " , " << testRay->direction.z << endl;
+
+	testRay_ = *testRay;
 
 	return false;
 }
@@ -313,7 +292,7 @@ bool CollisionDetection::OBBOBBIntersection(BoundingBox box1_, BoundingBox box2_
 		return true;
 	}
 
-	return false;
+	return true;
 }
 
 bool CollisionDetection::GJKDetection(GameObject* obj1, GameObject* obj2)
