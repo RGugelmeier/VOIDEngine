@@ -35,7 +35,7 @@ void SceneGraph::OnDestroy()
 	//Clean out game object map if the size is > 0.
 	if (sceneGameObjects.size() > 0)
 	{
-		for (auto gameObject : sceneGameObjects)
+		for (auto &gameObject : sceneGameObjects)
 		{
 			delete gameObject.second;
 			gameObject.second = nullptr;

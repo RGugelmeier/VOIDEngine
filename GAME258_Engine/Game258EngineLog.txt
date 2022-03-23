@@ -1,7 +1,6 @@
 [INFO]: OpenGL Version: 4.5.0 NVIDIA 497.09 in : Window.cpp on line: 51
-[INFO]: Window created in : Window.cpp on line: 54
+[INFO]: Window created in : Window.cpp on line: 53
 [INFO]: Start Scene started. in : StartScene.cpp on line: 14
-[INFO]: Everything worked in : CoreEngine.cpp on line: 62
+[INFO]: Everything worked in : CoreEngine.cpp on line: 64
 [INFO]: Start scene ended in : StartScene.cpp on line: 9
-[INFO]: Game Scene started. in : GameScene.cpp on line: 22
-[INFO]: Game scene ended in : GameScene.cpp on line: 12
+[INFO]: Start Scene started. in : StartScene.cpp on line: 14

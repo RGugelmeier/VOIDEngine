@@ -5,7 +5,7 @@
 
 //Use this constructor if the GameObject has no model.
 GameObject::GameObject(vec3 position_) : model(NULL), position(vec3()), angle(0.0f), vRotation(vec3(0.0f, 0.0f, 0.0f)), scale(vec3(1.0f)), modelInstance(0), hit(false), setNewOctNodes(false),
-										 forward(vec3()), right(vec3()), up(vec3()), worldUp(vec3()), collidedNodes(list<OctNode*>()), moveable(false)
+										 forward(vec3()), right(vec3()), up(vec3()), worldUp(vec3()), collidedNodes(list<OctNode*>()), moveable(false), groundCheck(false)
 {
 	position = position_;
 	forward = vec3(0.0f, 0.0f, -1.0f);
@@ -24,7 +24,7 @@ GameObject::GameObject(vec3 position_) : model(NULL), position(vec3()), angle(0.
 
 //Set default values. Set model to be the model passed in. Check if the model passed in is not nullptr, and then create the instance and set it's bounding box values.
 GameObject::GameObject(Model* model_, vec3 position_, bool moveable_) : model(nullptr), position(vec3()), angle(0.0f), vRotation(vec3(0.0f, 0.0f, 0.0f)), scale(vec3(1.0f)), modelInstance(0), hit(false), setNewOctNodes(false),
-														forward(vec3()), right(vec3()), up(vec3()), worldUp(vec3()), collidedNodes(list<OctNode*>()), moveable(false)
+														forward(vec3()), right(vec3()), up(vec3()), worldUp(vec3()), collidedNodes(list<OctNode*>()), moveable(false), groundCheck(false)
 {
 	model = model_;
 	position = position_;
@@ -168,13 +168,19 @@ void GameObject::SetRotation(quat qRotation_)
 //If scaling up (scale > 1) set to scale, if scaling down (scale < 1) divide the scale by 2 and set that.
 void GameObject::SetScale(vec3 scale_)
 {
-	scale - scale_;
+	scale = scale_;
 	if (model)
 	{
 		model->UpdateInstance(modelInstance, position, angle, vRotation, scale);
 		boundingBox.transform = model->GetTransform(modelInstance);
-		boundingBox.minVert *= scale.x > 1.0f ? scale : (scale / 2.0f);
-		boundingBox.maxVert *= scale.x > 1.0f ? scale : (scale / 2.0f);
+		boundingBox.minVert.x *= scale.x > 1.0f ? scale.x : (scale.x / 2.0f);
+		boundingBox.maxVert.x *= scale.x > 1.0f ? scale.x : (scale.x / 2.0f);
+		
+		boundingBox.minVert.y *= scale.y > 1.0f ? scale.y : (scale.y / 2.0f);
+		boundingBox.maxVert.y *= scale.y > 1.0f ? scale.y : (scale.y / 2.0f);
+		
+		boundingBox.minVert.z *= scale.z > 1.0f ? scale.z : (scale.z / 2.0f);
+		boundingBox.maxVert.z *= scale.z > 1.0f ? scale.z : (scale.z / 2.0f);
 	}
 }
 //end setters.
@@ -194,6 +200,12 @@ void GameObject::SetHit(bool hit_, int buttonType_)
 	{
 		cout << name << " was hit.\n";
 	}
+}
+
+//Sets the variable that checks if the object is colliding with something underneath it. Used to check if gravity should be applied.
+void GameObject::SetGroundCheck(bool groundCheck_)
+{
+	groundCheck = groundCheck_;
 }
 
 //Update the up, right and forward vectors.

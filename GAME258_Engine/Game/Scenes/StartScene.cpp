@@ -13,7 +13,7 @@ bool StartScene::OnCreate()
 {
 	Debug::Info("Start Scene started.", "StartScene.cpp", __LINE__);
 
-	CoreEngine::GetInstance()->SetCurrentScene(CoreEngine::SceneList::GAME_SCENE);
+	CoreEngine::GetInstance()->SetCurrentScene(CoreEngine::SceneList::DEMO_SCENE);
 	return true;
 }
 

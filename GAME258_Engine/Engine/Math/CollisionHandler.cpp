@@ -104,8 +104,6 @@ void CollisionHandler::CheckObjCollisions()
 						cout << obj1InNode->GetTag() << " collision with " << obj2InNode->GetTag() << endl;
 						
 						obj1InNode->GetComponent<Physics>()->SetVel(obj1InNode->GetComponent<Physics>()->GetVel() + (contactNormal * abs(obj1InNode->GetComponent<Physics>()->GetVel())));
-						//cout << obj1InNode->GetComponent<Physics>()->GetVel().x << " , " << obj1InNode->GetComponent<Physics>()->GetVel().y << " , " << obj1InNode->GetComponent<Physics>()->GetVel().z << endl;
-						//obj1InNode->SetPosition(obj1InNode->position - testRay.direction);
 					}
 				}
 			}
