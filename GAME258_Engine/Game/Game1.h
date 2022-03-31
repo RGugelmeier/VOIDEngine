@@ -5,6 +5,7 @@
 #include "Scenes/StartScene.h"
 #include "Scenes/GameScene.h"
 #include "Scenes/PhysicsScene.h"
+#include "Scenes/DemoScene.h"
 
 //Inherit from GameInterface
 class Game1 : public GameInterface

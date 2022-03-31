@@ -22,11 +22,14 @@ public:
 
 	//Getters
 	inline vec3 GetScale() const { return scale; }
+	inline vec3 GetRotation() const { return vRotation; }
+	inline float GetAngle() const { return angle; }
 	inline string GetTag() const { return name; }
 	inline BoundingBox GetBoundingBox() const { return boundingBox; }
 	inline BoundingBox* GetBoundingBoxPtr() { return &boundingBox; }
 	inline bool GetHit() const { return hit; }
 	inline Model* GetModel() const {  if(model) return model; }
+	inline unsigned int GetModelInstance() const { return modelInstance; }
 	inline vec3 GetPosition() const { return position; }
 	inline bool GetGroundCheck() const { return groundCheck; }
 	vector<vec3> GetVertices();

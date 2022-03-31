@@ -35,7 +35,7 @@ bool GameScene::OnCreate()
 
 	cout << sceneInstance->GetGameObject("Cube")->GetBoundingBox().minVert.x << " , " << sceneInstance->GetGameObject("Cube")->GetBoundingBox().minVert.y << " , " << sceneInstance->GetGameObject("Cube")->GetBoundingBox().minVert.z << endl;
 
-	sceneInstance->AddGameObject(new GameObject(diceModel, vec3(10.0f, 0.0f, 0.0f), true), true, "Cube2");
+	sceneInstance->AddGameObject(new GameObject(diceModel, vec3(10.0f, 10.0f, 0.0f), true), true, "Cube2");
 	sceneInstance->GetGameObject("Cube2")->SetRotation(vec3(1.0f, 0.0f, 0.0f));
 
 	sceneInstance->AddGameObject(new GameObject(diceModel, vec3(0.0f, 10.0f, 0.0f), false), true, "Player");
@@ -64,7 +64,6 @@ bool GameScene::OnCreate()
 
 //This function gets called every tick.
 void GameScene::Update(const float deltaTime_)
-
 {
 	//Update scene objects.
 	SceneGraph::GetInstance()->Update(deltaTime_);
@@ -73,18 +72,13 @@ void GameScene::Update(const float deltaTime_)
 	//TODO this can probabvly be moved to the Physics component with a check if the parent object should be affected by gravity that is determined by the object.
 	if (sceneInstance->GetGameObject("Player")->GetGroundCheck())
 	{
-		sceneInstance->GetGameObject("Player")->GetComponent<Physics>()->SetAccel(vec3(0.0f, 0.0f, 0.0f));
+		//sceneInstance->GetGameObject("Player")->GetComponent<Physics>()->SetAccel(vec3(0.0f, 0.0f, 0.0f));
 	}
 	else
 	{
-		sceneInstance->GetGameObject("Player")->GetComponent<Physics>()->ApplyForce(vec3(0.0f, -9.8f, 0.0f));
+		//sceneInstance->GetGameObject("Player")->GetComponent<Physics>()->ApplyForce(vec3(0.0f, -9.8f, 0.0f));
 	}
 	cout << sceneInstance->GetGameObject("Player")->GetGroundCheck() << endl;
-	//system("CLS");
-	//cout << "Max: " << sceneInstance->GetGameObject("Cube")->GetBoundingBox().maxVert.x << " , " << sceneInstance->GetGameObject("Cube")->GetBoundingBox().maxVert.y << " , " << sceneInstance->GetGameObject("Cube")->GetBoundingBox().maxVert.z << endl;
-	//cout << "Min: " << sceneInstance->GetGameObject("Cube")->GetBoundingBox().minVert.x << " , " << sceneInstance->GetGameObject("Cube")->GetBoundingBox().minVert.y << " , " << sceneInstance->GetGameObject("Cube")->GetBoundingBox().minVert.z << endl;
-	//cout << sceneInstance->GetGameObject("Player")->position.x << " , " << sceneInstance->GetGameObject("Player")->position.y << " , " << sceneInstance->GetGameObject("Player")->position.z << endl;
-	//cout << sceneInstance->GetGameObject("Player")->GetComponent<Physics>()->GetVel().x << " , " << sceneInstance->GetGameObject("Player")->GetComponent<Physics>()->GetVel().y << " , " << sceneInstance->GetGameObject("Player")->GetComponent<Physics>()->GetVel().z << endl;
 }
 
 //This function renders things to the screen.

@@ -55,6 +55,9 @@ void Game1::BuildScene()
 	case CoreEngine::SceneList::GAME_SCENE:
 		currentScene = new GameScene();
 		break;
+	case CoreEngine::SceneList::DEMO_SCENE:
+		currentScene = new DemoScene();
+		break;
 	default: //case CoreEngine::SceneList::START_SCENE:
 		currentScene = new StartScene();
 		break;

@@ -124,6 +124,7 @@ void SceneGraph::Update(const float deltaTime_)
 	for (auto gameObject : sceneGameObjects)
 	{
 		gameObject.second->Update(deltaTime_);
+		gameObject.second->GetModel()->UpdateInstance(gameObject.second->GetModelInstance(), gameObject.second->GetPosition(), gameObject.second->angle, gameObject.second->vRotation, gameObject.second->GetScale());
 	}
 }
 

@@ -28,6 +28,7 @@ public:
 	void Update(const float deltaTime_);
 	void Render(Camera* camera_);
 
+	static map<string, GameObject*> sceneGameObjects;
 private:
 	SceneGraph();
 	~SceneGraph();
@@ -36,6 +37,5 @@ private:
 	friend default_delete<SceneGraph>;
 
 	static unordered_map<GLuint, vector<Model*>> sceneModels;
-	static map<string, GameObject*> sceneGameObjects;
 };
 #endif // !SCENEGRAPH_H

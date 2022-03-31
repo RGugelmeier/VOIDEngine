@@ -1,0 +1,57 @@
+# Blender 3.1.0 MTL File: 'None'
+# www.blender.org
+
+newmtl Roof
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd  -o 3 3 3 G:\C++\CapstoneEngine\GAME258_Engine\Resources\Textures\roof.png
+
+newmtl Wall
+Ns 360.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd  -o 3 3 2 G:\C++\CapstoneEngine\GAME258_Engine\Resources\Textures\Wall.png
+
+newmtl Window
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd  G:\C++\CapstoneEngine\GAME258_Engine\Resources\Textures\window.png
+
+newmtl Window.004
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd  G:\C++\CapstoneEngine\GAME258_Engine\Resources\Textures\window.png
+
+newmtl door
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd  G:\C++\CapstoneEngine\GAME258_Engine\Resources\Textures\door.png

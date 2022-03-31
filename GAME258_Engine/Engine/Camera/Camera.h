@@ -26,6 +26,9 @@ public:
 	virtual void Render() const;
 
 	void AddLight(LightSource* light_);
+	void AddLight(PointLight* light_);
+	void AddLight(DirectionalLight* light_);
+	void AddLight(SpotLight* light_);
 
 	//Getters
 	inline mat4 GetView() const { return view; }
@@ -36,6 +39,9 @@ public:
 	inline float GetFarPlane() const { return farPlane; }
 	//inline Frustum GetFrustum() const { return frustum; }
 	inline vector<LightSource*> GetLights() const { return lights; }
+	inline vector<SpotLight*> GetSpotLights() const { return spotLights; }
+	inline vector<DirectionalLight*> GetDirectionalLights() const { return directionalLights; }
+	inline vector<PointLight*> GetPointLights() const { return pointLights; }
 	inline void setSkybox(Skybox* skyBox_) { skyBox = skyBox_; }
 
 	//Setters
@@ -64,6 +70,9 @@ private:
 	
 	//Frustum* frustum;
 	vector<LightSource*> lights;
+	vector<PointLight*> pointLights;
+	vector<DirectionalLight*> directionalLights;
+	vector<SpotLight*> spotLights;
 	Skybox* skyBox;
 };
 

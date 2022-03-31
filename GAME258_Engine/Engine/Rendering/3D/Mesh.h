@@ -48,7 +48,19 @@ private:
 	//Material uniform locations.
 	GLuint diffuseMapLoc, shininessLoc, transparencyLoc, ambientLoc, diffuseLoc, specularLoc;
 	//Light uniform locations.
-	GLuint viewPos, lightPos, lightAmbientVal, lightSpecularVal, lightDiffuseVal, lightColour;
+	//GLuint viewPos, lightPos, lightAmbientVal, lightSpecularVal, lightDiffuseVal, lightColour;
+	GLuint viewPos;
+	//Point light values
+	GLuint pointLightPos[10], pointLightAmbientVal[10], pointLightSpecularVal[10], pointLightDiffuseVal[10], pointLightColour[10], pointLightConstant[10], pointLightLinear[10], pointLightQuadratic[10];
+	//Directional light values.
+	GLuint dirLightDir[10], dirLightAmbientVal[10], dirLightSpecularVal[10], dirLightDiffuseVal[10], dirLightColour[10];
+	//Spot light values
+	GLuint spotLightPos[10], spotLightDir[10], spotLightCutOff[10], spotLightOuterCutOff[10], spotLightConstant[10], spotLightLinear[10], spotLightQuadratic[10], spotLightColour[10],
+		spotLightAmbient[10], spotLightDiffuse[10], spotLightSpecular[10];
+
+	vector<PointLight*> pointLights;
+	vector<DirectionalLight*> directionalLights;
+	vector<SpotLight*> spotLights;
 };
 
 #endif // !MESH_H

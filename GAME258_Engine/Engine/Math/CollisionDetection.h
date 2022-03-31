@@ -4,6 +4,8 @@
 #include "../Camera/Camera.h"
 #include "../../Physics/Simplex.h"
 
+#include <glm/gtx/rotate_vector.hpp>
+
 //Structure forward declaration.
 struct Ray;
 struct BoundingBox;
@@ -27,6 +29,7 @@ public:
 	static Ray MousePosToWorldRay(vec2 mouseCoords_, float screenWidth_, float screenHeight_, Camera* camera_);
 
 	static bool RayOBBIntersetion(Ray* ray_, BoundingBox* box_, vec3& pointOfContact, vec3& contactNormal);
+	static bool RayOBBIntersetion(Ray ray_, BoundingBox box_, vec3& pointOfContact, vec3& contactNormal);
 	static bool DynamicOBBOBBIntersects(GameObject* dynamicObj, GameObject* staticObj, vec3& contactPoint, vec3& contactNormal, float& intersetionDist_, Ray& testRay);
 	static bool OBBOBBIntersection(BoundingBox box1_, BoundingBox box2_);
 

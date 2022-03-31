@@ -12,8 +12,8 @@ orthographic(mat4()), view(mat4())
 	forward = vec3(0.0f, 0.0f, -1.0f);
 	up = vec3(0.0f, 1.0f, 0.0f);
 	worldUp = up;
-	nearPlane = 0.1f;
-	farPlane = 50.0f;
+	nearPlane = 0.5f;
+	farPlane = 500.0f;
 	yaw = -90.0f;
 	pitch = 0.0f;
 
@@ -45,7 +45,7 @@ void Camera::Update(const float deltaTime)
 {
 	if (position != SceneGraph::GetInstance()->GetGameObject("Player")->position)
 	{
-		CoreEngine::GetInstance()->MoveCamera(SceneGraph::GetInstance()->GetGameObject("Player")->position);
+		CoreEngine::GetInstance()->MoveCamera(vec3(SceneGraph::GetInstance()->GetGameObject("Player")->position.x, SceneGraph::GetInstance()->GetGameObject("Player")->position.y + 1.0f, SceneGraph::GetInstance()->GetGameObject("Player")->position.z));
 	}
 }
 
@@ -180,7 +180,23 @@ void Camera::UpdateCameraVectors()
 	view = lookAt(position, position + forward, up);
 }
 
+//Add lights to camera.
 void Camera::AddLight(LightSource* light_)
 {
 	lights.push_back(light_);
+}
+
+void Camera::AddLight(PointLight* light_)
+{
+	pointLights.push_back(light_);
+}
+
+void Camera::AddLight(DirectionalLight* light_)
+{
+	directionalLights.push_back(light_);
+}
+
+void Camera::AddLight(SpotLight* light_)
+{
+	spotLights.push_back(light_);
 }

@@ -18,11 +18,11 @@ struct Material
 	GLuint diffuseMap = 0;		//newmtl 
 
 	float shininess = 32.0f;	//Ns
-	float transparency = 1.0f;	//d
+	float transparency = 0.5f;	//d
 
 	vec3 ambient = vec3(1.0f);		//Ka
 	vec3 diffuse = vec3(1.0f);		//Kd
-	vec3 specular = vec3(1.0f);		//Ks
+	vec3 specular = vec3(0.0f);		//Ks
 
 	string name = "";
 };

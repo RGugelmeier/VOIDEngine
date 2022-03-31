@@ -1,5 +1,5 @@
 #include "Model.h"
-
+#include "../../Core/CoreEngine.h"
 //Set default value for the mesh list.
 Model::Model(const string& objPath_, const string& matPath_, GLuint shaderProgram_) : meshes(vector<Mesh*>()), shaderProgram(0), modelInstances(vector<mat4>())
 {
@@ -64,6 +64,7 @@ void Model::AddMesh(Mesh* mesh_)
 unsigned int Model::CreateInstance(vec3 position_, float angle_, vec3 rotation_, vec3 scale_)
 {
 	modelInstances.push_back(CreateTransform(position_, angle_, rotation_, scale_));
+	//boundingBox
 	return modelInstances.size() - 1;
 }
 
@@ -71,6 +72,9 @@ unsigned int Model::CreateInstance(vec3 position_, float angle_, vec3 rotation_,
 void Model::UpdateInstance(unsigned int index_, vec3 position_, float angle_, vec3 rotation_, vec3 scale_)
 {
 	modelInstances[index_] = CreateTransform(position_, angle_, rotation_, scale_);
+
+	boundingBox.transform = translate(boundingBox.transform, position_);
+	boundingBox.transform = scale(boundingBox.transform, scale_);
 }
 
 //Update the instance but using a quaternion for rotation.
@@ -106,6 +110,7 @@ mat4 Model::CreateTransform(vec3 position_, float angle_, vec3 rotation_, vec3 s
 	model = translate(model, position_);
 	model = rotate(model, angle_, rotation_);
 	model = scale(model, scale_);
+
 	return model;
 }
 
