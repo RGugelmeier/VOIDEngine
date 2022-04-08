@@ -70,6 +70,13 @@ bool DemoScene::OnCreate()
 	sceneInstance->AddGameObject(new GameObject(streetLightModel, vec3(0.0f, 0.0f, -5.0f), false), false, "light1");
 	
 
+	
+	Model* Enemy = new Model("Resources/Models/Enemy.obj", "Resources/Materials/Enemy.mtl", ShaderHandler::GetInstance()->GetShader("basicShader"));
+	SceneGraph::GetInstance()->AddModel(Enemy);
+	sceneInstance->AddGameObject(new GameObject(Enemy, vec3(20.0f, 1.0f, 0.0f), false), true, "Enemy");
+
+
+	
 	//Setup skybox
 	citySkybox = new Skybox();
 	citySkybox->OnCreate();
@@ -85,7 +92,8 @@ bool DemoScene::OnCreate()
 	sceneInstance->GetGameObject("House2")->AddComponent<Physics>();
 	sceneInstance->GetGameObject("House3")->AddComponent<Physics>();
 	sceneInstance->GetGameObject("House4")->AddComponent<Physics>();
-
+        sceneInstance->GetGameObject("Enemy")->AddComponent<Physics>();
+	sceneInstance->GetGameObject("Enemy")->AddComponent<AI>();  
 	return true;
 }
 
@@ -102,6 +110,8 @@ void DemoScene::Update(const float deltaTime_)
 	{
 		sceneInstance->GetGameObject("Player")->GetComponent<Physics>()->ApplyForce(vec3(0.0f, -9.8f, 0.0f));
 	}
+	
+		sceneInstance->GetGameObject("Enemy")->GetComponent<AI>()->Arrive(sceneInstance->GetGameObject("Player")->GetPosition(), 2.0f, 2.0f, 2.0f, 2.0f, 5.0f);
 	
 	cout << "Player pos: " << sceneInstance->GetGameObject("Player")->GetPosition().x << ", " << sceneInstance->GetGameObject("Player")->GetPosition().z << endl;
 	//cout << "Player Max: " << sceneInstance->GetGameObject("Player")->GetBoundingBox().maxVert.x << ", " << sceneInstance->GetGameObject("Player")->GetBoundingBox().maxVert.y << " , " << sceneInstance->GetGameObject("Player")->GetBoundingBox().maxVert.z << endl;
