@@ -24,7 +24,7 @@ GameObject::GameObject(vec3 position_) : model(NULL), position(vec3()), angle(0.
 
 //Set default values. Set model to be the model passed in. Check if the model passed in is not nullptr, and then create the instance and set it's bounding box values.
 GameObject::GameObject(Model* model_, vec3 position_, bool moveable_) : model(nullptr), position(vec3(0.0f)), angle(0.0f), vRotation(vec3(1.0f, 1.0f, 1.0f)), scale(vec3(1.0f)), modelInstance(0), hit(false), setNewOctNodes(false),
-														forward(vec3()), right(vec3()), up(vec3()), worldUp(vec3()), collidedNodes(list<OctNode*>()), moveable(false), groundCheck(false)
+														forward(vec3()), right(vec3()), up(vec3()), worldUp(vec3()), collidedNodes(list<OctNode*>()), moveable(false), groundCheck(false), collidedObjs(list<GameObject*>())
 {
 	model = model_;
 	position = position_;
@@ -88,6 +88,24 @@ vector<vec3> GameObject::GetVertices()
 	return v;
 }
 
+//Checks if the object this is called on is colliding with the object passed into the function.
+bool GameObject::IsCollidedWith(GameObject* otherObj)
+{
+	//Tru to find the parameter obj.
+	collidedObjsIterator = find(collidedObjs.begin(), collidedObjs.end(), otherObj);
+
+	//If it was found, return true.
+	if (collidedObjsIterator != collidedObjs.end())
+	{
+		return true;
+	}
+	//Else false.
+	else
+	{
+		return false;
+	}
+}
+
 vector<vec3> GameObject::FillVertices()
 {
 	vector<vec3> v;
@@ -137,6 +155,23 @@ void GameObject::SetPosition(vec3 position_)
 			collidedNodesIterator++;
 		}
 	}
+	if (collidedObjs.size() > 0)
+	{
+		//Loop through each obj that this obj is collided with...
+		while (collidedObjsIterator != collidedObjs.end())
+		{
+			//If the obj is no longer collided with the other obj being checked...
+			if (!boundingBox.Intersects((*collidedObjsIterator)->GetBoundingBoxPtr()))
+			{
+				//...remove it from the list here of collided objs.
+				collidedObjsIterator = collidedObjs.erase(collidedObjsIterator);
+			}
+			else
+			{
+				collidedObjsIterator++;
+			}
+		}
+	}
 	
 	if (setNewOctNodes)
 	{
@@ -161,7 +196,7 @@ void GameObject::SetRotation(vec3 rotation_)
 	if (model)
 	{
 		model->UpdateInstance(modelInstance, position, angle, vRotation, scale);
-		//boundingBox.transform = model->GetTransform(modelInstance);
+		boundingBox.transform = model->GetTransform(modelInstance);
 	}
 }
 

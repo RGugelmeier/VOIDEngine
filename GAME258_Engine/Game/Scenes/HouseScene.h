@@ -1,5 +1,5 @@
-#ifndef DEMOSCENE_H
-#define DEMOSCENE_H
+#ifndef HOUSESCENE_H
+#define HOUSESCENE_H
 
 #include "../../Engine/Patterns/Container.h"
 #include "../../Engine/Core/CoreEngine.h"
@@ -7,25 +7,17 @@
 #include "../../Engine/Rendering/Skybox.h"
 
 //Inherit scene.
-class DemoScene : public Scene
+class HouseScene : public Scene
 {
 public:
-	DemoScene();
-	virtual ~DemoScene();
+	HouseScene();
+	virtual ~HouseScene();
 
 	bool OnCreate() override;
 	void Update(const float deltaTime_) override;
 	void Render() override;
 private:
 	SceneGraph* sceneInstance;
-
-	Window* window;
-	Skybox* citySkybox;
-
-	Model* streetModel;
-	Model* streetModel2;
-	Model* houseModel;
-	Model* streetLightModel;
 };
 
-#endif // !DEMOSCENE_H
+#endif // !HOUSESCENE_H

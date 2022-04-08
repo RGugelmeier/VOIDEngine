@@ -63,7 +63,7 @@ void SceneGraph::OnDestroy()
 }
 
 //If the model's shader exists as a key already, add the model to the list with the key.
-//If the model's shader does not exist as a key, create a new entry to the map with the model's key and value, then add that entry to the sceneModel's vector.
+//If the model's shader does not exist as a key, create a new entry to the map with the model's key and value, then add that entry to the sceneModels vector.
 void SceneGraph::AddModel(Model* model_)
 {
 	GLuint shader = model_->GetShaderProgram();

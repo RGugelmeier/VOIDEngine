@@ -25,5 +25,5 @@ void main()
 	TexCoords = vec2(texCoords.x, 1.0 - texCoords.y);
 	transpose(inverse(model));
 	Normal = mat3(model) * normal;
-	FragPosition = mat3(model) * position;
+	FragPosition = vec3(model * vec4(position, 1.0));
 }

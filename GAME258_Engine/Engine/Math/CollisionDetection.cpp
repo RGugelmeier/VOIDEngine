@@ -9,7 +9,6 @@ CollisionDetection::~CollisionDetection()
 
 Ray CollisionDetection::MousePosToWorldRay(vec2 mouseCoords_, float screenWidth_, float screenHeight_, Camera* camera_)
 {
-	//Ask about this: Can you explain NDC space again? 
 	//Start and end position in NDC (normalised device coordinate) space.
 	vec4 rayStartNDC((mouseCoords_.x / screenWidth_ - 0.5f) * 2.0f, (mouseCoords_.y / screenHeight_ - 0.5f) * 2.0f, -1.0f, 1.0f);
 	vec4 rayEndNDC((mouseCoords_.x / screenWidth_ - 0.5f) * 2.0f, (mouseCoords_.y / screenHeight_ - 0.5f) * 2.0f, 0.0f, 1.0f);
@@ -54,6 +53,8 @@ bool CollisionDetection::RayOBBIntersetion(Ray* ray_, BoundingBox* box_, vec3& p
 	//Dot product of delta and dir on the y axis.
 	float dotDelta = dot(delta, xAxis);
 	float dotDir = dot(rayDirection, xAxis);
+
+	
 
 	//If statement makes sure we dont divide by zero or anything too close to zero.
 	if (fabs(dotDir) > 0.001f)
@@ -279,12 +280,21 @@ bool CollisionDetection::DynamicOBBOBBIntersects(GameObject* dynamicObj, GameObj
 		}
 	}
 
+	vec3 oldRotation = staticObj->GetRotation();
+	if (staticObj->GetRotation() != vec3(1.0f, 1.0f, 1.0f))
+	{
+		//staticObj->SetRotation(vec3(1.0f, 1.0f, 1.0f));
+		//staticObj->SetAngle(radians(-staticObj->GetAngle()));
+	}
+
 	//Check to see if the ray collides with the other object. If it does, send the contactPoint, normal, and time forward.
 	if (RayOBBIntersetion(testRay, expandedBox, contactPoint, contactNormal))
 	{
 		intersectionDist_ = testRay->intersectionDist;
 		//If the contactTime is between 0 and 1, there is a collision in the next frame. The collision is resolved in CollisionHandler.
 		testRay_ = *testRay;
+		//staticObj->SetRotation(oldRotation);
+		//staticObj->SetAngle(radians(staticObj->GetAngle()));
 		return (testRay->intersectionDist >= 0.0f && testRay->intersectionDist <= 1.0f);
 	}
 

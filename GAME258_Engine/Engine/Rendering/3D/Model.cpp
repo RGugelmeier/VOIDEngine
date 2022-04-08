@@ -64,7 +64,7 @@ void Model::AddMesh(Mesh* mesh_)
 unsigned int Model::CreateInstance(vec3 position_, float angle_, vec3 rotation_, vec3 scale_)
 {
 	modelInstances.push_back(CreateTransform(position_, angle_, rotation_, scale_));
-	//boundingBox
+
 	return modelInstances.size() - 1;
 }
 

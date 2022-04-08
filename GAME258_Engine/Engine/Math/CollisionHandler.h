@@ -5,6 +5,8 @@
 #include "../Rendering/3D/GameObject.h"
 #include "../Core/OctSpatialPartition.h"
 
+#include<glm/gtx/rotate_vector.hpp>
+
 class CollisionHandler
 {
 public:

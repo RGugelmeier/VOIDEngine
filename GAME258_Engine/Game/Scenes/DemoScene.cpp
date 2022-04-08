@@ -25,11 +25,10 @@ bool DemoScene::OnCreate()
 
 	//Setup cube model to be used by the player.
 	Model* diceModel = new Model("Resources/Models/Dice.obj", "Resources/Materials/Dice.mtl", ShaderHandler::GetInstance()->GetShader("basicShader"));
-	SceneGraph::GetInstance()->AddModel(diceModel);
+	//SceneGraph::GetInstance()->AddModel(diceModel);
 
 	//Create and set up player.
-	sceneInstance->AddGameObject(new GameObject(diceModel, vec3(0.0f, 15.0f, 0.0f), false), true, "Player");
-
+	sceneInstance->AddGameObject(new GameObject(diceModel, vec3(0.0f, 20.0f, 0.0f), false), true, "Player");
 	//Create and set up camera
 	CoreEngine::GetInstance()->SetCamera(new Camera());
 	CoreEngine::GetInstance()->GetCamera()->SetPosition(vec3(sceneInstance->GetGameObject("Player")->position.x, sceneInstance->GetGameObject("Player")->position.y + 5.0f, sceneInstance->GetGameObject("Player")->position.z));
@@ -37,7 +36,10 @@ bool DemoScene::OnCreate()
 	//Material glass(;
 	//MaterialHandler::GetInstance()->AddMaterial()
 	CoreEngine::GetInstance()->GetCamera()->AddLight(new DirectionalLight(vec3(-0.2f, -1.0f, -0.3f), normalize(vec3(253.0f, 94.0f, 83.0f)), 0.25f, 0.4f, 0.5f));
-	CoreEngine::GetInstance()->GetCamera()->AddLight(new PointLight(vec3(5.0f, 0.0f, 0.0f), 1.0f, 0.14f, 0.07f, normalize(vec3(233.0f, 150.0f, 122.0f)), 0.05f, 0.8f, 1.0f));
+	CoreEngine::GetInstance()->GetCamera()->AddLight(new PointLight(vec3(-5.5f, 0.0f, -8.5f), 1.0f, 0.14f, 0.07f, normalize(vec3(233.0f, 150.0f, 122.0f)), 0.05f, 0.0f, 1.0f));
+	CoreEngine::GetInstance()->GetCamera()->AddLight(new PointLight(vec3(5.0f, 1.0f, 0.0f), 1.0f, 0.14f, 0.07f, normalize(vec3(233.0f, 150.0f, 122.0f)), 0.05f, 0.0f, 1.0f));
+	CoreEngine::GetInstance()->GetCamera()->AddLight(new PointLight(vec3(-5.5f, 1.0f, 8.5f), 1.0f, 0.14f, 0.07f, normalize(vec3(233.0f, 150.0f, 122.0f)), 0.05f, 0.0f, 1.0f));
+	CoreEngine::GetInstance()->GetCamera()->AddLight(new PointLight(vec3(-30.5f, 1.0f, 0.0f), 1.0f, 0.14f, 0.07f, normalize(vec3(233.0f, 150.0f, 122.0f)), 0.05f, 0.0f, 1.0f));
 	CoreEngine::GetInstance()->GetCamera()->AddLight(new SpotLight(vec3(0.0f, 3.0f, 0.0f), vec3(0.0f, -1.0f, 0.0f), cos(radians(30.0f)), cos(radians(39.0f)), 1.0f, 0.09f, 0.032f, vec3(1.0f, 0.9f, 0.7f), 0.0f, 1.0f, 0.0f));
 	//Add physics and the camera to the player.
 	sceneInstance->GetGameObject("Player")->AddComponent<Physics>();
@@ -45,17 +47,17 @@ bool DemoScene::OnCreate()
 
 	//Create street model
 	streetModel = new Model("Resources/Models/Street.obj", "Resources/Materials/Street.mtl", ShaderHandler::GetInstance()->GetShader("basicShader"));
-	SceneGraph::GetInstance()->AddModel(streetModel);
-	sceneInstance->AddGameObject(new GameObject(streetModel, vec3(44.0f, 0.0f, 0.0f), false), true, "Street1");
-	sceneInstance->AddGameObject(new GameObject(streetModel, vec3(0.0f, 0.0f, 0.0f), false), true, "Street5");
-	sceneInstance->AddGameObject(new GameObject(streetModel, vec3(22.0f, 0.0f, 0.0f), false), true, "Street2");
-	sceneInstance->AddGameObject(new GameObject(streetModel, vec3(-44.0f, 0.0f, 0.0f), false), true, "Street3");
-	sceneInstance->AddGameObject(new GameObject(streetModel, vec3(-22.0f, 0.0f, 0.0f), false), true, "Street4");
-	//sceneInstance->GetGameObject("Street")->SetPosition(vec3(30.0f, 0.0f, 0.0f));
-	//sceneInstance->GetGameObject("Street")->SetScale(vec3(4.0f, 1.0f, 1.0f));
+	streetModel2 = new Model("Resources/Models/Street.obj", "Resources/Materials/Street.mtl", ShaderHandler::GetInstance()->GetShader("basicShader"));
+
+	sceneInstance->AddGameObject(new GameObject(new Model("Resources/Models/Street.obj", "Resources/Materials/Street.mtl", ShaderHandler::GetInstance()->GetShader("basicShader")), vec3(44.0f, 0.0f, 0.0f), false), true, "Street1");
+	sceneInstance->AddGameObject(new GameObject(new Model("Resources/Models/Street.obj", "Resources/Materials/Street.mtl", ShaderHandler::GetInstance()->GetShader("basicShader")), vec3(0.0f, 0.0f, 0.0f), false), true, "Street5");
+	sceneInstance->AddGameObject(new GameObject(new Model("Resources/Models/Street.obj", "Resources/Materials/Street.mtl", ShaderHandler::GetInstance()->GetShader("basicShader")), vec3(22.0f, 0.0f, 0.0f), false), true, "Street2");
+	sceneInstance->AddGameObject(new GameObject(new Model("Resources/Models/Street.obj", "Resources/Materials/Street.mtl", ShaderHandler::GetInstance()->GetShader("basicShader")), vec3(-44.0f, 0.0f, 0.0f), false), true, "Street3");
+	sceneInstance->AddGameObject(new GameObject(new Model("Resources/Models/Street.obj", "Resources/Materials/Street.mtl", ShaderHandler::GetInstance()->GetShader("basicShader")), vec3(-22.0f, 0.0f, 0.0f), false), true, "Street4");
+
 	//Create house model
 	houseModel = new Model("Resources/Models/House.obj", "Resources/Materials/House.mtl", ShaderHandler::GetInstance()->GetShader("basicShader"));
-	SceneGraph::GetInstance()->AddModel(houseModel);
+	//SceneGraph::GetInstance()->AddModel(houseModel);
 	sceneInstance->AddGameObject(new GameObject(houseModel, vec3(10.0f, 0.0f, -9.3f), false), true, "House1");
 	sceneInstance->AddGameObject(new GameObject(houseModel, vec3(-10.0f, 0.0f, -9.3f), false), true, "House2");
 	sceneInstance->AddGameObject(new GameObject(houseModel, vec3(10.0f, 0.0f, 9.3f), false), true, "House3");
@@ -111,6 +113,12 @@ void DemoScene::Update(const float deltaTime_)
 		sceneInstance->GetGameObject("Player")->GetComponent<Physics>()->ApplyForce(vec3(0.0f, -9.8f, 0.0f));
 	}
 	
+	if (sceneInstance->GetGameObject("Player")->IsCollidedWith(sceneInstance->GetGameObject("House1")))
+	{
+		CoreEngine::GetInstance()->SetCurrentScene(CoreEngine::SceneList::GAME_SCENE);
+	}
+
+	//cout << "Player pos: " << sceneInstance->GetGameObject("Player")->GetPosition().x << ", " << sceneInstance->GetGameObject("Player")->GetComponent<Physics>()->GetVel().y << " , " << sceneInstance->GetGameObject("Player")->GetPosition().z << endl;
 		sceneInstance->GetGameObject("Enemy")->GetComponent<AI>()->Arrive(sceneInstance->GetGameObject("Player")->GetPosition(), 2.0f, 2.0f, 2.0f, 2.0f, 5.0f);
 	
 	cout << "Player pos: " << sceneInstance->GetGameObject("Player")->GetPosition().x << ", " << sceneInstance->GetGameObject("Player")->GetPosition().z << endl;

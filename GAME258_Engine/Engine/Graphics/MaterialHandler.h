@@ -22,7 +22,7 @@ struct Material
 
 	vec3 ambient = vec3(1.0f);		//Ka
 	vec3 diffuse = vec3(1.0f);		//Kd
-	vec3 specular = vec3(0.0f);		//Ks
+	vec3 specular = vec3(1.0f);		//Ks
 
 	string name = "";
 };

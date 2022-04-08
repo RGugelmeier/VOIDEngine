@@ -33,6 +33,7 @@ public:
 	inline vec3 GetPosition() const { return position; }
 	inline bool GetGroundCheck() const { return groundCheck; }
 	vector<vec3> GetVertices();
+	bool IsCollidedWith(GameObject* otherObj);
 
 	//Setters
 	void SetPosition(vec3 position_);
@@ -98,6 +99,8 @@ public:
 	quat qRotation;
 	list<OctNode*> collidedNodes;
 	list<OctNode*>::iterator collidedNodesIterator;
+	list<GameObject*> collidedObjs;
+	list<GameObject*>::iterator collidedObjsIterator;
 	bool moveable;
 	vec3 forward, right, up, worldUp;
 private:

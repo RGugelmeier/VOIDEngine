@@ -82,28 +82,6 @@ void CollisionHandler::MouseUpdate(vec2 mousePosition_, int buttonType_)
 
 void CollisionHandler::CheckObjCollisions()
 {
-	//Used to store values from DynamicOBBOBBIntersects
-	//vec3 contactPoint, contactNormal;
-	//Ray testRay;
-	//float contactTime = 0.0f;
-	//Do OBBOBB check first, then do GJK check inside OBBOBB algorithm.
-	//for (auto obj1 : SceneGraph::GetInstance()->sceneGameObjects)
-	//{
-	//	for (auto obj2 : SceneGraph::GetInstance()->sceneGameObjects)
-	//	{
-	//		if (obj1 != obj2)
-	//		{
-	//			if (CollisionDetection::DynamicOBBOBBIntersects(obj1.second, obj2.second, contactPoint, contactNormal, contactTime, testRay))
-	//			{
-	//				cout << obj1.second->GetTag() << " collision with " << obj2.second->GetTag() << endl;
-	//
-	//				obj1.second->GetComponent<Physics>()->SetVel(vec3(obj1.second->GetComponent<Physics>()->GetVel().x + (contactNormal.x * abs(obj1.second->GetComponent<Physics>()->GetVel().x)), obj1.second->GetComponent<Physics>()->GetVel().y, obj1.second->GetComponent<Physics>()->GetVel().z + (contactNormal.z * abs(obj1.second->GetComponent<Physics>()->GetVel().z))));
-	//			}
-	//		}
-	//	}
-	//}
-	
-
 	//Loop through each leaf node.
 	for (auto leafNode : leafNodes)
 	{
@@ -127,19 +105,40 @@ void CollisionHandler::CheckObjCollisions()
 						{
 							//if (CollisionDetection::GJKDetection(obj1InNode, obj2InNode))
 							//{
-								//cout << obj1InNode->GetTag() << " collision with " << obj2InNode->GetTag() << endl;
+								if (obj2InNode->GetRotation() != vec3(1.0f, 1.0f, 1.0f))
+								{
+									contactNormal = rotate(contactNormal, radians(-obj2InNode->GetAngle()), obj2InNode->GetRotation());
+								}
+
+								if (obj1InNode->GetTag() == "Player")
+								{
+									cout << obj1InNode->GetTag() << " collision with " << obj2InNode->GetTag() << endl;
+									cout << contactNormal.x << " , " << contactNormal.y << " , " << contactNormal.z << endl;
+								}
 	
 								obj1InNode->GetComponent<Physics>()->SetVel(vec3(obj1InNode->GetComponent<Physics>()->GetVel().x + (contactNormal.x * abs(obj1InNode->GetComponent<Physics>()->GetVel().x)), obj1InNode->GetComponent<Physics>()->GetVel().y, obj1InNode->GetComponent<Physics>()->GetVel().z + (contactNormal.z * abs(obj1InNode->GetComponent<Physics>()->GetVel().z))));
-								//If the player is colliding with the something underneath it, do not do anything to the y velocity
-								//if (obj1InNode->GetGroundCheck())
-								//{
-								//}
-								////If there is no downward collision, apply y velocity as well as all the rest
-								//else
-								//{
-								//	obj1InNode->GetComponent<Physics>()->SetVel(obj1InNode->GetComponent<Physics>()->GetVel() + (contactNormal * abs(obj1InNode->GetComponent<Physics>()->GetVel())));
-								//}
+
+								obj1InNode->collidedObjsIterator = find(obj1InNode->collidedObjs.begin(), obj1InNode->collidedObjs.end(), obj2InNode);
+
+								if (obj1InNode->collidedObjsIterator == obj1InNode->collidedObjs.end() && obj1InNode->GetTag() == "Player")
+								{
+									obj1InNode->collidedObjs.push_back(obj2InNode);
+								}
+
+								
 							//}
+						}
+						else
+						{
+							//Try to find the second obj in the first obj'scollision list
+							obj1InNode->collidedObjsIterator = find(obj1InNode->collidedObjs.begin(), obj1InNode->collidedObjs.end(), obj2InNode);
+
+							//If the second obj was found...
+							if (obj1InNode->collidedObjsIterator != obj1InNode->collidedObjs.end() && obj1InNode->GetTag() == "Player")
+							{
+								//...remove it from the list.
+								obj1InNode->collidedObjs.erase(obj1InNode->collidedObjsIterator);
+							}
 						}
 					}
 				}

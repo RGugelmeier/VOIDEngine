@@ -20,6 +20,9 @@ public:
 
 	//Getters
 	inline const Scene* GetCurrentScene() { return currentScene; }
+
+	//Changes to a new scene.
+	inline void SwapScene(CoreEngine::SceneList scene_) { currentSceneName = scene_; }
 private:
 	CoreEngine::SceneList currentSceneName;
 	Scene* currentScene;

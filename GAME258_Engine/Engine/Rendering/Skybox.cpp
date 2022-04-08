@@ -23,7 +23,7 @@ void Skybox::OnCreate()
 	modelPtr = new Model("Resources/Models/Dice.obj", "Resources/Materials/Dice.mtl", ShaderHandler::GetInstance()->GetShader("skyboxShader"));
 
 	//Load the textures of the skybox.
-	bool status = LoadTextures("Resources/Textures/negx.jpg", "Resources/Textures/posx.jpg", "Resources/Textures/posy.jpg", "Resources/Textures/negy.jpg", "Resources/Textures/negz.jpg", "Resources/Textures/posz.jpg");
+	bool status = LoadTextures("Resources/Textures/posx.jpg", "Resources/Textures/negx.jpg", "Resources/Textures/posy.jpg", "Resources/Textures/negy.jpg", "Resources/Textures/posz.jpg", "Resources/Textures/negz.jpg");
 
 	//If the textures could not be loaded, print an error to the debug file.
 	if (status == false)

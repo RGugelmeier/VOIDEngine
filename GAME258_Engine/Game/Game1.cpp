@@ -40,10 +40,12 @@ void Game1::Render()
 	currentScene->Render();
 }
 
-/*Delete the current scene and deallocate the memory.
+/*Delete the current scene and deallocate the memory, and empties the scenegraph.
   Creates a new instance of whatever scene is supposed to be built, changes the game's currentSceneName variable to be correct, and error checks if the scene's OnCreate function ran properly. */
 void Game1::BuildScene()
 {
+	SceneGraph::GetInstance()->sceneGameObjects.clear();
+
 	delete currentScene;
 	currentScene = nullptr;
 

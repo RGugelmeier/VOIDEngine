@@ -83,28 +83,35 @@ void main()
 	vec3 viewDir = normalize(cameraPosition - FragPosition);
 
 	//Only 10 lights allowed in a scene. To change this, change the 10 ion the loop to something else.
-	vec3 result = CalcDirLight(dirLights[0], norm, viewDir);
-	result += CalcPointLight(pointLights[0], norm, FragPosition, viewDir);
-	result += CalcSpotLight(spotLights[0], norm, FragPosition, viewDir);
-	for(int i = 0; i <= 10; i++)
+	vec3 result;
+	//for(int i = 0; i <= 10; i++)
+	//{
+	//}
+	//for(int i = 0; i <= 0; i++)
+	//{
+	//
+	//	result = CalcDirLight(dirLights[i], norm, viewDir);
+	//}
+	//for(int i = 0; i <= 0; i++)
+	//{
+	//
+	//	result += CalcSpotLight(spotLights[0], norm, FragPosition, viewDir);
+	//}
+
+	for(int i = 0; i <= 0; i++)
 	{
-		////Calculate ambient value of light.
-		//vec3 ambient = lights[i].ambientVal * material.ambient * texture(material.diffuseMap, TexCoords).rgb * lights[i].lightColour;
-		//
-		////Calculate diffuse value of light.
-		//vec3 norm = normalize(Normal);
-		//vec3 lightDir = normalize(lights[i].position - FragPosition);
-		//float diff = max(dot(norm, lightDir), 0.0);
-		//vec3 diffuse = (diff * material.diffuse) * texture(material.diffuseMap, TexCoords).rgb * lights[i].lightColour;
-		//
-		////Calculate specular value of light.
-		//vec3 viewDir = normalize(cameraPosition - FragPosition);
-		//vec3 reflectDir = reflect(-lightDir, norm);
-		//float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
-		//vec3 specular = (spec * material.specular) * lights[i].lightColour;
-		//
-		////Calculate the final light value on the fragment.
-		//result += ambient + diffuse + specular;
+		//result += CalcPointLight(pointLights[0], norm, FragPosition, viewDir);
+		result = CalcDirLight(dirLights[i], norm, viewDir);
+	}
+	//Add all point lights
+	for(int i = 0; i <= 3; i++)
+	{
+		result += CalcPointLight(pointLights[i], norm, FragPosition, viewDir);
+	}
+	//Add all spot lights
+	for(int i = 0; i <= 0; i++)
+	{
+		result += CalcSpotLight(spotLights[i], norm, FragPosition, viewDir);
 	}
 
 	//Calculate the final light value on the fragment.
