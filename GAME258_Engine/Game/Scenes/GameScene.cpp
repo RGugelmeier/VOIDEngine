@@ -58,7 +58,7 @@ bool GameScene::OnCreate()
 	sceneInstance->GetGameObject("chair")->AddComponent<Physics>();
 
 	CoreEngine::GetInstance()->SetCamera(new Camera());
-	CoreEngine::GetInstance()->GetCamera()->SetPosition(vec3(sceneInstance->GetGameObject("Player")->position.x, sceneInstance->GetGameObject("Player")->position.y + 5.0f, sceneInstance->GetGameObject("Player")->position.z));
+	CoreEngine::GetInstance()->GetCamera()->SetPosition(vec3(sceneInstance->GetGameObject("Player")->position.x, sceneInstance->GetGameObject("Player")->position.y, sceneInstance->GetGameObject("Player")->position.z));
 
 	CoreEngine::GetInstance()->GetCamera()->AddLight(new DirectionalLight(vec3(-0.2f, -1.0f, -0.3f), normalize(vec3(253.0f, 94.0f, 83.0f)), 0.25f, 0.4f, 0.5f));
 	CoreEngine::GetInstance()->GetCamera()->AddLight(new PointLight(vec3(-5.5f, 0.0f, -8.5f), 1.0f, 0.14f, 0.07f, normalize(vec3(233.0f, 150.0f, 122.0f)), 0.05f, 0.0f, 1.0f));
@@ -73,6 +73,13 @@ bool GameScene::OnCreate()
 
 	sceneInstance->GetGameObject("Player")->AddComponent<Physics>();
 	sceneInstance->GetGameObject("Player")->AddComponent<Camera>();
+
+	Model* Enemy = new Model("Resources/Models/Enemy.obj", "Resources/Materials/Enemy.mtl", ShaderHandler::GetInstance()->GetShader("basicShader"));
+	SceneGraph::GetInstance()->AddModel(Enemy);
+	sceneInstance->AddGameObject(new GameObject(Enemy, vec3(5.0f, 10.0f, 0.0f), false), true, "Enemy");
+
+	sceneInstance->GetGameObject("Enemy")->AddComponent<Physics>();
+	sceneInstance->GetGameObject("Enemy")->AddComponent<AI>();
 
 	return true;
 }
@@ -92,7 +99,7 @@ void GameScene::Update(const float deltaTime_)
 		sceneInstance->GetGameObject("Player")->GetComponent<Physics>()->ApplyForce(vec3(0.0f, -9.8f, 0.0f));
 	}
 
-	cout << sceneInstance->GetGameObject("Player")->GetGroundCheck();
+	sceneInstance->GetGameObject("Enemy")->GetComponent<AI>()->Arrive(sceneInstance->GetGameObject("Player")->GetPosition(), 2.0f, 2.0f, 2.0f, 2.5f, 5.0f);
 }
 
 //This function renders things to the screen.

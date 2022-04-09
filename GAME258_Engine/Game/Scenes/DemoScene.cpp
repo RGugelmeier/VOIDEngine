@@ -19,6 +19,7 @@ bool DemoScene::OnCreate()
 	Debug::Info("Game Scene started.", "GameScene.cpp", __LINE__);
 
 	CollisionHandler::GetInstance()->OnCreate(100.0f);
+	
 
 	//Get the scene graph.
 	sceneInstance = SceneGraph::GetInstance();
@@ -28,7 +29,7 @@ bool DemoScene::OnCreate()
 	//SceneGraph::GetInstance()->AddModel(diceModel);
 
 	//Create and set up player.
-	sceneInstance->AddGameObject(new GameObject(diceModel, vec3(0.0f, 20.0f, 0.0f), false), true, "Player");
+	sceneInstance->AddGameObject(new GameObject(diceModel, vec3(0.0f, 25.0f, 0.0f), false), true, "Player");
 	//Create and set up camera
 	CoreEngine::GetInstance()->SetCamera(new Camera());
 	CoreEngine::GetInstance()->GetCamera()->SetPosition(vec3(sceneInstance->GetGameObject("Player")->position.x, sceneInstance->GetGameObject("Player")->position.y + 5.0f, sceneInstance->GetGameObject("Player")->position.z));
@@ -73,9 +74,6 @@ bool DemoScene::OnCreate()
 	
 
 	
-	Model* Enemy = new Model("Resources/Models/Enemy.obj", "Resources/Materials/Enemy.mtl", ShaderHandler::GetInstance()->GetShader("basicShader"));
-	SceneGraph::GetInstance()->AddModel(Enemy);
-	sceneInstance->AddGameObject(new GameObject(Enemy, vec3(20.0f, 1.0f, 0.0f), false), true, "Enemy");
 
 
 	
@@ -94,8 +92,6 @@ bool DemoScene::OnCreate()
 	sceneInstance->GetGameObject("House2")->AddComponent<Physics>();
 	sceneInstance->GetGameObject("House3")->AddComponent<Physics>();
 	sceneInstance->GetGameObject("House4")->AddComponent<Physics>();
-        sceneInstance->GetGameObject("Enemy")->AddComponent<Physics>();
-	sceneInstance->GetGameObject("Enemy")->AddComponent<AI>();  
 	return true;
 }
 
@@ -119,9 +115,9 @@ void DemoScene::Update(const float deltaTime_)
 	}
 
 	//cout << "Player pos: " << sceneInstance->GetGameObject("Player")->GetPosition().x << ", " << sceneInstance->GetGameObject("Player")->GetComponent<Physics>()->GetVel().y << " , " << sceneInstance->GetGameObject("Player")->GetPosition().z << endl;
-		sceneInstance->GetGameObject("Enemy")->GetComponent<AI>()->Arrive(sceneInstance->GetGameObject("Player")->GetPosition(), 2.0f, 2.0f, 2.0f, 2.0f, 5.0f);
+	//sceneInstance->GetGameObject("Enemy")->GetComponent<AI>()->Arrive(sceneInstance->GetGameObject("Player")->GetPosition(), 2.0f, 2.0f, 2.0f, 2.0f, 5.0f);
 	
-	cout << "Player pos: " << sceneInstance->GetGameObject("Player")->GetPosition().x << ", " << sceneInstance->GetGameObject("Player")->GetPosition().z << endl;
+	//cout << "Player pos: " << sceneInstance->GetGameObject("Player")->GetPosition().x << ", " << sceneInstance->GetGameObject("Player")->GetPosition().z << endl;
 	//cout << "Player Max: " << sceneInstance->GetGameObject("Player")->GetBoundingBox().maxVert.x << ", " << sceneInstance->GetGameObject("Player")->GetBoundingBox().maxVert.y << " , " << sceneInstance->GetGameObject("Player")->GetBoundingBox().maxVert.z << endl;
 	//cout << "Player Min: " << sceneInstance->GetGameObject("Player")->GetBoundingBox().minVert.x << ", " << sceneInstance->GetGameObject("Player")->GetBoundingBox().minVert.y << " , " << sceneInstance->GetGameObject("Player")->GetBoundingBox().minVert.z << endl << endl;
 	

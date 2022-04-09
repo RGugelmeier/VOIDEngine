@@ -5,6 +5,7 @@
 #include "../../Engine/Core/CoreEngine.h"
 #include "../../Physics/Physics.h"
 #include "../../Engine/Rendering/Skybox.h"
+#include "../../Components/AI.h"
 
 //Inherit from Scene
 class GameScene : public Scene
